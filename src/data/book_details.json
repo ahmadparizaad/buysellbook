@@ -1,0 +1,39 @@
+{
+    "books": [
+        {
+            "id": 1,
+            "imageUrl": "https://source.unsplash.com/featured/?book",
+            "bookName": "Introduction to Computer Science",
+            "year": "F.E",
+            "department": "Comp"
+          },
+          {
+            "id": 2,
+            "imageUrl": "https://source.unsplash.com/featured/?novel",
+            "bookName": "Data Structures and Algorithms",
+            "year": "S.E",
+            "department": "Comp"
+          },
+          {
+            "id": 3,
+            "imageUrl": "https://source.unsplash.com/featured/?programming",
+            "bookName": "Database Management Systems",
+            "year": "T.E",
+            "department": "Comp"
+          },
+          {
+            "id": 4,
+            "imageUrl": "https://source.unsplash.com/featured/?education",
+            "bookName": "Operating Systems",
+            "year": "B.E",
+            "department": "Comp"
+          },
+          {
+            "id": 5,
+            "imageUrl": "https://source.unsplash.com/featured/?library",
+            "bookName": "Introduction to Information Technology",
+            "year": "F.E",
+            "department": "IT"
+          }
+    ]
+}
