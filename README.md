@@ -16,41 +16,7 @@ Welcome to the Second-Hand Book Marketplace! This platform allows users to buy a
 ![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## Getting Started
 
-Follow these instructions to set up the project locally.
-
-### Prerequisites
-
-- Node.js
-- MongoDB
-
-### Installation
-
-1. **Clone the repository:**
-    ```sh
-    git clone https://github.com/your-username/second-hand-book-marketplace.git
-    cd second-hand-book-marketplace
-    ```
-
-2. **Install dependencies:**
-    ```sh
-    npm install
-    ```
-
-3. **Set up environment variables:**
-    Create a `.env.local` file in the root directory and add the following:
-    ```env
-    MONGODB_URI=your_mongodb_uri
-    NEXT_PUBLIC_API_URL=your_api_url
-    ```
-
-4. **Run the development server:**
-    ```sh
-    npm run dev
-    ```
-
-    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## Usage
 
