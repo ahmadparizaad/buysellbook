@@ -5,12 +5,11 @@ import { connect } from "@/dbConfig/dbConfig";
 
 connect()
 
-export default async function handler(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest, response: NextResponse) {
   if (request.method === "GET") {
     try {
-      const userId = await getDataFromToken(request);
       // Fetch all books from the database
-      const books = await Book.find();
+     const books = await Book.find()
 
       // Return the list of books as JSON response
       return NextResponse.json({

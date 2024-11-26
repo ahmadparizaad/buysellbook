@@ -26,6 +26,13 @@ const config = {
 	],
   prefix: "",
   theme: {
+    screens: {
+      'sm': '640px',     // @media (min-width: 640px)
+      'md': '768px',     // @media (min-width: 768px)
+      'lg': '1024px',    // @media (min-width: 1024px)
+      'xl': '1280px',    // @media (min-width: 1280px)
+      '2xl': '1536px',   // @media (min-width: 1536px)
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -97,7 +104,7 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        spotlight: "spotlight 2s ease .75s 1 forwards",
+        spotlight: "spotlight 1s ease .5s 1 forwards",
       },
       
     },

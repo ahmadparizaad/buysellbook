@@ -5,12 +5,15 @@ import Navbar from "@/components/Navbar";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { cn } from "@/utils/cn";
 import HeroSection from '@/components/HeroSection';
+import HowItWorks from '@/components/HowItWorks';
+import Footer from '@/components/Footer';
+import ContactUs from '@/components/ContactUs';
 
 export default function Home() {
   
   return (
     <>
-    <div className='min-h-screen bg-black/[0.96]  antialiased bg-grid-white/[0.02]'>
+    <div className='min-h-screen max-w-screen md:w-auto bg-black/[0.96] antialiased bg-grid-white/[0.02]'>
     {/* <div className="h-[40rem] w-full rounded-md flex flex-col md:items-center md:justify-center bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
@@ -35,6 +38,9 @@ export default function Home() {
     </div> */}
     
         <HeroSection/>
+        <HowItWorks/>
+        <ContactUs/>
+        <Footer/>
     </div>
     </>
   )

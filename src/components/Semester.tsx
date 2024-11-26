@@ -16,7 +16,7 @@ const Semester: React.FC<SemesterProps> = ({ semester, setSemester }) => {
       <div className='flex flex-col items-start mb-4'>
         <label className='pl-5' htmlFor="semester">Semester</label>
         <select
-          className='text-black mb-8 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black mb-8 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="semester"
           value={semester}
           onChange={handleSemesterChange}

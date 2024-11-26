@@ -39,7 +39,7 @@ function SellPage() {
       console.log(book);
       const response = await axios.post("/api/books/sell", book);
       console.log("Book Details uploaded Successfully", response.data);
-      router.push("/");
+      router.push("/buy");
     }
     catch (error:any) {
       console.log("Failed", error.message);
@@ -52,10 +52,23 @@ function SellPage() {
 
   return (
     <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]'>
+      {loading && 
+      <div className="flex justify-center items-center">
+      <div className="relative w-24 h-8 p-0">
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-0.4s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-0.8s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-1.2s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-1.6s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2.4s]"></span>
+        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2.8s]"></span>
+      </div>
+    </div>
+    }
       <div className="flex flex-col items-start">
         <label className='pl-5' htmlFor="course">Course</label>
         <select
-          className='text-black mb-4 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="course"
           value={book.course}
           onChange={(e) => setBook({ ...book, course: e.target.value })}
@@ -74,7 +87,7 @@ function SellPage() {
         <div className='flex flex-col items-start'>
           <label className='pl-5' htmlFor="class">Class</label>
           <select
-            className='text-black mb-4 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
             id="class"
             value={book.std}
             onChange={(e) => setBook({ ...book, std: e.target.value })}
@@ -91,7 +104,7 @@ function SellPage() {
         <div className='flex flex-col items-start'>
           <label className='pl-5' htmlFor="year">Year</label>
           <select
-            className='text-black mb-4 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
             id="year"
             value={book.year}
             onChange={(e) => setBook({ ...book, year: e.target.value })}
@@ -115,10 +128,10 @@ function SellPage() {
         <Semester semester={book.semester} setSemester={handleSemesterChange} />
       }
 
-        <div className='flex flex-col items-start'>
-          <label className='pl-5' htmlFor="isset">Do you have Complete Set of Books</label>
+        <div className='flex flex-col items-center'>
+          <label className='pb-3' htmlFor="isset">Do you have Complete Set of Books?</label>
           <select
-            className='text-black mb-10 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
             id="isset"
             value={book.isSet}
             onChange={(e) => setBook({ ...book, isSet: e.target.value })}
@@ -135,7 +148,7 @@ function SellPage() {
       <Button 
       onClick={onSubmit}
         variant="outline"
-        className=' border dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+        className='border dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
       >
         Submit
       </Button>

@@ -28,7 +28,6 @@ export const config = {
     '/login',
     '/signup',
     '/verifyemail',
-    '/books',
-    '/sell'
+    '/sell',
   ]
 }

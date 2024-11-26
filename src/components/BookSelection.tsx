@@ -14,7 +14,7 @@ interface BookSelectionProps {
 
 const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0 });
+  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0});
   const [halfAmount, setHalfAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0)
 
@@ -54,7 +54,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
         <label className='pl-5' htmlFor="bookName">Book Name</label>
         <input
           type="text"
-          className='text-black mb-10 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="bookName"
           value={newBook.name}
           onChange={handleBookNameChange}
@@ -64,7 +64,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
         <label className='pl-5' htmlFor="bookPrice">Book Price</label>
         <input
           type="number"
-          className='text-black mb-6 mt-2 w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="bookPrice"
           value={newBook.price}
           onChange={handleBookPriceChange}

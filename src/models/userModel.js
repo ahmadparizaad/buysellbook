@@ -23,21 +23,25 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    isProfileComplete: {
+        type: Boolean,
+        default: false,
+    },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,
     verifyTokenExpiry: Date,
     name: {
         type: String,
-        required: [true, "Please provide a name"],
+        // required: [true, "Please provide a name"],
     },
     college: {
         type: String,
-        required: [true, "Please provide a college name"],
+        // required: [true, "Please provide a college name"],
     },
     city: {
         type: String,
-        required: [true, "Please provide a city"],
+        // required: [true, "Please provide a city"],
     },
     profileImage: {
         type: String,

@@ -3,115 +3,89 @@ import React from "react";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { TracingBeam } from "@/components/ui/tracing-beam";
-import { calsans } from "@/styles/fonts";
 
-export function TracingBeamDemo() {
+
+// import { calsans } from "@/styles/fonts";
+
+export default function HowItWorks() {
   return (
-    <TracingBeam className="">
-      <div className="max-w-2xl mx-auto antialiased pt-4 relative">
+    <div className="flex flex-col items-center justify-center w-screen bg-black/[0.96] antialiased relative overflow-hidden px-4">
+    <TracingBeam className="my-8 relative">
+      <h1 className="mb-10 text-3xl md:text-5xl font-bold text-left bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">How It Works</h1>
+      <div className="max-w-3xl mx-auto antialiased pt-4 relative">
         {dummyContent.map((item, index) => (
-          <div key={`content-${index}`} className="mb-10">
-            <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-4">
-              {item.badge}
-            </h2> 
-
-            <p className={twMerge(calsans.className, "text-xl mb-4")}>
-                {item.title}
-            </p>
-
-            <div className="text-sm  prose prose-sm dark:prose-invert">
-              {item?.image && (
-                <Image
-                  src={item.image}
-                  alt="blog thumbnail"
-                  height="1000"
-                  width="1000"
-                  className="rounded-lg mb-10 object-cover"
-                />
-              )}
+          <div key={`content-${index}`} className="mb-10 flex flex-col md:flex-row justify-center">
+            <div className="flex flex-col text-sm prose prose-sm dark:prose-invert">
+              <h2 className="bg-black text-white rounded-full text-lg w-fit px-4 py-1 mb-4">
+                {item.badge}
+              </h2>
+              <p className="ml-6 mb-4 mr-10">
               {item.description}
+              </p>
+              
             </div>
+            {item?.image && (
+              <Image
+                src={item.image}
+                alt="blog thumbnail"
+                height="250"
+                width="300"
+                className="rounded-lg ml-6 object-cover border-[1px] border-gray-500"
+              />
+            )}
           </div>
         ))}
       </div>
     </TracingBeam>
+    </div>
   );
 }
 
 const dummyContent = [
   {
-    title: "Lorem Ipsum Dolor Sit Amet",
+    title: "Step 1: User Registration",
     description: (
       <>
-        <p>
-          Sit duis est minim proident non nisi velit non consectetur. Esse
-          adipisicing laboris consectetur enim ipsum reprehenderit eu deserunt
-          Lorem ut aliqua anim do. Duis cupidatat qui irure cupidatat incididunt
-          incididunt enim magna id est qui sunt fugiat. Laboris do duis pariatur
-          fugiat Lorem aute sit ullamco. Qui deserunt non reprehenderit dolore
-          nisi velit exercitation Lorem qui do enim culpa. Aliqua eiusmod in
-          occaecat reprehenderit laborum nostrud fugiat voluptate do Lorem culpa
-          officia sint labore. Tempor consectetur excepteur ut fugiat veniam
-          commodo et labore dolore commodo pariatur.
-        </p>
-        <p>
-          Dolor minim irure ut Lorem proident. Ipsum do pariatur est ad ad
-          veniam in commodo id reprehenderit adipisicing. Proident duis
-          exercitation ad quis ex cupidatat cupidatat occaecat adipisicing.
-        </p>
-        <p>
-          Tempor quis dolor veniam quis dolor. Sit reprehenderit eiusmod
-          reprehenderit deserunt amet laborum consequat adipisicing officia qui
-          irure id sint adipisicing. Adipisicing fugiat aliqua nulla nostrud.
-          Amet culpa officia aliquip deserunt veniam deserunt officia
-          adipisicing aliquip proident officia sunt.
-        </p>
+          Users start by registering on our site, creating an account to access all features and services.
       </>
     ),
-    badge: "React",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=3540&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    badge: "Registration",
+    image: "/register.png",
   },
   {
-    title: "Lorem Ipsum Dolor Sit Amet",
+    title: "Step 2: Complete Your Profile",
     description: (
       <>
-        <p>
-          Ex irure dolore veniam ex velit non aute nisi labore ipsum occaecat
-          deserunt cupidatat aute. Enim cillum dolor et nulla sunt exercitation
-          non voluptate qui aliquip esse tempor. Ullamco ut sunt consectetur
-          sint qui qui do do qui do. Labore laborum culpa magna reprehenderit ea
-          velit id esse adipisicing deserunt amet dolore. Ipsum occaecat veniam
-          commodo proident aliqua id ad deserunt dolor aliquip duis veniam sunt.
-        </p>
-        <p>
-          In dolore veniam excepteur eu est et sunt velit. Ipsum sint esse
-          veniam fugiat esse qui sint ad sunt reprehenderit do qui proident
-          reprehenderit. Laborum exercitation aliqua reprehenderit ea sint
-          cillum ut mollit.
-        </p>
+          After registration, users complete their profiles to enhance their experience and connect with other users effectively.
       </>
     ),
-    badge: "Changelog",
-    image:
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80&w=3540&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    badge: "Profile Setup",
+    image: "/profile.png",
   },
   {
-    title: "Lorem Ipsum Dolor Sit Amet",
+    title: "Step 3: Browse Available Books",
     description: (
       <>
-        <p>
-          Ex irure dolore veniam ex velit non aute nisi labore ipsum occaecat
-          deserunt cupidatat aute. Enim cillum dolor et nulla sunt exercitation
-          non voluptate qui aliquip esse tempor. Ullamco ut sunt consectetur
-          sint qui qui do do qui do. Labore laborum culpa magna reprehenderit ea
-          velit id esse adipisicing deserunt amet dolore. Ipsum occaecat veniam
-          commodo proident aliqua id ad deserunt dolor aliquip duis veniam sunt.
-        </p>
+          Users can browse through a variety of books being sold by nearby individuals, making it easy to find what they need.
       </>
     ),
-    badge: "Launch Week",
-    image:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    badge: "Browsing",
+    image: "/browse.png",
+  },
+  {
+    title: "Step 4: Select and Contact Seller",
+    description: (
+      <>
+          Once a user finds a book they like, they can select it and initiate a conversation with the seller to discuss details.
+      </>
+    ),
+    badge: "Contact Seller",
+    image: "/chat.png",
+  },
+  {
+    title: "Step 5: Meet and Purchase",
+    description: "Finally, users arrange to meet the seller in person to complete the purchase of the book.",
+    badge: "Purchase",
+    image: "/purchase.png",
   },
 ];
