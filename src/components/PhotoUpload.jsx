@@ -32,7 +32,7 @@ const PhotoUpload = ({bookImage}) => {
         >
           Upload
         </div> */}
-        <div>Uplaod Book's Photo</div>
+        <div>Uplaod Book&apos;s Photo</div>
         <input
           type="file"
           accept="image/*"

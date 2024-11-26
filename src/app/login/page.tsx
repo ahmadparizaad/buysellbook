@@ -127,7 +127,7 @@ export default function LoginPage() {
             className="border mb-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200">
                 Login
             </Button>
-            <p className="text-sm mb-2">Don't have an account?</p>
+            <p className="text-sm mb-2">Don&apos;t have an account?</p>
             <Link className="text-sm text-blue-500" href="/signup">Signup here</Link>
             </form>
         </div>
