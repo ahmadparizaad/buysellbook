@@ -47,7 +47,7 @@ const OneChat = () => {
   // Initialize chat and fetch previous messages
   const initializeChat = useCallback(async () => {
     try {
-      if (typeof window === 'undefined') return;
+      // if (typeof window === 'undefined') return;
       if (!senderUID) {
         console.log('Waiting for senderUID...');
         return;
