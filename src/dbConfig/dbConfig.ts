@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 
 export async function connect() {
     try {
-        mongoose.connect(process.env.MONGO_URI!);
+        mongoose.connect(process.env.MONGO_URI!, {
+            ssl: true, // Ensure SSL is enabled
+          });
         const connection = mongoose.connection;
 
         connection.on('connected', () => {
