@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { CometChat } from '@cometchat/chat-sdk-javascript';
 import { cometchatAuth } from '@/utils/cometchatAuth';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
@@ -24,6 +23,12 @@ interface Conversation {
   timestamp?: number;
 }
 
+// declare global {
+//   interface Window {
+//     CometChat: any;
+//   }
+// }
+
 const OneChat = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,6 +46,12 @@ const OneChat = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const reciever = searchParams.get('reciever');
+
+  let CometChat: any;
+  if (typeof window !== "undefined") {
+  CometChat = require("@cometchat/chat-sdk-javascript").CometChat;
+  window.CometChat = CometChat;
+  }
 
   // Initialize chat and fetch previous messages  
   const initializeChat = useCallback(async () => {
@@ -72,7 +83,7 @@ const OneChat = () => {
       console.error('Error loading chat history:', error);
       setError('Failed to load chat history');
     }
-  }, []);
+  }, [CometChat.MessagesRequestBuilder]);
 
   useEffect(() => {
     const fetchSenderUID = async () => {
@@ -81,6 +92,33 @@ const OneChat = () => {
         setSenderUID(uid);
         console.log(`Sender UID: ${uid}`);
         await initializeChat();
+        const fetchConversations = async () => {
+          try {
+            const conversationsRequest = new CometChat.ConversationsRequestBuilder()
+              .setLimit(30)
+              // .setConversationType('user')
+              .build();
+      
+            const fetchedConversations = await conversationsRequest.fetchNext();
+            const formattedConversations = fetchedConversations.map((conv: { getConversationWith: () => any; getLastMessage: () => { (): any; new(): any; getText: { (): any; new(): any; }; getSentAt: { (): any; new(): any; }; }; }) => {
+              const conversationWith = conv.getConversationWith();
+              const uid = 'uid' in conversationWith ? conversationWith.uid : '';
+              console.log(uid);
+              return {
+                uid,
+                name: conversationWith.getName(),
+                lastMessage: conv.getLastMessage()?.getText(),
+                timestamp: conv.getLastMessage()?.getSentAt()
+              };
+            });
+            
+            setConversations(formattedConversations as Conversation[]);
+          } catch (error) {
+            console.error('Error fetching conversations:', error);
+            setError('Failed to fetch conversations');
+          }
+        };
+        fetchConversations();
       
     };
     if (typeof window !== 'undefined') {
@@ -88,7 +126,7 @@ const OneChat = () => {
     }
 
     fetchSenderUID();
-  }, [initializeChat]);
+  }, [initializeChat, CometChat.ConversationsRequestBuilder]);
 
   useEffect(() => {
     if (reciever) {
@@ -123,34 +161,7 @@ const OneChat = () => {
       }
     };
   }, []);
-
-  const fetchConversations = async () => {
-    try {
-      const conversationsRequest = new CometChat.ConversationsRequestBuilder()
-        .setLimit(30)
-        // .setConversationType('user')
-        .build();
-
-      const fetchedConversations = await conversationsRequest.fetchNext();
-      const formattedConversations = fetchedConversations.map(conv => {
-        const conversationWith = conv.getConversationWith();
-        const uid = 'uid' in conversationWith ? conversationWith.uid : '';
-        console.log(uid);
-        return {
-          uid,
-          name: conversationWith.getName(),
-          lastMessage: conv.getLastMessage()?.getText(),
-          timestamp: conv.getLastMessage()?.getSentAt()
-        };
-      });
-      
-      setConversations(formattedConversations as Conversation[]);
-    } catch (error) {
-      console.error('Error fetching conversations:', error);
-      setError('Failed to fetch conversations');
-    }
-  };
-
+  
   const startChat = async (receiverUid: string) => {
     try{
       router.push(`/onechat?reciever=${receiverUid}`);
@@ -257,7 +268,7 @@ const OneChat = () => {
       return () => {
         CometChat.removeMessageListener(listenerId);
       };
-    }, [recieverUID, initializeChat, senderUID]);
+    }, [recieverUID, initializeChat, senderUID, CometChat]);
 
     // Scroll when messages change (new message sent or received)
   // useEffect(() => {

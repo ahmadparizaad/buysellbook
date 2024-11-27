@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark overflow-x-hidden">
       <body className={inter.className}>
-        {isClient && <Navbar />}
+        <Navbar />
         <Spotlight
           className="left-40  md:left-60 md:-top-20"
           fill="blue"
