@@ -44,34 +44,19 @@ const OneChat = () => {
   const reciever = searchParams.get('reciever');
   console.log(reciever);
 
-  // Initialize chat and fetch previous messages
+  // Initialize chat and fetch previous messages  
   const initializeChat = useCallback(async () => {
-    try {
-      // if (typeof window === 'undefined') return;
-      if (!senderUID) {
-        console.log('Waiting for senderUID...');
-        return;
-      }
-      setIsLoading(true);
-      setError(null);
-      await cometchatAuth.init();
-      const login = await cometchatAuth.login(senderUID);
-      console.log(login);
-    //   // Fetch previous messages
-    //   const messagesRequest = new CometChat.MessagesRequestBuilder()
-    //     .setUID(recieverUID)
-    //     .setLimit(50)
-    //     .build();
-
-    //   const previousMessages = await messagesRequest.fetchPrevious();
-    //   setMessages(previousMessages.map(formatMessage));
-
-      setIsLoading(false);
-    } catch (err) {
-      console.error('Error initializing chat:', err);
-      setError('Failed to initialize chat. Please try again.');
-      setIsLoading(false);
+    if (typeof window === 'undefined') return;
+    if (!senderUID) {
+      console.log('Waiting for senderUID...');
+      return;
     }
+    setIsLoading(true);
+    setError(null);
+    await cometchatAuth.init();
+    const login = await cometchatAuth.login(senderUID);
+    console.log(login);
+    setIsLoading(false);
   }, [senderUID]);
 
   const loadChatHistory = useCallback(async (receiverUid: string) => {
