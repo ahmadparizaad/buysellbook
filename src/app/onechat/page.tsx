@@ -39,14 +39,11 @@ const OneChat = () => {
   const router = useRouter();
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  // Get the userId from the URL
   const searchParams = useSearchParams();
   const reciever = searchParams.get('reciever');
-  console.log(reciever);
 
   // Initialize chat and fetch previous messages  
   const initializeChat = useCallback(async () => {
-    if (typeof window === 'undefined') return;
     if (!senderUID) {
       console.log('Waiting for senderUID...');
       return;
@@ -76,37 +73,31 @@ const OneChat = () => {
       setError('Failed to load chat history');
     }
   }, []);
+  
+  useEffect(() => {
+    const fetchSenderUID = async () => {
+      if (typeof window !== 'undefined') {
+        const res = await axios.get('/api/users/me');
+        const uid = res.data.data.username;
+        setSenderUID(uid);
+        console.log(`Sender UID: ${uid}`);
+        await initializeChat();
+      }
+    };
 
+    fetchSenderUID();
+  }, [initializeChat]);
 
   useEffect(() => {
-    getSenderUID()
-    .then(async () => {
-      if (reciever) {
-        // Buyer path (from /buy route)
-        setRecieverUID(reciever);
-        console.log(reciever);
-        setSelectedChat(reciever);
-        await loadChatHistory(reciever);
+    if (reciever) {
+      setRecieverUID(reciever);
+      setSelectedChat(reciever);
+      loadChatHistory(reciever);
+    }
+  }, [reciever, loadChatHistory]);
 
-      } else{
-        // Seller path (from navbar)
-        console.log('Accessed directly from navbar');
-        await initializeChat();
-        fetchConversations();
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching sender UID:', error);
-    });
+ 
 
-  }, [reciever, initializeChat, loadChatHistory]);
-
-  // useEffect(() => {
-  //   if (!selectedChat) {
-  //     scrollToBottom();
-  //   }
-  // }, [selectedChat]);
-  
   const handleScroll = () => {
     if (messageContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messageContainerRef.current;
