@@ -1,4 +1,3 @@
-// src/components/OneToOneChat.tsx
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { CometChat } from '@cometchat/chat-sdk-javascript';
@@ -7,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
+
 interface Message {
   id: string;
   text: string;
@@ -73,17 +73,19 @@ const OneChat = () => {
       setError('Failed to load chat history');
     }
   }, []);
-  
+
   useEffect(() => {
     const fetchSenderUID = async () => {
-      if (typeof window !== 'undefined') {
         const res = await axios.get('/api/users/me');
         const uid = res.data.data.username;
         setSenderUID(uid);
         console.log(`Sender UID: ${uid}`);
         await initializeChat();
-      }
+      
     };
+    if (typeof window !== 'undefined') {
+      fetchSenderUID();
+    }
 
     fetchSenderUID();
   }, [initializeChat]);
