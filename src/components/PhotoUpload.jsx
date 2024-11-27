@@ -1,6 +1,7 @@
 // components/PhotoUpload.js
 
 import { useRef, useState } from 'react';
+import Image from 'next/image';
 
 const PhotoUpload = ({bookImage}) => {
   const fileInputRef = useRef(null);
@@ -43,7 +44,7 @@ const PhotoUpload = ({bookImage}) => {
       </div>
       <div className="h-[22vw] w-[18vw] rounded-[1.5vw] overflow-hidden hover:shadow-xl hover:scale-105">
         {previewImage ? (
-          <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
+          <Image src={previewImage} alt="Preview" className="w-full h-full object-cover" />
         ) : (
           <div className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-400">
             Preview Image

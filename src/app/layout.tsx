@@ -27,9 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark overflow-x-hidden">
       <body className={inter.className}>
-      <div className='relative w-screen'>
-        {window.location.pathname !== '/login' && window.location.pathname !== '/signup' && <Navbar />}
-      </div>
+      <Navbar />
       <Spotlight
         className="left-40  md:left-60 md:-top-20"
         fill="blue"
