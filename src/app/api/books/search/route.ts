@@ -8,9 +8,8 @@ connect();
 export async function GET(request: NextRequest, response: NextResponse) {
   if (request.method === "GET") {
     try {
-        const { searchParams } = new URL(request.url);
-        const query = searchParams.get("query") || ""; // Get the search query from the URL
-  
+      const query = request.nextUrl.searchParams.get("query") || ""; // Use nextUrl to get query parameters
+
         // Find users matching the search query based on city or college
         const users = await User.find({
           $or: [
