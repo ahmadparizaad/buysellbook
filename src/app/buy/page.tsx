@@ -103,19 +103,19 @@ useEffect(() => {
     }
   };
 
-  const fetchSearchData = async (query: string) => {
-    try {
-      const response = await axios.get(`/api/books/search/search?query=${query}`);
-      setBooks(response.data.books);
-      console.log(response.data.books);
+//   const fetchSearchData = async (query: string) => {
+//     try {
+//       const response = await axios.get(`/api/books/search/search?query=${query}`);
+//       setBooks(response.data.books);
+//       console.log(response.data.books);
       
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError('An error occurred while fetching data.');
-    } finally {
-      setLoading
-  }
-};
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//       setError('An error occurred while fetching data.');
+//     } finally {
+//       setLoading
+//   }
+// };
 
   const getSenderUID = async () => {
     const res = await axios.get('/api/users/me');
@@ -147,7 +147,7 @@ useEffect(() => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <Button 
-          onClick={() => fetchSearchData(searchQuery)}
+          // onClick={() => fetchSearchData(searchQuery)}
           variant="outline" 
           className=' sm:w-auto border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'
         >
@@ -180,7 +180,7 @@ useEffect(() => {
         </AccordionItem>
       </Accordion> */}
 
-      {/* Loading skeleton grid */}
+      
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8'>
         {loading && Array.from({ length: 6 }).map((_, index) => (
           <div key={index} className="animate-pulse flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
