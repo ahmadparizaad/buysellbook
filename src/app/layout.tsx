@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import LoginPage from "./login/page";
 import SignupPage from "./signup/page";
 import { useInitializeCometChat } from "@/utils/cometchatConfig";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,12 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark overflow-x-hidden">
       <body className={inter.className}>
+        <Suspense>
         <Navbar />
         <Spotlight
           className="left-40  md:left-60 md:-top-20"
           fill="blue"
         />
         {children}
+        </Suspense>
       </body>
     </html>
   );

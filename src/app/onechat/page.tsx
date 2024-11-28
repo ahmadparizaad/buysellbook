@@ -294,7 +294,6 @@ const OneChat = () => {
   
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
     <div className="h-[100vh] flex flex-col border rounded-md">
     {!selectedChat ? (
         // Conversations List View
@@ -398,7 +397,6 @@ const OneChat = () => {
     </>
   )}
     </div>
-    </Suspense>
 );
 };
 
