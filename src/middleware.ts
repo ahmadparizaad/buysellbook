@@ -28,5 +28,7 @@ export const config = {
     '/signup',
     '/verifyemail',
     '/sell',
+    '/onechat',
+    '/mybooks',
   ]
 }
