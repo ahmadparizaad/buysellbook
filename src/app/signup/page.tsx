@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Spotlight } from "@/components/ui/Spotlight";
 
 
 
@@ -54,6 +55,10 @@ export default function SignupPage() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
+            <Spotlight
+          className="left-40  md:left-60 md:-top-20"
+          fill="blue"
+        />
         <h1 className="text-2xl mb-5">{loading ? "Processing" : "Signup"}</h1>
         <hr />
         <form onSubmit={onSignup} className="z-[9] flex flex-col items-center justify-center py-2">

@@ -29,10 +29,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Suspense>
         <Navbar />
-        <Spotlight
-          className="left-40  md:left-60 md:-top-20"
-          fill="blue"
-        />
+        
         {children}
         </Suspense>
       </body>

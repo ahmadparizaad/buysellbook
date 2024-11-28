@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import CometChat from "@cometchat/chat-sdk-javascript";
 import { Button } from "@/components/ui/button"
+import { Spotlight } from "@/components/ui/Spotlight";
 
 // import { initializeCometChat } from "@/utils/cometchatConfig";
 
@@ -92,6 +93,10 @@ export default function LoginPage() {
 
     return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">
+        <Spotlight
+          className="left-40  md:left-60 md:-top-20"
+          fill="blue"
+        />
         <h1 className="text-2xl mb-5">{loading ? "Processing" : "Login"}</h1>
         <hr />
         <form onSubmit={onLogin} className="z-[9] flex flex-col items-center justify-center py-2">
