@@ -1,10 +1,11 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { cometchatAuth } from '@/utils/cometchatAuth';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
+// import { useInitializeCometChat } from '@/utils/cometchatConfig';
+import { cometchatAuth } from '@/utils/cometchatAuth';
 
 interface Message {
   id: string;
@@ -22,12 +23,6 @@ interface Conversation {
   lastMessage?: string;
   timestamp?: number;
 }
-
-// declare global {
-//   interface Window {
-//     CometChat: any;
-//   }
-// }
 
 const OneChat = () => {
 
@@ -70,6 +65,7 @@ const OneChat = () => {
   const loadChatHistory = useCallback(async (receiverUid: string) => {
     try {
       console.log('Fetching messages for:', receiverUid); // Debug log
+      if (CometChat.MessagesRequestBuilder) {
       const messagesRequest = new CometChat.MessagesRequestBuilder()
         .setUID(receiverUid)
         .setLimit(50)
@@ -79,11 +75,12 @@ const OneChat = () => {
       console.log('Previous messages:', previousMessages); // Debug log
       setMessages(previousMessages.map(formatMessage));
       return previousMessages;
+      }
     } catch (error) {
       console.error('Error loading chat history:', error);
       setError('Failed to load chat history');
     }
-  }, [CometChat.MessagesRequestBuilder]);
+  }, [CometChat?.MessagesRequestBuilder]);
 
   useEffect(() => {
     const fetchSenderUID = async () => {
@@ -126,7 +123,7 @@ const OneChat = () => {
     }
 
     fetchSenderUID();
-  }, [initializeChat, CometChat.ConversationsRequestBuilder]);
+  }, [initializeChat]);
 
   useEffect(() => {
     if (reciever) {

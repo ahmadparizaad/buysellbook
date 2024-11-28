@@ -1,7 +1,6 @@
 'use client';
 
 import { COMETCHAT_CONSTANTS } from '@/app/chat/const';
-import { CometChat } from '@cometchat/chat-sdk-javascript';
 import axios from 'axios';
 
 interface AuthResponse {
@@ -13,7 +12,13 @@ export class CometchatAuthService {
   private static instance: CometchatAuthService;
   private isInitialized: boolean = false;
 
-  private constructor() {}
+  private constructor() {
+    let CometChat: any;
+     if (typeof window !== "undefined") {
+      CometChat = require("@cometchat/chat-sdk-javascript").CometChat;
+      window.CometChat = CometChat;
+    }
+  }
 
   public static getInstance(): CometchatAuthService {
     if (!CometchatAuthService.instance) {
@@ -36,13 +41,13 @@ export class CometchatAuthService {
     }
 
     try {
-      const appSetting = new CometChat.AppSettingsBuilder()
+      const appSetting = new window.CometChat.AppSettingsBuilder()
         .subscribePresenceForAllUsers()
         .setRegion(region)
         .autoEstablishSocketConnection(true)
         .build();
 
-      await CometChat.init(appID, appSetting);
+      await window.CometChat.init(appID, appSetting);
       this.isInitialized = true;
       console.log('CometChat initialization completed successfully');
     } catch (error) {
@@ -60,7 +65,7 @@ export class CometchatAuthService {
       await this.initializeCometChat();
 
       // First, check if user is already logged in
-      const currentUser = await CometChat.getLoggedinUser();
+      const currentUser = await window.CometChat.getLoggedinUser();
       if (currentUser && currentUser.getUid() === uid) {
         console.log('User already logged in');
         return currentUser;
@@ -83,7 +88,7 @@ export class CometchatAuthService {
       // }
 
       // Login with the generated auth token
-      const user = await CometChat.login(uid, COMETCHAT_CONSTANTS.AUTH_KEY);
+      const user = await window.CometChat.login(uid, COMETCHAT_CONSTANTS.AUTH_KEY);
       console.log('CometChat login successful:', user);
         return user;
       }
@@ -99,7 +104,7 @@ export class CometchatAuthService {
    */
   public async logout(): Promise<void> {
     try {
-      await CometChat.logout();
+      await window.CometChat.logout();
       console.log('CometChat logout successful');
     } catch (error) {
       console.error('CometChat logout failed:', error);
@@ -112,7 +117,7 @@ export class CometchatAuthService {
    */
   public async isLoggedIn(): Promise<boolean> {
     try {
-      const user = await CometChat.getLoggedinUser();
+      const user = await window.CometChat.getLoggedinUser();
       return !!user;
     } catch (error) {
       return false;
@@ -124,7 +129,7 @@ export class CometchatAuthService {
    */
   public async getCurrentUser(): Promise<CometChat.User | null> {
     try {
-      return await CometChat.getLoggedinUser();
+      return await window.CometChat.getLoggedinUser();
     } catch (error) {
       console.error('Error getting current user:', error);
       return null;
