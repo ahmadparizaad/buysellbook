@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -123,7 +123,7 @@ const OneChat = () => {
     }
 
     fetchSenderUID();
-  }, [initializeChat]);
+  }, [CometChat.ConversationsRequestBuilder, initializeChat]);
 
   useEffect(() => {
     if (reciever) {
@@ -294,6 +294,7 @@ const OneChat = () => {
   
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="h-[100vh] flex flex-col border rounded-md">
     {!selectedChat ? (
         // Conversations List View
@@ -396,7 +397,8 @@ const OneChat = () => {
     </form>
     </>
   )}
-  </div>
+    </div>
+    </Suspense>
 );
 };
 
