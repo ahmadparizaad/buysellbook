@@ -4,32 +4,64 @@ import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 import { Menu as MenuIcon, X } from "lucide-react"; // Import icons
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Button } from "./ui/button";
+import {useRouter} from "next/navigation";
 
 function Navbar({ className }: { className?: string }) {
     const [active, setActive] = useState<string | null>(null);
     const [visible, setVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const router = useRouter();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
+    const currentScrollPos = window.scrollY;
   
       setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
   
       setPrevScrollPos(currentScrollPos);
     };
-  
+    const getUserDetails = async () => {
+      try {
+        const res = await axios.get('/api/users/me');
+        setUser(res.data.data);
+      } catch (error: any) {
+        console.log(error.message);
+        toast.error(error.message);
+      }
+    };
+
+    const handleLogin = async () => {
+      try {
+        if (user) {
+          setIsMenuOpen(false)
+          await axios.get('/api/users/logout');
+          setUser(null);
+          toast.success('Logged out successfully');
+          router.push("/login");
+        } else {
+          window.location.href = '/login';
+        }
+      } catch (error: any) {
+        console.log(error.message);
+        toast.error(error.message);
+      }
+    };
+
     useEffect(() => {
       window.addEventListener('scroll', handleScroll);
-  
+      getUserDetails();
       return () => {
         window.removeEventListener('scroll', handleScroll);
       };
     }, [handleScroll, prevScrollPos]);
 
     return (
-      <>
+      <div>
       
       <div
         className={cn(`fixed top-4 inset-x-0 md:w-fit mx-auto max-sm:mx-5 z-50 transition-all duration-300 ${
@@ -82,7 +114,7 @@ function Navbar({ className }: { className?: string }) {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden font-semibold bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 border border-gray-400 fixed rounded-3xl top-14 py-1 w-full bg-blue-950/[0.9] transition-opacity duration-300 transform ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>         
+        <div className={`md:hidden space-y-5 font-semibold bg-gray-600 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 border border-gray-400 fixed rounded-3xl top-14 py-1 w-full bg-blue-950/[0.9] transition-opacity duration-300 transform ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>         
             <div className="flex flex-col px-4">
 
               <Link 
@@ -121,12 +153,19 @@ function Navbar({ className }: { className?: string }) {
               >
                 Chat
               </Link>
+              <Button 
+                className="text-md px-2 py-1 rounded-3xl"
+                onClick={() => handleLogin()}
+              >
+                {user ? 'Logout' : 'Login'}
+              </Button>
             </div>
           </div>
           {/* <div className={`md:hidden absolute rounded-3xl w-full border-[2px] border-gray-400 px-4 py-6 bg-transparent  transition-transform duration-300 transform ${isMenuOpen ? 'translate-y-40' : 'translate-y-0'}`}></div>         */}
           </div>
         </div>
-        </>
+
+        </div>
   )
 }
 

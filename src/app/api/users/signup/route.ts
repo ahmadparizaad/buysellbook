@@ -3,6 +3,7 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/helpers/mailer";
+import { COMETCHAT_CONSTANTS } from "@/app/chat/const";
 
 connect()
 
@@ -36,6 +37,25 @@ export async function POST(request: NextRequest){
         //send verification email
 
         await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
+        const options = {
+            method: 'POST',
+            headers: {
+                accept: 'application/json', 
+                'content-type': 'application/json',
+                apikey: 'be5f7e2c78caa1bd70bcf08bbc24f560f8612e2f'
+            },
+            body: JSON.stringify(
+                {
+                    uid: username,
+                    name: username,
+                })
+          };
+          console.log(options);
+          
+          fetch(`https://${COMETCHAT_CONSTANTS.APP_ID}.api-${COMETCHAT_CONSTANTS.REGION}.cometchat.io/v3/users`, options)
+            .then(res => res.json())
+            .then(res => console.log(res))
+            .catch(err => console.error(err));
 
         return NextResponse.json({
             message: "User registered successfully",

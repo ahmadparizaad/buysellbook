@@ -21,59 +21,14 @@ export default function LoginPage() {
     const [loading, setLoading] = React.useState(false);
 
 
-    const onLogin = async () => {
+    const onLogin = async (e: React.FormEvent) => {
         try {
+            e.preventDefault(); 
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
             console.log("Login success", response.data);
             toast.success("Login success");
-            // if (response.data.success) {
-            //   const res = await axios.get('/api/users/me');
-            //   const uid = res.data.data.username;
-            //     // Step 2: Generate CometChat Auth Token
-            //     const options = {
-            //       method: 'POST',
-            //       headers: {accept: 'application/json', 'content-type': 'application/json'}
-            //     };
-                
-            //     fetch(`https://26674133e9811b37.api-in.cometchat.io/v3/users/${uid}/auth_tokens`, options)
-            //       .then(res => res.json())
-            //       .then(res => console.log(res))
-            //       .catch(err => console.error(err));
-            //       console.log(res);
-            //       const authToken = res.data.authToken
-            //       console.log(authToken);
-                  
-        
-            //       // Step 3: Login to CometChat
-            //     //   initializeCometChat();
-            //       await CometChat.CometChat.getLoggedinUser().then(
-            //         (value: CometChat.User | null) => {
-            //           if (!value) {
-            //             CometChat.CometChat.login(authToken).then(
-            //               (user: CometChat.User) => {
-            //                 console.log("Login Successful:", { user });
-            //               },
-            //               (error: CometChat.CometChatException) => {
-            //                 console.log("Login failed with exception:", { error });
-            //               }
-            //             );
-            //           }
-            //         },
-            //         (error: CometChat.CometChatException) => {
-            //           console.log("Some Error Occured", { error });
-            //         }
-            //       );
-            //       // Redirect or perform other actions after successful login
-            //       // ...
-                
-            //     if(!res.data.data.isProfileComplete){
-            //       router.push("/complete-profile");
-            //     } else{
-            //       router.push("/")
-            //     }
-                
-            //   }
+            router.push("/");
             
         } catch (error:any) {
             console.log("Login failed", error.message);
@@ -133,7 +88,7 @@ export default function LoginPage() {
                 Login
             </Button>
             <p className="text-sm mb-2">Don&apos;t have an account?</p>
-            <Link className="text-sm text-blue-500" href="/signup">Signup here</Link>
+            <Link className="text-sm text-blue-500" href="/signup">Sign Up here</Link>
             </form>
         </div>
     )

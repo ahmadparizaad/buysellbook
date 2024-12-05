@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/models/userModel.js", "src/components/PhotoUpload.jsx", "src/components/Semester.tsx", "src/app/chat/chat.jsx", "src/app/chat/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/models/userModel.js", "src/components/PhotoUpload.jsx", "src/components/Semester.tsx", "src/app/chat/chat.jsx", "src/app/chat/page.jsx", "src/components/ui/smoothScroll.jsx"],
   "exclude": ["node_modules"]
 }

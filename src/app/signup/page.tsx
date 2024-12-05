@@ -5,6 +5,7 @@ import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Spotlight } from "@/components/ui/Spotlight";
+import { COMETCHAT_CONSTANTS } from '@/app/chat/const';
 
 
 
@@ -19,21 +20,22 @@ export default function SignupPage() {
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
-    const onSignup = async () => {
+    const onSignup = async (e: React.FormEvent) => {
         try {
+            e.preventDefault();
             setLoading(true);
             const response = await axios.post("/api/users/signup", user);
             console.log("Signup success", response.data);
             toast.success("Signup successful");
-            if (response.data.success) {
-                // Step 2: Create user on CometChat
-                await axios.post('/api/cometchat/createUser', {
-                  uid: user.username, // Ensure uid is unique
-                  name: user.username,
-                  // Optionally, include avatar URL
-                });
-            }
             router.push("/login");
+            if (response.data) {
+                // Step 2: Create user on CometChat
+                // await axios.post('/api/cometchat/createUser', {
+                //   uid: user.username, // Ensure uid is unique
+                //   name: user.username,
+                //   // Optionally, include avatar URL
+                // });
+            }
             
         }catch (error:any) {
             console.log("Signup failed", error.message);

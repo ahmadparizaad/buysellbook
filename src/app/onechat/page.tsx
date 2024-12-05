@@ -281,7 +281,7 @@ const OneChat = () => {
 
   
     if (isLoading) {
-      return <div className="flex justify-center items-center h-64">Loading chat...</div>;
+      return <div className="flex justify-center items-center h-64">Loading chats...</div>;
     }
   
     if (error) {

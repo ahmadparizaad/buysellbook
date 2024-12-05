@@ -9,6 +9,7 @@ import SignupPage from "./signup/page";
 import { useInitializeCometChat } from "@/utils/cometchatConfig";
 import { Suspense, useEffect, useState } from "react";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
