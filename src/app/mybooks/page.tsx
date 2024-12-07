@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
+import LoadingComponent from '@/components/LoadingComponent';
 
 interface IBook {
   _id: string;
@@ -22,7 +23,18 @@ const MyBook = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchMyBooks();
+    const initializePage = async () => {
+      try {
+        setLoading(true);
+        await fetchMyBooks();
+      } catch (error) {
+        console.error('Error initializing page:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializePage();
   }, []);
 
   const fetchMyBooks = async () => {
@@ -51,13 +63,15 @@ const MyBook = () => {
     }
   };
 
-
   if (loading) {
-    return <div>Loading your books...</div>;
+    return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading your books...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600">{error}</div>;
+    return <div className="text-xl text-red-600 font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">{error}</div>;
+  }
+  if(myBooks.length === 0) {
+    return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
   }
 
   return (

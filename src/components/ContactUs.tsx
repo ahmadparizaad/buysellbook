@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button"
 import Image from "next/image";
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const   ContactUs = () => {
   const [name, setName] = useState("");
@@ -10,9 +13,17 @@ const   ContactUs = () => {
   const [attachment, setAttachment] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
+    try{
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please complete the captcha");
+      return;
+  }
+    setLoading(true);
     setError("");
     setSuccess("");
 
@@ -21,17 +32,39 @@ const   ContactUs = () => {
       setError("Name, email, and description are required.");
       return;
     }
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("description", description);
+    if (attachment) {
+      formData.append("attachment", attachment);
+    }
+    formData.append("captchaToken", captchaToken);
 
-    // Handle form submission logic here
-    // For example, send the data to an API
+    const response = await axios.post("/api/contactus", {
+        ...formData,
+        captchaToken
+    });
+    console.log("Message sent", response.data);
+    
 
+    toast.success("Message sent successfully");
     setSuccess("Your message has been sent successfully!");
     // Reset form fields
     setName("");
     setEmail("");
     setDescription("");
     setAttachment(null);
-  };
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+              setLoading(false);
+    }
+  }
+
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
+}
 
   return (
     <>    
@@ -88,12 +121,20 @@ const   ContactUs = () => {
           className="text-black mb-4 mt-2 w-[35vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
         />
       </div>
+
+      <div className="mb-5">
+        <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onChange={handleCaptchaChange}
+        />
+      </div>
+
       <Button
         type="submit"
         variant="outline"
-        className="border px-4 py-2 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200"
-      >
-        Submit
+        disabled={!captchaToken || loading}
+        className="border px-4 mb-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200">
+        {loading ? "Sending..." : "Submit"}
       </Button>
     </form>
 

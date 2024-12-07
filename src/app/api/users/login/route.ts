@@ -3,15 +3,47 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import axios from "axios";
 
 connect()
+
+async function verifyCaptcha(token: string) {
+    try {
+        console.log("Verifying captcha token:", token); // Debug log
+
+        const response = await axios.post(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+                },
+            }
+        );
+        console.log("Captcha verification response:", response.data); // Debug log
+
+        return response.data.success;
+    } catch (error:any) {
+        console.error("Detailed captcha verification error:", error.response?.data || error); // More detailed error
+        return false;
+    }
+}
 
 export async function POST(request: NextRequest){
     try {
 
         const reqBody = await request.json()
-        const {email, password} = reqBody;
+        const {email, password, captchaToken} = reqBody;
         console.log(reqBody);
+
+        // Verify captcha
+        const isCaptchaValid = await verifyCaptcha(captchaToken);
+        if (!isCaptchaValid) {
+            return NextResponse.json(
+                { error: "Invalid captcha" },
+                { status: 400 }
+            );
+        }
 
         //check if user exists
         const user = await User.findOne({email})

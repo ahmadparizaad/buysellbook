@@ -105,7 +105,7 @@ function Navbar({ className }: { className?: string }) {
             <MenuItem setActive={setActive} active={active} item="Sell"></MenuItem>
             </Link>
             <Link href="/onechat">
-            <MenuItem setActive={setActive} active={active} item="Chat"></MenuItem>
+            <MenuItem setActive={setActive} active={active} item="Chats"></MenuItem>
             </Link>
             <Link href="/mybooks">
             <MenuItem setActive={setActive} active={active} item="My Books"></MenuItem>
@@ -151,7 +151,14 @@ function Navbar({ className }: { className?: string }) {
                 className="text-md px-4 py-1 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Chat
+                Chats
+              </Link>
+              <Link 
+                href="/mybooks" 
+                className="text-md px-4 py-1 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                My Books
               </Link>
               <Button 
                 className="text-md px-2 py-1 rounded-3xl"

@@ -78,6 +78,7 @@ function SellPage() {
           <option value="Engineering">Engineering</option>
           <option value="Medical">Medical</option>
           <option value="BSc">BSc</option>
+          <option value="BCom">BCom</option>
           <option value="Other">Other</option>
         </select>
       </div>

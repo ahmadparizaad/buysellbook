@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import CometChat from "@cometchat/chat-sdk-javascript";
 import { Button } from "@/components/ui/button"
 import { Spotlight } from "@/components/ui/Spotlight";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // import { initializeCometChat } from "@/utils/cometchatConfig";
 
@@ -15,33 +15,45 @@ export default function LoginPage() {
     const [user, setUser] = React.useState({
         email: "",
         password: "",
+        captchaToken: ""
        
     })
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
-
     const onLogin = async (e: React.FormEvent) => {
         try {
-            e.preventDefault(); 
-            setLoading(true);
-            const response = await axios.post("/api/users/login", user);
-            console.log("Login success", response.data);
-            toast.success("Login success");
-            router.push("/");
+            e.preventDefault();
             
-        } catch (error:any) {
-            console.log("Login failed", error.message);
+            if (!user.captchaToken) {
+                toast.error("Please complete the captcha");
+                return;
+            }
+
+            setLoading(true);
+            const response = await axios.post("/api/users/login", {
+                email: user.email,
+                password: user.password,
+                captchaToken: user.captchaToken // Make sure this is being sent
+            });
+            
+            toast.success("Login successful");
+            router.push("/profile");
+        } catch (error: any) {
+            console.error("Login error:", error.response?.data || error); // More detailed error logging
             toast.error(error.message);
-        } finally{
-        setLoading(false);
+        } finally {
+            setLoading(false);
         }
+    }
+    const handleCaptchaChange = (token: string | null) => {
+        setUser({...user, captchaToken: token || ''});
     }
 
     useEffect(() => {
-        if(user.email.length > 0 && user.password.length > 0) {
+        if(user.email.length > 0 && user.password.length > 0 && user.captchaToken) {
             setButtonDisabled(false);
-        } else{
+        } else {
             setButtonDisabled(true);
         }
     }, [user]);
@@ -52,7 +64,7 @@ export default function LoginPage() {
           className="left-40  md:left-60 md:-top-20"
           fill="blue"
         />
-        <h1 className="text-2xl mb-5">{loading ? "Processing" : "Login"}</h1>
+        <h1 className="text-2xl md:mt-20 mb-2">{loading ? "Processing..." : "Login"}</h1>
         <hr />
         <form onSubmit={onLogin} className="z-[9] flex flex-col items-center justify-center py-2">
 
@@ -82,9 +94,16 @@ export default function LoginPage() {
             />
         </div>
         
+        <div className="mb-5">
+            <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={handleCaptchaChange}
+            />
+        </div>
+
             <Button
             variant="outline"
-            className="border mb-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200">
+            className="border mb-5 px-4 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200">
                 Login
             </Button>
             <p className="text-sm mb-2">Don&apos;t have an account?</p>

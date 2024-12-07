@@ -104,7 +104,8 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        spotlight: "spotlight 1s ease .5s 1 forwards",
+        'spotlight': "spotlight 1s ease .5s 1 forwards",
+        'spin-reverse': 'spin 1s linear infinite reverse',
       },
       
     },

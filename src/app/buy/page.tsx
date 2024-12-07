@@ -25,6 +25,10 @@ import toast from 'react-hot-toast';
     semester: string;
     isSet: string;
     books: {name : string, price : number}[];
+    seller: {
+      city: string;
+      college: string;
+    }
   }
   
 
@@ -38,7 +42,14 @@ function Books() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchType, setSearchType] = useState('books');
+  const [filters, setFilters] = useState({
+    course: '',
+    std: '',
+    year: '',
+    semester: ''
+  });
 
   const router = useRouter();
 
@@ -46,7 +57,7 @@ function Books() {
   useEffect(() => {
     fetchData();
     getSenderUID();
-  }, [searchQuery]);
+  }, [searchQuery, filters]);
 
   // Add intersection observer
 useEffect(() => {
@@ -88,14 +99,24 @@ useEffect(() => {
 
   const fetchData = async (pageNum = 1) => {
     try {
-      const response = await axios.get(`/api/books/buy?page=${pageNum}&limit=12`);
-    if (pageNum === 1) {
-      setBooks(response.data.books);
-    } else {
-      setBooks(prev => [...prev, ...response.data.books]);
-    }
-    setHasMore(response.data.books.length === 12);
-   } catch (error) {
+      // Add filters to query params
+      const queryParams = new URLSearchParams({
+        page: pageNum.toString(),
+        limit: '12',
+        ...(filters.course && { course: filters.course }),
+        ...(filters.std && { std: filters.std }),
+        ...(filters.year && { year: filters.year }),
+        ...(filters.semester && { semester: filters.semester })
+      }).toString();
+
+      const response = await axios.get(`/api/books/buy?${queryParams}`);
+      if (pageNum === 1) {
+        setBooks(response.data.books);
+      } else {
+        setBooks(prev => [...prev, ...response.data.books]);
+      }
+      setHasMore(response.data.books.length === 12);
+    } catch (error) {
       console.error('Error fetching data:', error);
       setError('An error occurred while fetching data.');
     } finally {
@@ -134,51 +155,161 @@ useEffect(() => {
     return res.data.data;
   }
 
+  const handleFilterChange = (filterType: string, value: string) => {
+    // Reset dependent filters when course changes
+    if (filterType === 'course') {
+      setFilters({
+        course: value,
+        std: '',
+        year: '',
+        semester: ''
+      });
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [filterType]: value
+      }));
+    }
+    setPage(1); // Reset page when filters change
+  };
+
+  const handleSearch = async () => {
+    try {
+      setLoading(true);
+      const queryParams = new URLSearchParams({
+        searchType: searchType,
+        query: searchQuery,
+        ...(filters.course && { course: filters.course }),
+        ...(filters.std && { std: filters.std }),
+        ...(filters.year && { year: filters.year }),
+        ...(filters.semester && { semester: filters.semester })
+      }).toString();
+
+      const response = await axios.get(`/api/books/buy?${queryParams}`);
+      setBooks(response.data.books);
+      setHasMore(response.data.books.length === 12);
+    } catch (error) {
+      console.error('Error searching books:', error);
+      toast.error('Failed to search books');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     // Adjust main container padding and margin for mobile
     <div className='p-2 sm:p-2 min-h-screen relative z-[9] mt-[60px] sm:mt-[8vw] font-[Gilroy]'>
       
       {/* Search section  */}
-      <div className="flex sm:flex-row sm:justify-center gap-3 items-center my-6">
+      <div className="flex flex-col sm:flex-row sm:justify-center gap-3 items-center my-6">
+        <select
+          className="w-[80%] sm:w-auto sm:py-1 rounded-3xl px-4 py-2 text-black border-2"
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+        >
+          <option value="books">Search Books</option>
+          <option value="city">Search by City</option>
+          <option value="college">Search by College</option>
+        </select>
+        
         <input 
           className='w-[80%] sm:w-[30%] sm:py-1 rounded-3xl px-4 py-2 text-black border-2'
-          placeholder="Search books..."
+          placeholder={`Search ${searchType}...`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        
         <Button 
-          // onClick={() => fetchSearchData(searchQuery)}
+          onClick={handleSearch}
           variant="outline" 
-          className=' sm:w-auto border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'
+          className='sm:w-auto border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'
         >
           Search
         </Button>
       </div>
 
-      {/* Filter accordion */}
-      {/* <Accordion type="single" collapsible className="mb-8">
+      {/* Replace the filter accordion with this new one */}
+      <Accordion type="single" collapsible className="mb-8">
         <AccordionItem value="item-1">    
-          <AccordionTrigger>Filter</AccordionTrigger>
-          <AccordionContent className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <Checkbox id="fy" />
-              <label htmlFor="fy">First Year</label>
+          <AccordionTrigger>Filters</AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-4">
+            {/* Course Filter */}
+            <div className="flex flex-col gap-2">
+              <label className="font-medium">Course</label>
+              <select 
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                value={filters.course}
+                onChange={(e) => handleFilterChange('course', e.target.value)}
+              >
+                <option className='rounded-3xl' value="">All Courses</option>
+                <option value="School">School</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Medical">Medical</option>
+                <option value="BSc">BSc</option>
+                <option value="BCom">BCom</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="sy" />
-              <label htmlFor="sy">Second Year</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="ty" />
-              <label htmlFor="ty">Third Year</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="ly" />
-              <label htmlFor="ly">Last Year</label>
-            </div>
+
+            {/* Conditional School Class Filter */}
+            {filters.course === "School" && (
+              <div className="flex flex-col gap-2">
+                <label className="font-medium">Class</label>
+                <select 
+                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  value={filters.std}
+                  onChange={(e) => handleFilterChange('std', e.target.value)}
+                >
+                  <option value="">All Classes</option>
+                  <option value="Class 9">Class 9</option>
+                  <option value="Class 10">Class 10</option>
+                  <option value="Class 11">Class 11</option>
+                  <option value="Class 12">Class 12</option>
+                </select>
+              </div>
+            )}
+
+            {/* Conditional Year Filter for non-School courses */}
+            {filters.course && filters.course !== "School" && (
+              <div className="flex flex-col gap-2">
+                <label className="font-medium">Year</label>
+                <select 
+                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  value={filters.year}
+                  onChange={(e) => handleFilterChange('year', e.target.value)}
+                >
+                  <option value="">All Years</option>
+                  <option value="First Year">First Year</option>
+                  <option value="Second Year">Second Year</option>
+                  <option value="Third Year">Third Year</option>
+                  {filters.course !== "BSc" && filters.course !== "BCom" && filters.course === "Medical" && (
+                    <option value="Fourth Year">Fourth Year</option>
+                  )}
+                  {filters.course !== "BSc" && filters.course !== "BCom" && (
+                    <option value="Final Year">Final Year</option>
+                  )}
+                </select>
+              </div>
+            )}
+
+            {/* Conditional Semester Filter for non-School courses */}
+            {filters.course && filters.course !== "School" && (
+              <div className="flex flex-col gap-2">
+                <label className="font-medium">Semester</label>
+                <select 
+                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  value={filters.semester}
+                  onChange={(e) => handleFilterChange('semester', e.target.value)}
+                >
+                  <option value="">All Semesters</option>
+                  <option value="Semester 1">Semester 1</option>
+                  <option value="Semester 2">Semester 2</option>
+                </select>
+              </div>
+            )}
           </AccordionContent>
         </AccordionItem>
-      </Accordion> */}
+      </Accordion>
 
       
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8'>
@@ -199,11 +330,11 @@ useEffect(() => {
       {error && <p className="text-red-600 mb-8">{error}</p>}
 
       {/* Books grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {books?.map((book) => (
           <div key={book._id} className="container relative text-white">
             <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-white bg-opacity-10 border border-white border-opacity-20 
-                          filter backdrop-blur-xl rounded-lg transition-all duration-300 ease-in-out 
+                          filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:scale-105 hover:border-opacity-55">
               <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
               
@@ -223,7 +354,7 @@ useEffect(() => {
             
               <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
-                <ul className="space-y-[2px]">
+                <ul className="space-y-[1px]">
                   {book.books.map((item, index) => (
                     <li key={index} className="text-gray-300">
                       <p className='font-medium'>{item.name}: ₹{item.price}</p>
@@ -231,6 +362,13 @@ useEffect(() => {
                   ))}
                 </ul>
               </div>
+
+              {book.seller && (
+                <div className="mt-2 text-sm text-gray-300">
+                  <p>Location: {book.seller.city}</p>
+                  <p>College: {book.seller.college}</p>
+                </div>
+              )}
 
               <Button 
                 onClick={() => handleBuyClick(book)} 

@@ -281,7 +281,7 @@ const OneChat = () => {
 
   
     if (isLoading) {
-      return <div className="flex justify-center items-center h-64">Loading chats...</div>;
+      return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading chats...</div>;
     }
   
     if (error) {
@@ -300,7 +300,7 @@ const OneChat = () => {
         <div className="flex-1 overflow-y-auto p-4">
           
           {conversations.length == 0 ? (
-            <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-24">No Recent Chat</h2>          ) : (
+            <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>          ) : (
             <>
             <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
             {conversations.map((conversation) => (

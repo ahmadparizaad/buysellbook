@@ -8,6 +8,7 @@ import LoginPage from "./login/page";
 import SignupPage from "./signup/page";
 import { useInitializeCometChat } from "@/utils/cometchatConfig";
 import { Suspense, useEffect, useState } from "react";
+import { LoadingProvider } from '@/components/LoadingProvider';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,9 +30,11 @@ export default function RootLayout({
     <html lang="en" className="dark overflow-x-hidden">
       <body className={inter.className}>
         <Suspense>
+        <LoadingProvider>
         <Navbar />
         
         {children}
+        </LoadingProvider>
         </Suspense>
       </body>
     </html>

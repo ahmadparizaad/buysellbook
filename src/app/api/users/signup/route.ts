@@ -4,15 +4,43 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/helpers/mailer";
 import { COMETCHAT_CONSTANTS } from "@/app/chat/const";
+import axios from "axios";
 
 connect()
+
+async function verifyCaptcha(token: string) {
+    try {
+        const response = await axios.post(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+                },
+            }
+        );
+        return response.data.success;
+    } catch (error) {
+        console.error("Error verifying captcha:", error);
+        return false;
+    }
+}
 
 export async function POST(request: NextRequest){
     try {
         const reqBody = await request.json()
-        const {username, email, password} = reqBody
+        const {username, email, password, captchaToken} = reqBody
 
         console.log(reqBody);
+
+        // Verify captcha
+        const isCaptchaValid = await verifyCaptcha(captchaToken);
+        if (!isCaptchaValid) {
+            return NextResponse.json(
+                { error: "Invalid captcha" },
+                { status: 400 }
+            );
+        }
 
         //check if user already exists
         const user = await User.findOne({email})
@@ -50,7 +78,6 @@ export async function POST(request: NextRequest){
                     name: username,
                 })
           };
-          console.log(options);
           
           fetch(`https://${COMETCHAT_CONSTANTS.APP_ID}.api-${COMETCHAT_CONSTANTS.REGION}.cometchat.io/v3/users`, options)
             .then(res => res.json())
