@@ -1,19 +1,16 @@
 // File: /pages/api/otp/verify.ts
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/userModel"; // Adjust based on your project structure
 import {connect} from "@/dbConfig/dbConfig";
 
 connect();
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
-  const { whatsappNumber, otp } = req.body;
+export async function POST(request: NextRequest, response: NextResponse) {  
+  const reqBody = await request.json()
+  const { whatsappNumber, otp } = reqBody;
 
   if (!whatsappNumber || !otp) {
-    return res.status(400).json({ message: "WhatsApp number and OTP are required" });
+    return NextResponse.json({ error: "WhatsApp number and OTP are required" }, { status: 400 });
   }
 
   try {
@@ -21,7 +18,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     const user = await User.findOne({ whatsappNumber });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     // Check if OTP is valid and not expired
@@ -30,7 +27,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       !user.verifyTokenExpiry ||
       user.verifyTokenExpiry < Date.now()
     ) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+      return NextResponse.json({ message: "Invalid or expired OTP" }, { status: 400 });
     }
 
     // Mark user as verified
@@ -39,9 +36,9 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     user.verifyTokenExpiry = undefined; // Clear expiration
     await user.save();
 
-    return res.status(200).json({ message: "OTP verified successfully" });
+    return NextResponse.json({ message: "OTP verified successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error verifying OTP:", error);
-    return res.status(500).json({ message: "Failed to verify OTP" });
+    return NextResponse.json({ message: "Failed to verify OTP" }, { status: 500 });
   }
 }
