@@ -1,6 +1,5 @@
 'use client';
 
-import { COMETCHAT_CONSTANTS } from '@/app/chat/const';
 import axios from 'axios';
 
 interface AuthResponse {
@@ -33,8 +32,8 @@ export class CometchatAuthService {
   public async initializeCometChat(): Promise<void> {
     if (this.isInitialized) return;
 
-    const appID = COMETCHAT_CONSTANTS.APP_ID;
-    const region = COMETCHAT_CONSTANTS.REGION;
+    const appID = process.env.COMETCHAT_APP_ID;
+    const region = process.env.COMETCHAT_REGION;
 
     if (!appID || !region) {
       throw new Error('CometChat credentials are not properly configured');
@@ -88,7 +87,7 @@ export class CometchatAuthService {
       // }
 
       // Login with the generated auth token
-      const user = await window.CometChat.login(uid, COMETCHAT_CONSTANTS.AUTH_KEY);
+      const user = await window.CometChat.login(uid, process.env.COMETCHAT_AUTH_KEY);
       console.log('CometChat login successful:', user);
         return user;
       }

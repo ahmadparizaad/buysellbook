@@ -1,9 +1,8 @@
 // src/utils/cometchatConfig.ts
-import { COMETCHAT_CONSTANTS } from '@/app/chat/const';
 import { useEffect } from 'react';
 
-const appID = COMETCHAT_CONSTANTS.APP_ID;
-const region = COMETCHAT_CONSTANTS.REGION;
+const appID = process.env.COMETCHAT_APP_ID;
+const region = process.env.COMETCHAT_REGION;
 
 declare global {
   interface Window {

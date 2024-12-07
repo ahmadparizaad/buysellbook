@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { CometChat } from '@cometchat/chat-sdk-javascript';
 import { cometchatAuth } from '@/utils/cometchatAuth';
-import { COMETCHAT_CONSTANTS } from '@/app/chat/const';
 import axios from 'axios';
 
 interface Message {

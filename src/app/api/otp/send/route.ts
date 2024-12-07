@@ -4,7 +4,6 @@ import twilio from "twilio";
 import User from "@/models/userModel"; // Adjust based on your project structure
 import {connect} from "@/dbConfig/dbConfig";
 import bcryptjs from "bcryptjs";
-import { COMETCHAT_CONSTANTS } from "@/app/chat/const";
 
 connect()
 
@@ -70,7 +69,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
           })
     };
     
-    fetch(`https://${COMETCHAT_CONSTANTS.APP_ID}.api-${COMETCHAT_CONSTANTS.REGION}.cometchat.io/v3/users`, options)
+    fetch(`https://${process.env.COMETCHAT_APP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
       .then(res => res.json())
       .then(res => console.log(res))
       .catch(err => console.error(err));

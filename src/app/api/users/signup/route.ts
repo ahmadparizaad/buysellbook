@@ -3,7 +3,6 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/helpers/mailer";
-import { COMETCHAT_CONSTANTS } from "@/app/chat/const";
 import axios from "axios";
 
 connect()
@@ -79,7 +78,7 @@ export async function POST(request: NextRequest){
                 })
           };
           
-          fetch(`https://${COMETCHAT_CONSTANTS.APP_ID}.api-${COMETCHAT_CONSTANTS.REGION}.cometchat.io/v3/users`, options)
+          fetch(`https://${process.env.COMETCHAT_PP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
             .then(res => res.json())
             .then(res => console.log(res))
             .catch(err => console.error(err));
