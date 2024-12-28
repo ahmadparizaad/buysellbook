@@ -8,7 +8,7 @@ export async function PUT(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
     const reqBody = await request.json()
-    const { name, college, city, profileImage } = reqBody;
+    const { name, college, city, profileImage, isProfileComplete } = reqBody;
 
     // Find the user by ID
     const user = await User.findById(userId);
@@ -24,6 +24,7 @@ export async function PUT(request: NextRequest) {
       college: college,
       city: city,
       profileImage: profileImage,
+      isProfileComplete: isProfileComplete,
     }, { new: true });
 
     return NextResponse.json({

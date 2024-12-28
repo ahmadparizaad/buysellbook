@@ -30,7 +30,7 @@ export async function POST(request: NextRequest){
         const reqBody = await request.json()
         const {username, email, password, captchaToken} = reqBody
 
-        console.log(reqBody);
+        console.log("request body : ", reqBody);
 
         // Verify captcha
         const isCaptchaValid = await verifyCaptcha(captchaToken);
@@ -51,6 +51,8 @@ export async function POST(request: NextRequest){
         //hash password
         const salt = await bcryptjs.genSalt(10)
         const hashedPassword = await bcryptjs.hash(password, salt)
+        console.log(hashedPassword);
+        
 
         const newUser = new User({
             username,
@@ -59,11 +61,13 @@ export async function POST(request: NextRequest){
         })
 
         const savedUser = await newUser.save()
-        console.log(savedUser);
+        console.log("Saved user : ", savedUser);
 
         //send verification email
 
         await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
+        console.log("Email sent");
+        
         const options = {
             method: 'POST',
             headers: {
@@ -81,7 +85,7 @@ export async function POST(request: NextRequest){
           fetch(`https://${process.env.COMETCHAT_PP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
             .then(res => res.json())
             .then(res => console.log(res))
-            .catch(err => console.error(err));
+            .catch(err => console.error("Cometchat error : ", err));
 
         return NextResponse.json({
             message: "User registered successfully",

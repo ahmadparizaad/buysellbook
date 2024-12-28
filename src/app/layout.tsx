@@ -9,7 +9,8 @@ import SignupPage from "./signup/page";
 import { useInitializeCometChat } from "@/utils/cometchatConfig";
 import { Suspense, useEffect, useState } from "react";
 import { LoadingProvider } from '@/components/LoadingProvider';
-
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,8 @@ export default function RootLayout({
         <Navbar />
         
         {children}
+        <Analytics />
+        <SpeedInsights />
         </LoadingProvider>
         </Suspense>
       </body>

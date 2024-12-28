@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import { Button } from "@/components/ui/button"
 
 const UpdateProfile = () => {
   const [profileImage, setProfileImage] = useState("");
@@ -14,6 +15,7 @@ const UpdateProfile = () => {
     college: '',
     city: '',
     profileImage: '',
+    isProfileComplete: true,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,44 +45,49 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="mt-[6.5vw] flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>Update Profile</h1>
-      <hr />
-      <form onSubmit={handleSubmit} className="max-w-md w-full z-[9]">
+    <div className="min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]">
+      <h1 className='text-xl'>Update Profile</h1>
+      <br />
+      <form onSubmit={handleSubmit} className="z-[9] flex flex-col items-center justify-center py-2">
         <div className="mb-4">
-          <label className="block text-gray-200 text-sm font-bold mb-2">Name:</label>
+          {/* <label className="block text-gray-200 text-sm font-bold mb-2">Name:</label> */}
           <input
             type="text"
             name="name"
+            required
             value={formData.name}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
             placeholder="Enter your name"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-200 text-sm font-bold mb-2">College:</label>
+          {/* <label className="block text-gray-200 text-sm font-bold mb-2">College:</label> */}
           <input
             type="text"
             name="college"
+            required
             value={formData.college}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+
             placeholder="Enter your college name"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-200 text-sm font-bold mb-2">City:</label>
+          {/* <label className="block text-gray-200 text-sm font-bold mb-2">City:</label> */}
           <input
             type="text"
             name="city"
+            required
             value={formData.city}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+
             placeholder="Enter your city"
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-gray-200 text-sm font-bold mb-2">Profile Image:</label>
           <input
             type="file" 
@@ -89,13 +96,14 @@ const UpdateProfile = () => {
             // className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             // placeholder="Enter URL for profile image"
           />
-        </div>
-        <button
+        </div> */}
+        <Button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
+          variant="outline"
+          className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+          >
           Update Profile
-        </button>
+        </Button>
       </form>
     </div>
   );

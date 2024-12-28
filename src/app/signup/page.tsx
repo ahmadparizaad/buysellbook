@@ -21,29 +21,31 @@ export default function SignupPage() {
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     const onSignup = async (e: React.FormEvent) => {
-        try {
-            e.preventDefault();
+        e.preventDefault();
             
-            if (!captchaToken) {
-                toast.error("Please complete the captcha");
-                return;
-            }
+        if (!captchaToken) {
+            toast.error("Please complete the captcha");
+            return;
+        }
 
-            setLoading(true);
-            const response = await axios.post("/api/users/signup", {
-                ...user,
-                captchaToken
+        setLoading(true);
+        try {           
+            const res = await axios.post("/api/users/signup", {
+                email: user.email,
+                password: user.password,
+                username: user.username,
+                captchaToken: captchaToken
             });
-            console.log("Signup success", response.data);
+            console.log(res.data);
+            toast.success(res.data.message);
             toast.success("Signup successful");
-            router.push("/login");
-            
+            router.push("/aftersignup");
         } catch (error:any) {
             console.log("Signup failed", error.message);
             toast.error(error.message);
         } finally {
             setLoading(false);
-        }
+        }           
     }
 
     const handleCaptchaChange = (token: string | null) => {
