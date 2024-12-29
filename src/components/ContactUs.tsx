@@ -42,7 +42,10 @@ const   ContactUs = () => {
     formData.append("captchaToken", captchaToken);
 
     const response = await axios.post("/api/contactus", {
-        ...formData,
+        name,
+        email,
+        description,
+        attachment,
         captchaToken
     });
     console.log("Message sent", response.data);

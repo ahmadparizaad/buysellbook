@@ -54,13 +54,19 @@ const OneChat = () => {
       console.log('Waiting for senderUID...');
       return;
     }
+    try{
     setIsLoading(true);
     setError(null);
     await cometchatAuth.init();
     const login = await cometchatAuth.login(senderUID);
     console.log(login);
     setIsLoading(false);
+  } catch (error) {
+    console.error('Error initializing chat:', error);
+    setError('Failed to initialize chat');
+  }
   }, [senderUID]);
+
 
   const loadChatHistory = useCallback(async (receiverUid: string) => {
     try {
@@ -87,8 +93,10 @@ const OneChat = () => {
         const res = await axios.get('/api/users/me');
         const uid = res.data.data.username;
         setSenderUID(uid);
-        console.log(`Sender UID: ${uid}`);
+        // console.log(`Sender UID: ${uid}`);
+        if(senderUID){
         await initializeChat();
+        }
         const fetchConversations = async () => {
           try {
             const conversationsRequest = new CometChat.ConversationsRequestBuilder()
@@ -279,7 +287,9 @@ const OneChat = () => {
   //   }
   // }, [selectedChat]);
 
-  
+    if (conversations.length == 0) {
+      return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No recent chats</div>;
+    }
     if (isLoading) {
       return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading chats...</div>;
     }

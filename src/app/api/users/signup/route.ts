@@ -43,6 +43,7 @@ export async function POST(request: NextRequest){
 
         //check if user already exists
         const user = await User.findOne({email})
+        console.log("User : ", user);
 
         if(user){
             return NextResponse.json({error: "User already exists"}, {status: 400})
@@ -59,14 +60,19 @@ export async function POST(request: NextRequest){
             email,
             password: hashedPassword
         })
-
+        console.log("New user : ", newUser);
         const savedUser = await newUser.save()
         console.log("Saved user : ", savedUser);
 
         //send verification email
 
-        await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
-        console.log("Email sent");
+        try {
+            await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
+            console.log("Email sent");
+        } catch (error) {
+            console.error("Error sending email:", error);
+            return NextResponse.json({ error: "Failed to send verification email" }, { status: 500 });
+        }
         
         const options = {
             method: 'POST',
@@ -82,7 +88,7 @@ export async function POST(request: NextRequest){
                 })
           };
           
-          fetch(`https://${process.env.COMETCHAT_PP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
+          fetch(`https://${process.env.COMETCHAT_APP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
             .then(res => res.json())
             .then(res => console.log(res))
             .catch(err => console.error("Cometchat error : ", err));

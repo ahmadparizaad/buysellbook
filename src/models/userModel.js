@@ -6,20 +6,20 @@ const userSchema = new mongoose.Schema({
         required: [true, "Please provide a username"],
         unique: true,
     },
-    // email: {
-    //     type: String,
-    //     required: [true, "Please provide a email"],
-    //     unique: true,
-    // },
+    email: {
+        type: String,
+        required: [true, "Please provide a email"],
+        unique: true,
+    },
     password: {
         type: String,
         required: [true, "Please provide a password"],
     },
-    whatsappNumber: {
-        type: String,
-        required: [true, "Please provide a WhatsApp number"],
-        unique: true,
-    },
+    // whatsappNumber: {
+    //     type: String,
+    //     required: [true, "Please provide a WhatsApp number"],
+    //     unique: true,
+    // },
     isVerfied: {
         type: Boolean,
         default: false,

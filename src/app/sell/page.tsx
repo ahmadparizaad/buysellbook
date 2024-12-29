@@ -70,7 +70,7 @@ function SellPage() {
     <Button
     onClick={() => router.push("/update-profile")}
     variant="outline"
-    className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'>
+    className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-white hover:text-black ease-linear duration-200'>
     Complete Profile</Button> </div> : 
     <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]'>
       {loading && 

@@ -3,13 +3,14 @@ import axios from "axios";
 import nodemailer from "nodemailer";
 
 // Create a transporter for sending emails
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
+var transporter = nodemailer.createTransport({
+    host: "live.smtp.mailtrap.io",
+    port: 587,
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD // Use App Password if using Gmail
+      user: process.env.MAILTRAP_USER,
+      pass: process.env.MAILTRAP_PASS
     }
-});
+  });
 
 async function verifyCaptcha(token: string) {
     try {
@@ -32,8 +33,9 @@ async function verifyCaptcha(token: string) {
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
-        const { name, email, description, captchaToken } = reqBody;
-
+        const { name, email, description, attachment, captchaToken } = reqBody;
+        // console.log("request body : ", reqBody);
+        
         // Input validation
         if (!name || !email || !description || !captchaToken) {
             return NextResponse.json(
@@ -50,6 +52,8 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
+        console.log("Email format verified");
+        
 
         // Verify captcha
         const isCaptchaValid = await verifyCaptcha(captchaToken);
@@ -59,11 +63,13 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
+        console.log("Captcha verified");
+        
 
         // Email content
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.CONTACT_FORM_RECIPIENT, // Where you want to receive contact form submissions
+            from: 'ahmadparizaad@campusbook.live',
+            to: 'feedback.campusbook.live@gmail.com', // Where you want to receive contact form submissions
             subject: `New Contact Form Submission from ${name}`,
             html: `
                 <h2>New Contact Form Submission</h2>
@@ -71,12 +77,19 @@ export async function POST(request: NextRequest) {
                 <p><strong>Email:</strong> ${email}</p>
                 <p><strong>Message:</strong></p>
                 <p>${description}</p>
+                
             `
-        };
+        };        
 
         // Send email
+        try{
         await transporter.sendMail(mailOptions);
-
+        console.log("Email sent");
+        
+        } catch (error) {
+            console.error("Error sending email:", error);
+            return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+        }
         // Optional: Save to database if you want to keep records
         // await ContactForm.create({ name, email, message });
 

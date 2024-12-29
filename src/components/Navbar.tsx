@@ -54,7 +54,10 @@ function Navbar({ className }: { className?: string }) {
 
     useEffect(() => {
       window.addEventListener('scroll', handleScroll);
-      getUserDetails();
+      const currentPath = window.location.pathname;
+      if (!['/signup', '/login', '/verifyEmail'].includes(currentPath)) {
+        getUserDetails();
+      }
       return () => {
         window.removeEventListener('scroll', handleScroll);
       };

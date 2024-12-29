@@ -20,14 +20,14 @@ export const sendEmail = async({email, emailType, userId}:any) => {
             host: "live.smtp.mailtrap.io",
             port: 587,
             auth: {
-              user: "api",
-              pass: "2e2bc7f82229700f9ab42ee1d33fc92b"
+              user: process.env.MAILTRAP_USER,
+              pass: process.env.MAILTRAP_PASS
             }
           });
 
 
         const mailOptions = {
-            from: 'ma1251373@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: emailType === "VERIFY" ? "Verify your email" : "Reset your password",
             html: `
