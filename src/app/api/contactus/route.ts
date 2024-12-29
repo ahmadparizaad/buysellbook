@@ -68,8 +68,8 @@ export async function POST(request: NextRequest) {
 
         // Email content
         const mailOptions = {
-            from: 'ahmadparizaad@campusbook.live',
-            to: 'feedback.campusbook.live@gmail.com', // Where you want to receive contact form submissions
+            from: process.env.EMAIL_USER, // Your email address
+            to: process.env.CONTACT_FORM_RECIPIENT, // Where you want to receive contact form submissions
             subject: `New Contact Form Submission from ${name}`,
             html: `
                 <h2>New Contact Form Submission</h2>
