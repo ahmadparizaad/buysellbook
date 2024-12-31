@@ -32,8 +32,10 @@ export class CometchatAuthService {
   public async initializeCometChat(): Promise<void> {
     if (this.isInitialized) return;
 
-    const appID = process.env.COMETCHAT_APP_ID;
-    const region = process.env.COMETCHAT_REGION;
+    const appID = process.env.APP_ID;
+    const region = process.env.REGION;
+    console.log(appID, region);
+    
 
     if (!appID || !region) {
       throw new Error('CometChat credentials are not properly configured');

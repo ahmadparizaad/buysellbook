@@ -287,9 +287,9 @@ const OneChat = () => {
   //   }
   // }, [selectedChat]);
 
-    if (conversations.length == 0) {
-      return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No recent chats</div>;
-    }
+    // if (conversations.length == 0) {
+    //   return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No recent chats</div>;
+    // }
     if (isLoading) {
       return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading chats...</div>;
     }

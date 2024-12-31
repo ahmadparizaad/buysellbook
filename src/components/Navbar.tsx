@@ -8,6 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import {useRouter} from "next/navigation";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 function Navbar({ className }: { className?: string }) {
     const [active, setActive] = useState<string | null>(null);
@@ -55,7 +56,7 @@ function Navbar({ className }: { className?: string }) {
     useEffect(() => {
       window.addEventListener('scroll', handleScroll);
       const currentPath = window.location.pathname;
-      if (!['/signup', '/login', '/verifyEmail'].includes(currentPath)) {
+      if (!['/signup', '/login', '/verifyEmail', '/'].includes(currentPath)) {
         getUserDetails();
       }
       return () => {
