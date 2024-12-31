@@ -32,8 +32,8 @@ export class CometchatAuthService {
   public async initializeCometChat(): Promise<void> {
     if (this.isInitialized) return;
 
-    const appID = process.env.APP_ID;
-    const region = process.env.REGION;
+    const appID = process.env.NEXT_PUBLIC_APP_ID;
+    const region = process.env.NEXT_PUBLIC_REGION;
     console.log(appID, region);
     
 

@@ -345,7 +345,7 @@ const OneChat = () => {
               <button 
                 onClick={() => {
                   setSelectedChat(null)
-                  router.push('/onechat')
+                  router.replace('/onechat')
                 }}
                 className="font-semibold text-sm hover:text-blue-600"
               >
