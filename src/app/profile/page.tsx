@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image";
 
 export default function ProfilePage() {
+  const [loading, setLoading] = useState(false);
     const router = useRouter()
     const [user, setUser] = useState({
         name: "",
@@ -34,6 +35,7 @@ export default function ProfilePage() {
 
     const getUserDetails = async () => {
         try {
+          setLoading(true);
           const res = await axios.get('/api/users/me');
           setUser({
             name: res.data.data.name,
@@ -45,13 +47,34 @@ export default function ProfilePage() {
         } catch (error: any) {
           console.log(error.message);
           toast.error(error.message);
+        } finally {
+          setLoading(false);
         }
       };
 
-    return (
-        <div className="text-white flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden">
+      if(loading){
+        return <div className="flex items-center justify-center h-screen w-[80%]">
+        <div className="animate-pulse flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
+            <div className="w-full">
+              <div className="w-3/4 h-5 bg-slate-400 rounded-md"></div>
+              <div className="w-1/2 h-4 bg-slate-400 mt-3 rounded-md"></div>
+            </div>
+            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
+            <div className="h-4 bg-slate-400 w-1/2 rounded-md"></div>
+          </div>
+          </div>
+      }
+
+    return (      
+    <>
+    {!loading &&    
+    <div className="text-white flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden">
           {/* <h1>Profile</h1> */}
           <hr />
+
+          
           <div className="bg-slate-500/[.07] flex flex-col items-start justify-center shadow-xl rounded-2xl px-[4vw] p-6 mb-8 m-[3vw] z-[9] md:w-[50%]  w-[95%] border-[1px]">
             <div className="flex mb-3">
               <label className="block text-white text-sm font-semibold mb-1 mr-2">
@@ -60,7 +83,7 @@ export default function ProfilePage() {
               <p className='text-md'>{user.name}</p>
             </div>
             <div className="flex mb-3">
-              <label className="block text-white text-sm font-semibold mb-1 mr-2">
+              <label className="fix text-white text-sm font-semibold mb-1 mr-2">
                 Email ID:
               </label>
               <p className='text-md'>{user.email}</p>
@@ -104,5 +127,7 @@ export default function ProfilePage() {
           </Button>
           </div>
         </div>
+    }
+        </>
       );
     }

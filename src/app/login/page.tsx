@@ -20,11 +20,15 @@ export default function LoginPage() {
     })
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
     const onLogin = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
-            
+            setEmailError("");
+            setPasswordError("");
             if (!user.captchaToken) {
                 toast.error("Please complete the captcha");
                 return;
@@ -42,6 +46,21 @@ export default function LoginPage() {
         } catch (error: any) {
             console.error("Login error:", error.response?.data || error); // More detailed error logging
             toast.error(error.message);
+            if (error.response) {
+                // Check for specific error messages from the server
+                if (error.response.status === 400) {
+                    const errorMessage = error.response.data.error;
+                    if (errorMessage.includes("User does not exist")) {
+                        setEmailError("Invalid Email: Please Enter Correct Email");
+                    } else if (errorMessage.includes("Invalid password")) {
+                        setPasswordError("Invalid password: Please Enter Correct Password");
+                    } else {
+                        toast.error(errorMessage); // General error message
+                    }
+                } else {
+                    toast.error("An unexpected error occurred. Please try again.");
+                }
+            }
         } finally {
             setLoading(false);
         }
@@ -79,19 +98,32 @@ export default function LoginPage() {
             placeholder="email"
             required
             />
+            {emailError && <div className="text-red-500">{emailError}</div>}
         </div>
 
-        <div className='flex flex-col items-start mb-5'>
+        <div className='relative flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="password">Password</label> */}
         <input 
         className="text-black mb-4 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="password"
-            type="password"
+            type={passwordVisible ? "text" : "password"}
             value={user.password}
             onChange={(e) => setUser({...user, password: e.target.value})}
             placeholder="password"
             required
             />
+            <button
+                type="button"
+                onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
+                className="absolute right-3 top-7 transform -translate-y-2/4 text-gray-500"
+            >
+                {passwordVisible ? (
+                        <span role="img" aria-label="Hide Password">🙈</span> // Hide Icon
+        ) : (
+          <span role="img" aria-label="Show Password">👁️</span> // Show Icon
+                    )}
+            </button>
+            {passwordError && <div className="text-red-500">{passwordError}</div>}
         </div>
         
         <div className="mb-5">

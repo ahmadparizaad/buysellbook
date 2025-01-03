@@ -28,6 +28,7 @@ function SellPage() {
   });
 
   useEffect(() => {
+    setLoading(true);
     const fetchUserDetails = async () => {
       const user = await getUserDetails();
       if (user?.isProfileComplete) {
@@ -36,6 +37,7 @@ function SellPage() {
       }
     };
     fetchUserDetails();
+    setLoading(false);
   }, [])
 
   const handleSemesterChange = (semester: string) => {

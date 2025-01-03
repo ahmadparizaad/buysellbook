@@ -15,7 +15,14 @@ function Navbar({ className }: { className?: string }) {
     const [visible, setVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+      _id: "",
+      name: "",
+      email: "",
+      college: "",
+      city: "",
+      profileImage: "", // Assuming this is the URL for the profile image
+    });
     const router = useRouter();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,9 +46,16 @@ function Navbar({ className }: { className?: string }) {
     const handleLogin = async () => {
       try {
         if (user) {
-          setIsMenuOpen(false)
+          setIsMenuOpen(false);
           await axios.get('/api/users/logout');
-          setUser(null);
+          setUser({
+            _id: "",
+            name: "",
+            email: "",
+            college: "",
+            city: "",
+            profileImage: "",
+          });
           toast.success('Logged out successfully');
           router.push("/login");
         } else {
@@ -91,7 +105,7 @@ function Navbar({ className }: { className?: string }) {
             <Link href="/">
                 <MenuItem setActive={setActive} active={active} item="Home"></MenuItem>
             </Link>
-            <Link href="/profile">
+            <Link href={`/profile?${user?._id}`}>
             <MenuItem setActive={setActive} active={active} item="Profile"></MenuItem>
             </Link>
             {/* <MenuItem setActive={setActive} active={active} item="Books">

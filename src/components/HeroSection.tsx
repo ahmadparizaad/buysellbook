@@ -43,10 +43,15 @@ function HeroSection() {
     Your Gateway to Affordable Learning <br/> Find Second-Hand Books at 50% Price <br/> Directly from Fellow Students!
     </p>
   </div>
-  <div className="flex items-center justify-center mt-5">
+  <div className="flex items-center justify-center mt-5 gap-x-2">
     <Link href="/buy">
-      <Button className="rounded-xl px-4 md:px-6 py-3 text-sm md:text-base border border-neutral-200 dark:border-slate-800">
-        Explore
+      <Button className="rounded-xl px-2 md:px-3 py-3 text-base md:text-base border border-neutral-200 dark:border-slate-800">
+        Buy
+      </Button>
+      </Link>
+      <Link href="/sell">
+      <Button className="rounded-xl px-4 md:px-3 py-3 text-base md:text-base border border-neutral-200 dark:border-slate-800">
+        Sell
       </Button>
     </Link>
   </div>
