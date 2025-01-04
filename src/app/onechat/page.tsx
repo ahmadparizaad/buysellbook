@@ -47,7 +47,6 @@ const OneChat = () => {
     // Initialize chat and fetch previous messages  
     const initializeChat = useCallback(async () => {
         if (!senderUID) {
-            console.log('Waiting for senderUID...');
             return;
         }
         try {
@@ -72,7 +71,6 @@ const OneChat = () => {
     const loadChatHistory = useCallback(async (receiverUid: string) => {
         try {
             setLoading(true)
-            console.log('Fetching messages for:', receiverUid); // Debug log
             if (CometChat.MessagesRequestBuilder) {
                 const messagesRequest = new CometChat.MessagesRequestBuilder()
                     .setUID(receiverUid)
@@ -80,7 +78,6 @@ const OneChat = () => {
                     .build();
 
                 const previousMessages = await messagesRequest.fetchPrevious();
-                console.log('Previous messages:', previousMessages); // Debug log
                 setMessages(previousMessages.map(formatMessage));
                 return previousMessages;
             }
@@ -145,7 +142,6 @@ const OneChat = () => {
             setSelectedChat(receiverUid);
             setRecieverUID(receiverUid);
             await loadChatHistory(receiverUid);
-            console.log('Loading chat history for:', receiverUid);
             scrollToBottom()
         } catch (error) {
             console.error('Error starting chat:', error);
@@ -256,10 +252,10 @@ const OneChat = () => {
             {conversations.map((conversation) => (
                 <div
                     key={conversation.uid}
-                    className="border-b rounded-xl p-5 hover:bg-gray-800 cursor-pointer"
+                    className="border-b rounded-xl p-5 hover:bg-blue-100 cursor-pointer"
                     onClick={() => startChat(conversation.uid)}
                 >
-                    <div className="font-medium">{conversation.name || conversation.uid}</div>
+                    <div className="font-medium text-gray-600">{conversation.name || conversation.uid}</div>
                     <div className="flex justify-between text-sm pt-2 text-gray-400">
                         {conversation.lastMessage || 'No messages yet'}
                         {conversation.timestamp && (
@@ -273,8 +269,8 @@ const OneChat = () => {
 </div>
         ) : (
             <>
-            <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
-                <h2 className="font-semibold">Chat with {recieverUID}</h2>
+            <div className="p-4 mt-24 border-b text-white bg-gray-800 flex justify-between items-center">
+                <h2 className="font-semibold text-lg">Chat with {recieverUID}</h2>
                 <button 
                 onClick={() => {
                   setSelectedChat(null)
@@ -300,8 +296,8 @@ const OneChat = () => {
                         <div
                             className={`flex justify-between max-w-[80%] rounded-2xl pl-4 pr-3 py-1 ${
                                 message.sender.uid === senderUID
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-800'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-gray-500 text-white'
                             }`}
                         >
                             <p className='mr-3'>{message.text}</p>
@@ -324,12 +320,12 @@ const OneChat = () => {
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder="Type your message..."
-                        className="flex-1 p-2 border rounded-3xl pl-4 pr-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                        className="flex-1 p-2 border border-gray-700 rounded-3xl pl-4 pr-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                     />
                     <button
                         type="submit"
                         disabled={!newMessage.trim()}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-5 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Send
                     </button>

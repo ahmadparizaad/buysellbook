@@ -28,7 +28,6 @@ export default function ProfilePage() {
             toast.success('Logout successful')
             router.push('/login')
         } catch (error:any) {
-            console.log(error.message);
             toast.error("Error in logout")
         }
     }
@@ -45,7 +44,6 @@ export default function ProfilePage() {
             profileImage: res.data.data.profileImage,
           });
         } catch (error: any) {
-          console.log(error.message);
           toast.error(error.message);
         } finally {
           setLoading(false);
@@ -70,39 +68,39 @@ export default function ProfilePage() {
     return (      
     <>
     {!loading &&    
-    <div className="text-white flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden font-[Gilroy]">
+    <div className="text-black flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden font-[Gilroy]">
           {/* <h1>Profile</h1> */}
           <hr />
 
           
           <div className="bg-slate-500/[.07] flex flex-col items-start justify-center shadow-xl rounded-2xl px-[4vw] p-6 mb-8 m-[3vw] z-[9] md:w-[50%]  w-[95%] border-[1px]">
             <div className="flex mb-3">
-              <label className="block text-white text-sm font-semibold mb-1 mr-2">
+              <label className="block text-black text-sm font-semibold mb-1 mr-2">
                 Name:
               </label>
               <p className='text-md'>{user.name}</p>
             </div>
             <div className="flex mb-3">
-              <label className="fix text-white text-sm font-semibold mb-1 mr-2">
+              <label className="fix text-black text-sm font-semibold mb-1 mr-2">
                 Email ID:
               </label>
               <p className='text-md'>{user.email}</p>
             </div>
             <div className="flex mb-3">
-              <label className="block text-white text-sm font-semibold mb-1 mr-2">
+              <label className="block text-black text-sm font-semibold mb-1 mr-2">
                 College:
               </label>
               <p className='text-md'>{user.college}</p>
             </div>
             <div className="flex ">
-              <label className="block text-white text-sm font-semibold mb-1 mr-2">
+              <label className="block text-black text-sm font-semibold mb-1 mr-2">
                 City:
               </label>
               <p className='text-md'>{user.city}</p>
             </div>
             {user.profileImage && (
               <div className="flex mb-3">
-                <label className="block text-white text-sm font-semibold mb-2 mr-2">
+                <label className="block text-black text-sm font-semibold mb-2 mr-2">
                   Profile Image:
                 </label>
                 <Image
@@ -117,11 +115,11 @@ export default function ProfilePage() {
           <hr />
           <div className="flex gap-4 items-center">
           <Link href="/update-profile">
-              <Button variant="outline" className='border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'>Update Profile</Button>
+              <Button variant="outline" className='border-[1px] shadow-lg px-5 rounded-3xl bg-slate-500/[.07] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'>Update Profile</Button>
             </Link>
           <Button variant="outline"
             onClick={logout}
-            className='border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'
+            className='border-[1px] shadow-lg px-5 rounded-3xl hover:bg-blue-400 bg-slate-500/[.07] hover:text-white hover:border-none ease-linear duration-200'
           >
             Logout
           </Button>

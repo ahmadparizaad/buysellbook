@@ -9,9 +9,9 @@ import { TracingBeam } from "@/components/ui/tracing-beam";
 
 export default function HowItWorks() {
   return (
-    <div className="flex flex-col items-center justify-center w-screen bg-black/[0.96] antialiased relative overflow-hidden px-4">
+    <div className="flex flex-col items-center justify-center w-screen bg-white antialiased relative overflow-hidden px-4">
     <TracingBeam className="my-8 relative">
-      <h1 className="mb-10 text-3xl md:text-5xl font-bold text-left bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">How It Works</h1>
+      <h1 className="mb-5 text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 to-neutral-500 bg-opacity-50">How It Works</h1>
       <div className="max-w-3xl mx-auto antialiased pt-4 relative">
         {dummyContent.map((item, index) => (
           <div key={`content-${index}`} className="mb-10 flex flex-col md:flex-row justify-center">

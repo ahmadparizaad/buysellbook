@@ -12,6 +12,7 @@ import { LoadingProvider } from '@/components/LoadingProvider';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en" className="dark overflow-x-hidden font-[Gilroy]">
+    <html lang="en" className="overflow-x-hidden font-[Gilroy]">
       <body className={inter.className}>
         <Suspense>
         <LoadingProvider>
@@ -39,7 +40,8 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
 
-        <div><Toaster/></div>
+        <Toaster/>
+        <Footer/>
         </LoadingProvider>
         </Suspense>
       </body>

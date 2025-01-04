@@ -35,7 +35,6 @@ const UpdateProfile = () => {
     e.preventDefault();
     try {
       const res = await axios.put('/api/users/update-profile', formData);
-      console.log('Profile updated successfully', res.data);
       toast.success('Profile updated successfully');
       router.push('/profile'); // Redirect to profile page after successful update
     } catch (error: any) {

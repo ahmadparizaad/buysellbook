@@ -117,7 +117,6 @@ useEffect(() => {
       }
       setHasMore(response.data.books.length === 12);
     } catch (error) {
-      console.error('Error fetching data:', error);
       setError('An error occurred while fetching data.');
     } finally {
       setLoading(false);
@@ -142,10 +141,8 @@ useEffect(() => {
     const res = await axios.get('/api/users/me');
     const senderUID = res.data.data.username;
     const userId = res.data.data._id
-    console.log(userId);
     setCurrentUser(userId)
     setSenderUID(senderUID);
-    console.log(senderUID);
     return senderUID;
   }
 
@@ -189,7 +186,6 @@ useEffect(() => {
       setBooks(response.data.books);
       setHasMore(response.data.books.length === 12);
     } catch (error) {
-      console.error('Error searching books:', error);
       toast.error('Failed to search books');
     } finally {
       setLoading(false);
@@ -203,7 +199,7 @@ useEffect(() => {
       {/* Search section  */}
       <div className="flex flex-col sm:flex-row sm:justify-center gap-3 items-center my-6">
         <select
-          className="w-[80%] sm:w-auto sm:py-1 rounded-3xl px-4 py-2 text-black border-2"
+          className="w-[80%] sm:w-auto sm:py-1 rounded-3xl px-4 py-2 text-black border-2 border-gray-700"
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
         >
@@ -213,7 +209,7 @@ useEffect(() => {
         </select>
         
         <input 
-          className='w-[80%] sm:w-[30%] sm:py-1 rounded-3xl px-4 py-2 text-black border-2'
+          className='w-[80%] sm:w-[30%] sm:py-1 rounded-3xl px-4 py-2 text-black border-2 border-gray-700'
           placeholder={`Search ${searchType}...`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -222,7 +218,7 @@ useEffect(() => {
         <Button 
           onClick={handleSearch}
           variant="outline" 
-          className='sm:w-auto border dark:border-white/[0.3] rounded-3xl hover:bg-white hover:text-black ease-linear duration-200'
+          className='sm:w-auto border-2 dark:border-white/[0.3] rounded-3xl bg-white text-black ease-linear duration-200 border-gray-700'
         >
           Search
         </Button>
@@ -231,13 +227,13 @@ useEffect(() => {
       {/* Replace the filter accordion with this new one */}
       <Accordion type="single" collapsible className="mb-8">
         <AccordionItem value="item-1">    
-          <AccordionTrigger>Filters</AccordionTrigger>
+          <AccordionTrigger className='text-base'>Filters</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-4">
             {/* Course Filter */}
             <div className="flex flex-col gap-2">
               <label className="font-medium">Course</label>
               <select 
-                className="focus:outline-none focus:ring-2 focus:ring-blue-500 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                className="focus:outline-none border-2 border-gray-700 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
                 value={filters.course}
                 onChange={(e) => handleFilterChange('course', e.target.value)}
               >
@@ -256,7 +252,7 @@ useEffect(() => {
               <div className="flex flex-col gap-2">
                 <label className="font-medium">Class</label>
                 <select 
-                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  className="border-2 border-gray-700 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
                   value={filters.std}
                   onChange={(e) => handleFilterChange('std', e.target.value)}
                 >
@@ -274,7 +270,7 @@ useEffect(() => {
               <div className="flex flex-col gap-2">
                 <label className="font-medium">Year</label>
                 <select 
-                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  className="border-2 border-gray-700 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
                   value={filters.year}
                   onChange={(e) => handleFilterChange('year', e.target.value)}
                 >
@@ -297,7 +293,7 @@ useEffect(() => {
               <div className="flex flex-col gap-2">
                 <label className="font-medium">Semester</label>
                 <select 
-                  className="text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+                  className="border-2 border-gray-700 text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
                   value={filters.semester}
                   onChange={(e) => handleFilterChange('semester', e.target.value)}
                 >
@@ -337,8 +333,8 @@ useEffect(() => {
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {books?.map((book) => (
-          <div key={book._id} className="container relative text-white">
-            <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-white bg-opacity-10 border border-white border-opacity-20 
+          <div key={book._id} className="container relative text-black">
+            <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-blue-400 bg-opacity-10 border border-black/[0.9]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:scale-105 hover:border-opacity-55">
               <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
@@ -353,27 +349,27 @@ useEffect(() => {
                 />
               </div>
 
-              {book.std && <p className='text-gray-300 mb-[2px]'>Standard: {book.std}</p>}  
-              <p className='text-gray-300 mb-[2px]'>Year: {book.year}</p>
-              <p className='text-gray-300 mb-[2px]'>Semester: {book.semester}</p>
+              {book.std && <p className='text-gray-900 mb-[2px]'>Standard: {book.std}</p>}  
+              <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>
+              <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>
             
               <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
                 <ul className="space-y-[1px]">
                   {book.books.map((item, index) => (
-                    <li key={index} className="text-gray-300">
+                    <li key={index} className="text-black">
                       <p className='font-medium'>{item.name}: ₹{item.price}</p>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-2 text-sm text-gray-300">
+              <div className="mt-2 text-sm">
                   <p>Complete Set: {book.isSet ? "Yes" : "No"}</p>
                 </div>
 
               {book.seller && (
-                <div className="text-sm text-gray-300">
+                <div className="text-sm text-gray-900">
                   <p>Location: {book.seller.city}</p>
                   <p>College: {book.seller.college}</p>
                 </div>
@@ -382,10 +378,7 @@ useEffect(() => {
               <Button 
                 onClick={() => handleBuyClick(book)} 
                 variant="outline" 
-                className="absolute font-medium left-1/2 bottom-4 transform -translate-x-1/2 
-                         w-4/5 rounded-full bg-blue-600 text-white 
-                          transition-all duration-300 ease-out 
-                          hover:text-blue-800 hover:bg-white"
+                className="absolute font-medium left-1/2 bottom-4 transform -translate-x-1/2 w-4/5 rounded-full bg-white text-black hover:text-white hover:bg-blue-400 transition-all duration-300 ease-out"
               >
                 Buy
               </Button>

@@ -43,11 +43,10 @@ export default function Home() {
   }} /> */}
     <SmoothScroll>
 
-    <div data-scroll-container className='min-h-screen max-w-screen md:w-auto bg-black/[0.96] antialiased bg-grid-white/[0.02]'>    
+    <div  data-scroll-container className='min-h-screen max-w-screen md:w-auto bg-white antialiased bg-grid-white/[0.02]'>    
         <HeroSection/>
         <HowItWorks/>
         <ContactUs/>
-        <Footer/>
     </div>
     </SmoothScroll>
 

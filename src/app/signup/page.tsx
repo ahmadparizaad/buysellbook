@@ -132,7 +132,6 @@ export default function SignupPage() {
                 username: user.username,
                 captchaToken: captchaToken
             });
-            console.log(res.data);
             toast.success(res.data.message);
             toast.success("Signup successful");
             router.push("/aftersignup");
@@ -185,7 +184,7 @@ export default function SignupPage() {
         <div className='flex flex-col items-start mb-3'>
         {/* <label className='pl-5' htmlFor="username">Username</label> */}
         <input 
-        className="text-black mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="username"
             type="text"
             value={user.username}
@@ -199,7 +198,7 @@ export default function SignupPage() {
         <div className='flex flex-col items-start mb-3'>
         {/* <label className='pl-5' htmlFor="email">Email</label> */}
         <input 
-        className="text-black mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="email"
             type="text"
             value={user.email}
@@ -213,7 +212,7 @@ export default function SignupPage() {
         <div className='relative flex flex-col items-start mb-3'>
         {/* <label className='pl-5' htmlFor="password">Password</label> */}
         <input 
-        className="text-black mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="password"
             type={passwordVisible ? "text" : "password"} // Toggle input type
             value={user.password}
@@ -245,7 +244,7 @@ export default function SignupPage() {
             <button
                 type="submit"
                 disabled={buttonDisabled}
-                className="border mb-3 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200 px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                className="border-2 border-gray-700 mb-3 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:border-none hover:text-white ease-linear duration-200 px-4 py-2">
                 {loading ? "Processing..." : "Sign Up"}
             </button>
             <p className="text-sm mb-2">Already have an account?</p>

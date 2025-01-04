@@ -51,9 +51,7 @@ function SellPage() {
   const onSubmit = async () => {
     try{
       setLoading(true);
-      console.log(book);
       const response = await axios.post("/api/books/sell", book);
-      console.log("Book Details uploaded Successfully", response.data);
       router.push("/buy");
     }
     catch (error:any) {
@@ -71,7 +69,7 @@ function SellPage() {
     <Button
     onClick={() => router.push("/update-profile")}
     variant="outline"
-    className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-white hover:text-black ease-linear duration-200'>
+    className=' border-2 border-gray-700 mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] bg-white hover:bg-blue-400 hover:text-black hover:border-none ease-linear duration-200'>
     Complete Profile</Button> </div>
   }
 
@@ -83,7 +81,7 @@ function SellPage() {
       <div className="flex flex-col items-start">
       <label className='pl-5' htmlFor="course">Course</label>
       <select
-        className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+        className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
         id="course"
         value={book.course}
         onChange={(e) => setBook({ ...book, course: e.target.value })}
@@ -103,7 +101,7 @@ function SellPage() {
       <div className='flex flex-col items-start'>
         <label className='pl-5' htmlFor="class">Class</label>
         <select
-          className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="class"
           value={book.std}
           onChange={(e) => setBook({ ...book, std: e.target.value })}
@@ -120,7 +118,7 @@ function SellPage() {
       <div className='flex flex-col items-start'>
         <label className='pl-5' htmlFor="year">Year</label>
         <select
-          className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="year"
           value={book.year}
           onChange={(e) => setBook({ ...book, year: e.target.value })}
@@ -147,7 +145,7 @@ function SellPage() {
       <div className='flex flex-col items-center'>
         <label className='pb-3' htmlFor="isset">Do you have Complete Set of Books?</label>
         <select
-          className='text-black mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black border-2 border-gray-700 mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="isset"
           value={book.isSet}
           onChange={(e) => setBook({ ...book, isSet: e.target.value })}
@@ -164,7 +162,7 @@ function SellPage() {
     <Button 
     onClick={onSubmit}
       variant="outline"
-      className='border dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+      className='border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
     >
       Submit
     </Button>

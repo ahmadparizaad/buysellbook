@@ -38,7 +38,6 @@ const MyBook = () => {
     try {
       setLoading(true);
       const response = await axios.get('/api/books/mybooks'); // Adjust the endpoint as necessary
-      console.log(response)
       setMyBooks(response.data.data);
     } catch (error) {
       console.error('Error fetching my books:', error);
@@ -55,7 +54,6 @@ const MyBook = () => {
         const response = await axios.delete(`/api/books/deletebooks/`, {
           data: bookId 
         }); // Adjust the endpoint as necessary
-        console.log(response);
         setMyBooks(myBooks.filter(book => book._id !== bookId)); // Update state to remove the book
       } catch (error) {
         console.error('Error removing book:', error);
@@ -91,8 +89,8 @@ const MyBook = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
         {myBooks.map((book) => (
-          <div key={book._id} className="container relative text-white">
-            <div className="group box w-full p-4 bg-white bg-opacity-10 border border-white border-opacity-20 
+          <div key={book._id} className="container relative text-black">
+            <div className="group box w-full p-4 bg-blue-400 bg-opacity-10 border border-black/[0.9]
                           filter backdrop-blur-xl rounded-lg transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:scale-105 hover:border-opacity-55">
 
@@ -101,10 +99,10 @@ const MyBook = () => {
                   &#x22EE; {/* Three dots icon */}
                 </button>
                 {menuVisible[book._id] && (
-                  <div className="absolute right-0 bg-white text-black shadow-lg rounded mt-1">
+                  <div className="absolute right-0 bg-white text-black shadow-lg hover:bg-gray-200 rounded">
                     <button 
                       onClick={() => removeBook(book._id)} 
-                      className="block px-4 py-2 hover:bg-gray-200"
+                      className="block px-4 py-2"
                     >
                       Remove
                     </button>
@@ -124,15 +122,15 @@ const MyBook = () => {
                 />
               </div>
 
-              {book.std && <p className='text-gray-300 mb-[2px]'>Standard: {book.std}</p>}  
-              <p className='text-gray-300 mb-[2px]'>Year: {book.year}</p>
-              <p className='text-gray-300 mb-[2px]'>Semester: {book.semester}</p>
+              {book.std && <p className='text-gray-900 mb-[2px]'>Standard: {book.std}</p>}  
+              <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>
+              <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>
             
               <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
                 <ul className="space-y-[2px]">
                   {book.books.map((item, index) => (
-                    <li key={index} className="text-gray-300">
+                    <li key={index} className="text-gray-900">
                       <p className='font-medium'>{item.name}: ₹{item.price}</p>
                     </li>
                   ))}

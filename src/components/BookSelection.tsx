@@ -54,7 +54,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
         <label className='pl-5' htmlFor="bookName">Book Name</label>
         <input
           type="text"
-          className='text-black mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black border-2 border-gray-700 mb-10 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="bookName"
           value={newBook.name}
           onChange={handleBookNameChange}
@@ -64,14 +64,14 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
         <label className='pl-5' htmlFor="bookPrice">Book Price</label>
         <input
           type="number"
-          className='text-black mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black  border-2 border-gray-700 mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="bookPrice"
           value={newBook.price}
           onChange={handleBookPriceChange}
         />
       </div>
       <Button variant="outline" onClick={handleAddBook}
-      className='mt-2  border dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+      className='mt-2 border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
       >Add</Button>
 
       
@@ -89,7 +89,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
 
       <div>
       <Button variant="outline" onClick={calculateAmount}
-      className='ml-[8vw] mb-8 mt-10 border dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+      className='border-2 px-5 border-gray-700 ml-[8vw] mb-8 mt-10 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
       >Calculate Total</Button>
         {halfAmount > 0 && (
           <>

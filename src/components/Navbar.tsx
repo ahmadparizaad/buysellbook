@@ -8,13 +8,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import {useRouter} from "next/navigation";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 function Navbar({ className }: { className?: string }) {
     const [active, setActive] = useState<string | null>(null);
     const [visible, setVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [loading, setLoading] = useState(false)
     const [user, setUser] = useState({
       _id: "",
       name: "",
@@ -38,32 +38,32 @@ function Navbar({ className }: { className?: string }) {
         const res = await axios.get('/api/users/me');
         setUser(res.data.data);
       } catch (error: any) {
-        console.log(error.message);
-        toast.error(error.message);
       }
     };
 
     const handleLogin = async () => {
       try {
-        if (user) {
-          setIsMenuOpen(false);
-          await axios.get('/api/users/logout');
-          setUser({
-            _id: "",
-            name: "",
-            email: "",
-            college: "",
-            city: "",
-            profileImage: "",
-          });
-          toast.success('Logged out successfully');
-          router.push("/login");
-        } else {
-          window.location.href = '/login';
-        }
+        setLoading(true)
+        if (!user)
+          {
+            window.location.href = '/login';
+          }  else {
+            setIsMenuOpen(false);
+            await axios.get('/api/users/logout');
+            setUser({
+              _id: "",
+              name: "",
+              email: "",
+              college: "",
+              city: "",
+              profileImage: "",
+            });
+            toast.success('Logged out successfully');
+            router.push("/login");
+          }
       } catch (error: any) {
-        console.log(error.message);
-        toast.error(error.message);
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -82,17 +82,17 @@ function Navbar({ className }: { className?: string }) {
       <div>
       
       <div
-        className={cn(`fixed top-4 inset-x-0 md:w-fit mx-auto max-sm:mx-5 z-50 transition-all duration-300 ${
+        className={cn(`fixed top-4 inset-x-0 border-gray-800 md:w-fit mx-auto max-sm:mx-5 z-50 transition-all duration-300 ${
           !visible ? '-translate-y-[150%]' : 'translate-y-0'
         }`, className)}
       >
         <div className="flex flex-col">
-        <div className="bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 border border-gray-400 flex justify-between bg-blue-950/[0.9] rounded-3xl md:hidden px-3 py-1 top-3 md:top-8 z-50">
+        <div className="bg-gray-800 backdrop-filter backdrop-blur-sm bg-opacity-50 border dark:border-gray-800 flex justify-between dark:bg-blue-950/[0.9] rounded-3xl md:hidden px-3 py-1 top-3 md:top-8 z-50">
         <h1 className={`text-white top-2 p-2 text-lg md:text-xl font-bold`}>Campus Book</h1>
         
         <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="top-2 right-2 p-2 rounded-lg z-50"
+            className="top-2 right-2 p-2 rounded-lg z-50 text-white"
           >
             {isMenuOpen ? <X size={24} /> : <MenuIcon size={24} />}
         </button>
@@ -132,7 +132,7 @@ function Navbar({ className }: { className?: string }) {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden space-y-5 font-semibold bg-gray-600 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 border border-gray-400 fixed rounded-3xl top-14 py-1 w-full bg-blue-950/[0.9] transition-opacity duration-300 transform ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>         
+        <div className={`${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:hidden text-white space-y-5 font-semibold bg-gray-800 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-50 border border-gray-400 fixed rounded-3xl top-14 py-1 w-full transition-opacity duration-300 transform `}>         
             <div className="flex flex-col px-4">
 
               <Link 
@@ -179,10 +179,10 @@ function Navbar({ className }: { className?: string }) {
                 My Books
               </Link>
               <Button 
-                className="text-md px-2 py-1 rounded-3xl"
+                className="text-md px-2 py-1 rounded-3xl border-[1px] border-solid border-gray-400"
                 onClick={() => handleLogin()}
               >
-                {user ? 'Logout' : 'Login'}
+                {user._id === "" ? 'Login' : 'Logout'}
               </Button>
             </div>
           </div>
