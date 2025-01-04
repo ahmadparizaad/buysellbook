@@ -368,8 +368,12 @@ useEffect(() => {
                 </ul>
               </div>
 
+              <div className="mt-2 text-sm text-gray-300">
+                  <p>Complete Set: {book.isSet ? "Yes" : "No"}</p>
+                </div>
+
               {book.seller && (
-                <div className="mt-2 text-sm text-gray-300">
+                <div className="text-sm text-gray-300">
                   <p>Location: {book.seller.city}</p>
                   <p>College: {book.seller.college}</p>
                 </div>

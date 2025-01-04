@@ -15,7 +15,7 @@ interface Book {
 }
 
 function SellPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [profileComplete, setProfileComplete] = useState(false);
   const [book, setBook] = useState({
@@ -37,7 +37,7 @@ function SellPage() {
       }
     };
     fetchUserDetails();
-    setLoading(false);
+    setTimeout(() => setLoading(false), 1000);
   }, [])
 
   const handleSemesterChange = (semester: string) => {
@@ -79,20 +79,6 @@ function SellPage() {
     <>
     
     <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]'>
-      {loading && 
-      <div className="flex justify-center items-center">
-      <div className="relative w-24 h-8 p-0">
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-0.4s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-0.8s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-1.2s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-1.6s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2.4s]"></span>
-        <span className="absolute right-0 w-1 h-8 bg-teal-500 block rounded-full animate-move delay-[-2.8s]"></span>
-      </div>
-    </div>
-    }
-
     
       <div className="flex flex-col items-start">
       <label className='pl-5' htmlFor="course">Course</label>
