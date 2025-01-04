@@ -122,9 +122,7 @@ const Chat: React.FC<ChatProps> = ({ senderUID, recieverUID, setSelectedChat }) 
 
     return (
         <div className="h-[100vh] flex flex-col border rounded-md">
-            <div
-                className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center"
-            >
+            <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
                 <h2 className="font-semibold">Chat with {recieverUID}</h2>
                 <button 
                 onClick={() => {

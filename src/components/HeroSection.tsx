@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from "./ui/moving-border";
 import { WavyBackground } from './ui/wavy-background';
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 function HeroSection() {
   const [user, setUser] = useState({

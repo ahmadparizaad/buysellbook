@@ -1,10 +1,9 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { cometchatAuth } from '@/utils/cometchatAuth';
-import Chat from '../chat/page';
 
 export interface Message {
     id: string;
@@ -29,12 +28,15 @@ const OneChat = () => {
     const [senderUID, setSenderUID] = useState('');
     const [recieverUID, setRecieverUID] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [selectedChat, setSelectedChat] = useState<string | null>(null);
     const searchParams = useSearchParams();
     const reciever = searchParams.get('reciever');
     const router = useRouter();
+    const messageContainerRef = useRef<HTMLDivElement>(null);
+
 
     let CometChat: any;
     if (typeof window !== "undefined") {
@@ -61,8 +63,16 @@ const OneChat = () => {
         }
     }, [senderUID]);
 
+    const scrollToBottom = () => {
+        messageContainerRef.current?.scrollTo({
+            top: messageContainerRef.current.scrollHeight,
+            behavior: 'smooth',
+        });
+    };
+
     const loadChatHistory = useCallback(async (receiverUid: string) => {
         try {
+            setLoading(true)
             console.log('Fetching messages for:', receiverUid); // Debug log
             if (CometChat.MessagesRequestBuilder) {
                 const messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -78,6 +88,8 @@ const OneChat = () => {
         } catch (error) {
             console.error('Error loading chat history:', error);
             setError('Failed to load chat history');
+        } finally {
+            setLoading(false)
         }
     }, [CometChat?.MessagesRequestBuilder]);
 
@@ -135,6 +147,7 @@ const OneChat = () => {
             setRecieverUID(receiverUid);
             await loadChatHistory(receiverUid);
             console.log('Loading chat history for:', receiverUid);
+            scrollToBottom()
         } catch (error) {
             console.error('Error starting chat:', error);
             setError('Failed to start chat');
@@ -170,6 +183,7 @@ const OneChat = () => {
             const sentMessage = await CometChat.sendMessage(textMessage);
             setMessages(prev => [...prev, formatMessage(sentMessage)]);
             setNewMessage('');
+            scrollToBottom()
         } catch (err) {
             console.error('Error sending message:', err);
             setError('Failed to send message. Please try again.');
@@ -178,6 +192,41 @@ const OneChat = () => {
 
     if (isLoading) {
         return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading chats...</div>;
+    }
+
+    if(loading){
+        return <div className="animate-pulse">
+        <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
+          <div className="h-6 bg-gray-500 rounded-xl w-1/2"></div>
+          <div className="h-6 bg-gray-500 rounded-xl w-1/6"></div>
+        </div>
+      
+        <div className="message-container flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex justify-end">
+            <div className="flex justify-between max-w-[80%] rounded-2xl pl-4 pr-3 py-1 bg-blue-600 text-white">
+              <div className="h-4 bg-blue-500 rounded w-3/4"></div>
+              <div className="text-[8px] opacity-55 mt-3 h-4 bg-blue-500 rounded w-1/4">
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-start">
+            <div className="flex justify-between max-w-[80%] rounded-2xl pl-4 pr-3 py-1 bg-gray-800">
+              <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+              <div className="text-[8px] opacity-55 mt-3 h-4 bg-gray-300 rounded w-1/4">
+              </div>
+            </div>
+          </div>     
+        </div>
+      
+        <form className="p-4">
+          <div className="flex space-x-2">
+            <div className="flex-1 p-2 border rounded-3xl pl-4 pr-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black h-6 bg-blue-200"></div>
+            <div className="px-4 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed h-6 w-1/4"></div>
+          </div>
+        </form>
+      
+        <div className="text-blue-500 h-6 rounded-3xl bg-blue-200 w-1/2"></div>
+      </div>
     }
 
     if (error) {
@@ -189,7 +238,6 @@ const OneChat = () => {
     }
     if(conversations.length === 0){
         <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
-
     }
 
     return (
@@ -217,7 +265,72 @@ const OneChat = () => {
             ))}
 </div>
         ) : (
-            <Chat senderUID={senderUID} recieverUID={recieverUID} setSelectedChat={setSelectedChat}/>
+            <>
+            <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
+                <h2 className="font-semibold">Chat with {recieverUID}</h2>
+                <button 
+                onClick={() => {
+                  setSelectedChat(null)
+                  router.push('/onechat')
+                }}
+                className="font-semibold text-sm hover:text-blue-600"
+              >
+                ← Back
+              </button>
+            </div>
+
+            {/* Messages Container */}
+            <div
+                ref={messageContainerRef}
+                className="message-container flex-1 overflow-y-auto p-4 space-y-4"
+            >
+                
+                {messages.map((message) => (
+                    <div
+                        key={message.id}
+                        className={`flex ${message.sender.uid === senderUID ? 'justify-end' : 'justify-start'}`}
+                    >
+                        <div
+                            className={`flex justify-between max-w-[80%] rounded-2xl pl-4 pr-3 py-1 ${
+                                message.sender.uid === senderUID
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-800'
+                            }`}
+                        >
+                            <p className='mr-3'>{message.text}</p>
+                            <span className="text-[8px] opacity-55 mt-3">
+                                {new Date(message.sentAt * 1000).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Message Input */}
+            <form onSubmit={sendMessage} className="p-4">
+                <div className="flex space-x-2">
+                    <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Type your message..."
+                        className="flex-1 p-2 border rounded-3xl pl-4 pr-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    />
+                    <button
+                        type="submit"
+                        disabled={!newMessage.trim()}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Send
+                    </button>
+                </div>
+            </form>
+
+            {error && <div className="text-red-500">{error}</div>}
+            </>
         )}
         </div>
     );

@@ -2,7 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import {toast} from "react-hot-toast";
+import toast from "react-hot-toast";
 import {useRouter} from "next/navigation";
 import { Button } from "@/components/ui/button"
 import Image from "next/image";
@@ -29,7 +29,7 @@ export default function ProfilePage() {
             router.push('/login')
         } catch (error:any) {
             console.log(error.message);
-            toast.error(error.message)
+            toast.error("Error in logout")
         }
     }
 
