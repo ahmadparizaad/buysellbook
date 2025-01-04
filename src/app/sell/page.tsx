@@ -65,15 +65,19 @@ function SellPage() {
   }
   }
 
-  return (
-    <>
-    {!profileComplete ? <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Complete your profile first for better experience.
+  if(!loading && !profileComplete){
+    return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Complete your profile first for better experience.
     <br/>
     <Button
     onClick={() => router.push("/update-profile")}
     variant="outline"
     className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-white hover:text-black ease-linear duration-200'>
-    Complete Profile</Button> </div> : 
+    Complete Profile</Button> </div>
+  }
+
+  return (
+    <>
+    
     <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]'>
       {loading && 
       <div className="flex justify-center items-center">
@@ -179,7 +183,7 @@ function SellPage() {
       Submit
     </Button>
     </div>
-    }
+    
   </> 
   );
 }

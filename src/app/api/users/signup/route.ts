@@ -7,6 +7,10 @@ import axios from "axios";
 
 connect()
 
+const apiKey = process.env.COMETCHAT_AUTH_KEY
+console.log(apiKey);
+
+
 async function verifyCaptcha(token: string) {
     try {
         const response = await axios.post(
@@ -79,7 +83,7 @@ export async function POST(request: NextRequest){
             headers: {
                 accept: 'application/json', 
                 'content-type': 'application/json',
-                apikey: 'be5f7e2c78caa1bd70bcf08bbc24f560f8612e2f'
+                apikey: `${process.env.COMETCHAT_AUTH_KEY}`
             },
             body: JSON.stringify(
                 {
@@ -88,7 +92,7 @@ export async function POST(request: NextRequest){
                 })
           };
           
-          fetch(`https://${process.env.COMETCHAT_APP_ID}.api-${process.env.COMETCHAT_REGION}.cometchat.io/v3/users`, options)
+          fetch(`https://${process.env.NEXT_PUBLIC_APP_ID}.api-${process.env.NEXT_PUBLIC_REGION}.cometchat.io/v3/users`, options)
             .then(res => res.json())
             .then(res => console.log(res))
             .catch(err => console.error("Cometchat error : ", err));
