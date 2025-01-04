@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import ConversationsList from '../ConversationsList/page';
+import ConversationsList from '../conversationsList/page';
 import { cometchatAuth } from '@/utils/cometchatAuth';
 import Chat from '../chat/page';
 
