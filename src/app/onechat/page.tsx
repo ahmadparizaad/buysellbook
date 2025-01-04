@@ -188,14 +188,18 @@ const OneChat = () => {
             </div>
         );
     }
+    if(conversations.length === 0){
+        <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
+
+    }
 
     return (
         <div className="h-[100vh] flex flex-col border rounded-md">
             {!selectedChat ? (
-                <ConversationsList conversations={conversations} startChat={startChat} />
-            ) : (
-                <Chat senderUID={senderUID} recieverUID={recieverUID} setSelectedChat={setSelectedChat}/>
-            )}
+            <ConversationsList conversations={conversations} startChat={startChat} />
+        ) : (
+            <Chat senderUID={senderUID} recieverUID={recieverUID} setSelectedChat={setSelectedChat}/>
+        )}
         </div>
     );
 };

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Conversation } from '../onechat/page'; // Import the Conversation interface
+
+interface Conversation {
+    uid: string;
+    name?: string;
+    lastMessage?: string;
+    timestamp?: number;
+}
 
 interface ConversationsListProps {
     conversations: Conversation[];
@@ -9,10 +15,7 @@ interface ConversationsListProps {
 const ConversationsList: React.FC<ConversationsListProps> = ({ conversations, startChat }) => {
     return (
         <div className="flex-1 overflow-y-auto p-4">
-            {conversations.length === 0 ? (
-                <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
-            ) : (
-                <>
+            
                     <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
                     {conversations.map((conversation) => (
                         <div
@@ -31,8 +34,6 @@ const ConversationsList: React.FC<ConversationsListProps> = ({ conversations, st
                             </div>
                         </div>
                     ))}
-                </>
-            )}
         </div>
     );
 };
