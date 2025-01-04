@@ -83,7 +83,7 @@ export async function POST(request: NextRequest){
             headers: {
                 accept: 'application/json', 
                 'content-type': 'application/json',
-                apikey: `${process.env.COMETCHAT_AUTH_KEY}`
+                apikey: `${process.env.NEXT_PUBLIC_COMETCHAT_AUTH_KEY}`
             },
             body: JSON.stringify(
                 {

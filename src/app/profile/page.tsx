@@ -70,7 +70,7 @@ export default function ProfilePage() {
     return (      
     <>
     {!loading &&    
-    <div className="text-white flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden">
+    <div className="text-white flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden font-[Gilroy]">
           {/* <h1>Profile</h1> */}
           <hr />
 

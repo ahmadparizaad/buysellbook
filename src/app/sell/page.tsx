@@ -78,7 +78,7 @@ function SellPage() {
   return (
     <>
     
-    <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]'>
+    <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw] font-[Gilroy]'>
     
       <div className="flex flex-col items-start">
       <label className='pl-5' htmlFor="course">Course</label>

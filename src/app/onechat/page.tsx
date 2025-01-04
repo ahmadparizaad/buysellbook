@@ -55,7 +55,6 @@ const OneChat = () => {
             setError(null);
             await cometchatAuth.init();
             const login = await cometchatAuth.login(senderUID);
-            console.log(login);
             setIsLoading(false);
         } catch (error) {
             console.error('Error initializing chat:', error);
@@ -190,10 +189,6 @@ const OneChat = () => {
         }
     };
 
-    if (isLoading) {
-        return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Loading chats...</div>;
-    }
-
     if(loading){
         return <div className="animate-pulse">
         <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
@@ -237,15 +232,27 @@ const OneChat = () => {
         );
     }
     if(conversations.length === 0){
-        <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
+        <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
     }
 
     return (
-        <div className="h-[100vh] flex flex-col border rounded-md">
+        <div className="h-[100vh] flex flex-col border rounded-md font-[Gilroy]">
             {!selectedChat ? (
             <div className="flex-1 overflow-y-auto p-4">
             
-            <h2 className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
+            <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
+            
+            {isLoading && 
+            <div className="animate-pulse mt-5 flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
+
+            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            </div>
+            }
+
             {conversations.map((conversation) => (
                 <div
                     key={conversation.uid}
@@ -273,7 +280,7 @@ const OneChat = () => {
                   setSelectedChat(null)
                   router.push('/onechat')
                 }}
-                className="font-semibold text-sm hover:text-blue-600"
+                className="font-medium text-sm hover:text-blue-600"
               >
                 ← Back
               </button>

@@ -34,7 +34,6 @@ export class CometchatAuthService {
 
     const appID = process.env.NEXT_PUBLIC_APP_ID;
     const region = process.env.NEXT_PUBLIC_REGION;
-    console.log(appID, region);
     
 
     if (!appID || !region) {
@@ -89,7 +88,7 @@ export class CometchatAuthService {
       // }
 
       // Login with the generated auth token
-      const user = await window.CometChat.login(uid, process.env.COMETCHAT_AUTH_KEY);
+      const user = await window.CometChat.login(uid, process.env.NEXT_PUBLIC_COMETCHAT_AUTH_KEY);
       console.log('CometChat login successful:', user);
         return user;
       }

@@ -29,7 +29,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en" className="dark overflow-x-hidden">
+    <html lang="en" className="dark overflow-x-hidden font-[Gilroy]">
       <body className={inter.className}>
         <Suspense>
         <LoadingProvider>
