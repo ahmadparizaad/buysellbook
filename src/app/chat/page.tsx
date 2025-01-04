@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { cometchatAuth } from '@/utils/cometchatAuth';
 
 interface Message {
@@ -16,7 +16,7 @@ interface Message {
 interface ChatProps {
     senderUID: string;
     recieverUID: string;
-    setSelectedChat: (chat: string | null) => void;
+    setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Chat: React.FC<ChatProps> = ({ senderUID, recieverUID, setSelectedChat }) => {
