@@ -27,12 +27,18 @@ export default function SignupPage() {
     const validateUsername = (username: string) => {
         // Check if username starts with a number
         if (/^\d/.test(username)) {
-            setUsernameError("Invalid username: cannot start with a number.");
+            setUsernameError("Cannot start with a number");
             return false;
         }
         // Check for spaces
         if (/\s/.test(username)) {
-            setUsernameError("Invalid username: Space is not allowed.");
+            setUsernameError("Space is not allowed");
+            return false;
+        }
+
+        // Check if username only contains small letters
+        if (!/^[a-z]+$/.test(username)) {
+            setUsernameError("Only contain small letters");
             return false;
         }
         // Clear error if valid
@@ -61,23 +67,23 @@ export default function SignupPage() {
         const specialChar = /[!@#$%^&*]/; // At least one special character
 
         if (!minLength.test(password)) {
-            setPasswordError("Password must be at least 8 characters long.");
+            setPasswordError("At least 8 characters long");
             return false;
         }
         if (!upperCase.test(password)) {
-            setPasswordError("Password must contain at least one uppercase letter.");
+            setPasswordError("At least one uppercase letter");
             return false;
         }
         if (!lowerCase.test(password)) {
-            setPasswordError("Password must contain at least one lowercase letter.");
+            setPasswordError("At least one lowercase letter");
             return false;
         }
         if (!number.test(password)) {
-            setPasswordError("Password must contain at least one number.");
+            setPasswordError("At least one number");
             return false;
         }
         if (!specialChar.test(password)) {
-            setPasswordError("Password must contain at least one special character.");
+            setPasswordError("At least one special character");
             return false;
         }
 
@@ -182,19 +188,16 @@ export default function SignupPage() {
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2">
-            <Spotlight
-          className="left-40  md:left-60 md:-top-20"
-          fill="blue"
-        />
+        <div className="flex flex-col items-center justify-center min-h-screen py-2 font-[Gilroy]">
+            
         <h1 className="text-2xl mb-2 md:mt-24">{loading ? "Processing" : "Signup"}</h1>
         <hr />
         <form onSubmit={onSignup} className="z-[9] flex flex-col items-center justify-center py-2">
         
-        <div className='flex flex-col items-start mb-3'>
+        <div className='flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="username">Username</label> */}
         <input 
-        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="username"
             type="text"
             value={user.username}
@@ -202,13 +205,13 @@ export default function SignupPage() {
             placeholder="username"
             required
             />
-            {usernameError && <div className="text-red-500">{usernameError}</div>}
+            {usernameError && <div className="text-red-500 ml-5 p-1 text-sm">{usernameError}</div>}
         </div>
 
-        <div className='flex flex-col items-start mb-3'>
+        <div className='flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="email">Email</label> */}
         <input 
-        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="email"
             type="text"
             value={user.email}
@@ -216,13 +219,13 @@ export default function SignupPage() {
             placeholder="email"
             required
             />
-            {emailError && <div className="text-red-500">{emailError}</div>}
+            {emailError && <div className="text-red-500 ml-5 p-1 text-sm">{emailError}</div>}
         </div>
 
-        <div className='relative flex flex-col items-start mb-3'>
+        <div className='relative flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="password">Password</label> */}
         <input 
-        className="text-black border-2 border-gray-700 mb-3 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="password"
             type={passwordVisible ? "text" : "password"} // Toggle input type
             value={user.password}
@@ -233,7 +236,7 @@ export default function SignupPage() {
             <button
                 type="button"
                 onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
-                className="absolute right-3 top-7 transform -translate-y-2/4 text-gray-500"
+                className="absolute right-3 top-6 md:top-5 transform -translate-y-2/4 text-gray-500"
             >
                 {passwordVisible ? (
                         <span role="img" aria-label="Hide Password">🙈</span> // Hide Icon
@@ -241,10 +244,10 @@ export default function SignupPage() {
           <span role="img" aria-label="Show Password">👁️</span> // Show Icon
                     )}
             </button>
-            {passwordError && <div className="text-red-500">{passwordError}</div>}
+            {passwordError && <div className="text-red-500 ml-5 p-1 text-sm">{passwordError}</div>}
         </div>
         
-            <div className="mb-5">
+            <div className="mb-5 mt-2">
                 <ReCAPTCHA
                     sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
                     onChange={handleCaptchaChange}

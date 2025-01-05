@@ -82,7 +82,7 @@ function Navbar({ className }: { className?: string }) {
       <div>
       
       <div
-        className={cn(`fixed top-4 inset-x-0 border-gray-800 md:w-fit mx-auto max-sm:mx-5 z-50 transition-all duration-300 ${
+        className={cn(`fixed font-[Gilroy] top-4 inset-x-0 border-gray-800 md:w-fit mx-auto max-sm:mx-5 z-50 transition-all duration-300 ${
           !visible ? '-translate-y-[150%]' : 'translate-y-0'
         }`, className)}
       >

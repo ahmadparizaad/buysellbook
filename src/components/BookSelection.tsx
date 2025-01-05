@@ -49,7 +49,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center mb-4'>
+    <div className='flex flex-col justify-center items-center mb-4 font-[Gilroy]'>
       <div className='flex flex-col items-start'>
         <label className='pl-5' htmlFor="bookName">Book Name</label>
         <input

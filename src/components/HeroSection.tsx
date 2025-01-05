@@ -40,7 +40,7 @@ function HeroSection() {
     <h1 className="text-4xl text-slate-800 md:text-7xl font-bold bg-clip-text dark:text-white mt-7 md:mt-15 bg-opacity-50">
       Buy & Sell Books @ 50%.
     </h1>
-    <p className="leading-6 mt-10 text-gray-700 p-2 md:px-4 font-normal text-base md:text-2xl dark:text-white max-w-lg mx-auto">
+    <p className="leading-6 mt-10 text-gray-700 p-2 md:px-4 font-normal text-[15px] md:text-2xl dark:text-white max-w-lg mx-auto">
     Your Gateway to Affordable Learning <br/> Find Second-Hand Books at 50% Price <br/> Directly from Fellow Students😊
     </p>
   </div>

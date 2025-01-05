@@ -17,7 +17,7 @@ function AfterSignUp() {
   };
 
   return (
-    <div className="text-xl min-h-[100vh] font-semibold mx-3 mt-56 text-center">
+    <div className="text-xl font-[Gilroy] min-h-[100vh] font-semibold mx-3 mt-56 text-center">
       <h1>Verify Your Email</h1>
       <p className='text-base mt-2 font-normal'>We have sent a verification email to your email address. Please verify your email to complete the signup process.</p>
       <button

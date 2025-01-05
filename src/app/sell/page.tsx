@@ -64,7 +64,7 @@ function SellPage() {
   }
 
   if(!loading && !profileComplete){
-    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Complete your profile first for better experience.
+    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center font-[Gilroy]">Complete your profile first for better experience.
     <br/>
     <Button
     onClick={() => router.push("/update-profile")}

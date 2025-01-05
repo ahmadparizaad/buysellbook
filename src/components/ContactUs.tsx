@@ -71,7 +71,7 @@ const   ContactUs = () => {
 
   return (
     <>    
-    <div className="mb-10 bg-white min-h-screen w-screen px-6 md:px-16 flex flex-col items-center">
+    <div className="mb-10 bg-white min-h-screen w-screen px-6 md:px-16 flex flex-col items-center font-[Gilroy]">
   <h1 className="mt-10 mb-6 text-3xl md:text-5xl font-bold text-start bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 to-neutral-500">
     Contact Us
   </h1>

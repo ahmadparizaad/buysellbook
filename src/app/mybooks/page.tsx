@@ -63,10 +63,10 @@ const MyBook = () => {
   };
 
   if (error) {
-    return <div className="text-xl text-red-600 font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">{error}</div>;
+    return <div className="text-xl min-h-[100vh] font-[Gilroy] text-red-600 font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">{error}</div>;
   }
   if(!loading && myBooks.length === 0) {
-    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
+    return <div className="min-h-[100vh] font-[Gilroy] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
   }
 
   return (

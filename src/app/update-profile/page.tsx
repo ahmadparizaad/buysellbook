@@ -57,7 +57,7 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="min-h-[100vh] p-9 mt-[3vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[5vw]">
+    <div className="min-h-[100vh] p-9 mt-[3vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[5vw] font-[Gilroy]">
       <h1 className='text-2xl'>Update Profile</h1>
       <br />
       <form onSubmit={handleSubmit} className="z-[9] flex flex-col items-center justify-center py-2">

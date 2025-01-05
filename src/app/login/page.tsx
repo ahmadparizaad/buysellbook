@@ -24,6 +24,64 @@ export default function LoginPage() {
     const [passwordError, setPasswordError] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
+    const validateEmail = (email: string) => {
+        // Regular expression for validating email format
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setEmailError("Invalid Email");
+            return false;
+        }
+        // Clear error if valid
+        setEmailError("");
+        return true;
+    };
+
+    const validatePassword = (password: string) => {
+        // Regular expressions for password validation
+        const minLength = /.{8,}/; // At least 8 characters
+        const upperCase = /[A-Z]/; // At least one uppercase letter
+        const lowerCase = /[a-z]/; // At least one lowercase letter
+        const number = /[0-9]/; // At least one number
+        const specialChar = /[!@#$%^&*]/; // At least one special character
+
+        if (!minLength.test(password)) {
+            setPasswordError("At least 8 characters long");
+            return false;
+        }
+        if (!upperCase.test(password)) {
+            setPasswordError("At least one uppercase letter");
+            return false;
+        }
+        if (!lowerCase.test(password)) {
+            setPasswordError("At least one lowercase letter");
+            return false;
+        }
+        if (!number.test(password)) {
+            setPasswordError("At least one number");
+            return false;
+        }
+        if (!specialChar.test(password)) {
+            setPasswordError("At least one special character");
+            return false;
+        }
+
+        // Clear error if valid
+        setPasswordError("");
+        return true;
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newEmail = e.target.value;
+        setUser({ ...user, email: newEmail });
+        validateEmail(newEmail);
+    }; 
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPassword = e.target.value;
+        setUser({ ...user, password: newPassword });
+        validatePassword(newPassword);
+    };
+
     const onLogin = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
@@ -69,6 +127,7 @@ export default function LoginPage() {
     }
 
     useEffect(() => {
+        
         if(user.email.length > 0 && user.password.length > 0 && user.captchaToken) {
             setButtonDisabled(false);
         } else {
@@ -77,11 +136,8 @@ export default function LoginPage() {
     }, [user]);
 
     return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen">
-        <Spotlight
-          className="left-40  md:left-60 md:-top-20"
-          fill="blue"
-        />
+    <div className="flex flex-col items-center justify-center h-screen w-screen font-[Gilroy]">
+        
         <h1 className="text-2xl md:mt-20 mb-2">{loading ? "Processing..." : "Login"}</h1>
         <hr />
         <form onSubmit={onLogin} className="z-[9] flex flex-col items-center justify-center py-2">
@@ -89,25 +145,25 @@ export default function LoginPage() {
         <div  className='flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="email">Email</label> */}
         <input 
-        className="text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="email"
             type="text"
             value={user.email}
-            onChange={(e) => setUser({...user, email: e.target.value})}
+            onChange={handleEmailChange}
             placeholder="email"
             required
             />
-            {emailError && <div className="text-red-500">{emailError}</div>}
+            {emailError && <div className="text-red-500 ml-5 p-1 text-sm">{emailError}</div>}
         </div>
 
         <div className='relative flex flex-col items-start mb-5'>
         {/* <label className='pl-5' htmlFor="password">Password</label> */}
         <input 
-        className="text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
+        className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="password"
             type={passwordVisible ? "text" : "password"}
             value={user.password}
-            onChange={(e) => setUser({...user, password: e.target.value})}
+            onChange={handlePasswordChange}
             placeholder="password"
             required
             />
@@ -122,7 +178,7 @@ export default function LoginPage() {
           <span role="img" aria-label="Show Password">👁️</span> // Show Icon
                     )}
             </button>
-            {passwordError && <div className="text-red-500">{passwordError}</div>}
+            {passwordError && <div className="text-red-500 ml-5 p-1 text-sm">{passwordError}</div>}
         </div>
         
         <div className="mb-5">
