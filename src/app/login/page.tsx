@@ -114,7 +114,7 @@ export default function LoginPage() {
             <button
                 type="button"
                 onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
-                className="absolute border-2 border-gray-700 right-3 top-7 transform -translate-y-2/4 text-black"
+                className="absolute right-3 top-7 transform -translate-y-2/4 text-black"
             >
                 {passwordVisible ? (
                         <span role="img" aria-label="Hide Password">🙈</span> // Hide Icon

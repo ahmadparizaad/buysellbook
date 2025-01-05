@@ -64,12 +64,12 @@ function SellPage() {
   }
 
   if(!loading && !profileComplete){
-    return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Complete your profile first for better experience.
+    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">Complete your profile first for better experience.
     <br/>
     <Button
     onClick={() => router.push("/update-profile")}
     variant="outline"
-    className=' border-2 border-gray-700 mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] bg-white hover:bg-blue-400 hover:text-black hover:border-none ease-linear duration-200'>
+    className=' border-2 border-gray-700 mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] bg-white hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'>
     Complete Profile</Button> </div>
   }
 

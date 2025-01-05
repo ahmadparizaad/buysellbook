@@ -41,22 +41,22 @@ body{
 
     /* Custom Scrollbar Styles for WebKit Browsers */
     ::-webkit-scrollbar {
-      width: 10px; /* Width of the scrollbar */
+      width: 7px; /* Width of the scrollbar */
       height: 10px; /* Height of the scrollbar */
     }
 
     ::-webkit-scrollbar-track {
-      background: rgba(23, 43, 62, 0.2); /* Background of the scrollbar track with transparency */
+      background: rgba(10, 36, 58, 0.2); /* Background of the scrollbar track with transparency */
       border-radius: 10px; /* Rounded corners for the track */
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #063356; /* Color of the scrollbar thumb */
+      background: #519cd5; /* Color of the scrollbar thumb */
       border-radius: 10px; /* Rounded corners for the thumb */
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #555; /* Color of the thumb on hover */
+      background: #0d2058; /* Color of the thumb on hover */
     }
   }
  

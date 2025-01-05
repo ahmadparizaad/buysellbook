@@ -41,7 +41,7 @@ export async function POST(request: NextRequest){
         if (!isCaptchaValid) {
             return NextResponse.json(
                 { error: "Invalid captcha" },
-                { status: 400 }
+                { status: 401 }
             );
         }
 

@@ -187,7 +187,7 @@ const OneChat = () => {
 
     if(loading){
         return <div className="animate-pulse">
-        <div className="p-4 mt-20 border-b bg-gray-800 flex justify-between items-center">
+        <div className="p-4 mt-20 border-b bg-gray-600 flex justify-between items-center">
           <div className="h-6 bg-gray-500 rounded-xl w-1/2"></div>
           <div className="h-6 bg-gray-500 rounded-xl w-1/6"></div>
         </div>
@@ -222,7 +222,7 @@ const OneChat = () => {
 
     if (error) {
         return (
-            <div className="flex justify-center items-center h-64 text-red-500">
+            <div className="min-h-[100vh] flex justify-center items-center h-64 text-red-500">
                 {error}
             </div>
         );
@@ -239,13 +239,13 @@ const OneChat = () => {
             <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
             
             {isLoading && 
-            <div className="animate-pulse mt-5 flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
+            <div className="animate-pulse mt-5 flex flex-col items-start gap-4 w-full rounded-md p-4">
 
-            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
-            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
-            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
-            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
-            <div className="h-20 bg-slate-500 w-full rounded-md"></div>
+            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
+            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
+            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
+            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
+            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
             </div>
             }
 
@@ -269,14 +269,14 @@ const OneChat = () => {
 </div>
         ) : (
             <>
-            <div className="p-4 mt-24 border-b text-white bg-gray-800 flex justify-between items-center">
+            <div className="p-4 mt-24 border-b text-white bg-slate-500 flex justify-between items-center">
                 <h2 className="font-semibold text-lg">Chat with {recieverUID}</h2>
                 <button 
                 onClick={() => {
                   setSelectedChat(null)
                   router.push('/onechat')
                 }}
-                className="font-medium text-sm hover:text-blue-600"
+                className="font-medium text-sm hover:text-black"
               >
                 ← Back
               </button>

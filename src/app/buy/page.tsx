@@ -334,9 +334,9 @@ useEffect(() => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {books?.map((book) => (
           <div key={book._id} className="container relative text-black">
-            <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-blue-400 bg-opacity-10 border border-black/[0.9]
+            <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
-                          flex flex-col justify-between hover:shadow-lg hover:scale-105 hover:border-opacity-55">
+                          flex flex-col justify-between hover:shadow-lg hover:scale-103 hover:border-opacity-55">
               <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
               
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>

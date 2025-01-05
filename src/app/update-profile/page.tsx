@@ -1,6 +1,6 @@
 // pages/update-profile.tsx
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
@@ -11,12 +11,25 @@ const UpdateProfile = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     college: '',
     city: '',
-    profileImage: '',
     isProfileComplete: true,
   });
+
+  const getUserDetails = async () => {
+    try {
+      const res = await axios.get('/api/users/me');
+      setFormData(res.data.data);
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, [])
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,8 +57,8 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw]">
-      <h1 className='text-xl'>Update Profile</h1>
+    <div className="min-h-[100vh] p-9 mt-[3vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[5vw]">
+      <h1 className='text-2xl'>Update Profile</h1>
       <br />
       <form onSubmit={handleSubmit} className="z-[9] flex flex-col items-center justify-center py-2">
         <div className="mb-4">
@@ -56,7 +69,7 @@ const UpdateProfile = () => {
             required
             value={formData.name}
             onChange={handleChange}
-            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
             placeholder="Enter your name"
           />
         </div>
@@ -68,7 +81,7 @@ const UpdateProfile = () => {
             required
             value={formData.college}
             onChange={handleChange}
-            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
 
             placeholder="Enter your college name"
           />
@@ -81,7 +94,7 @@ const UpdateProfile = () => {
             required
             value={formData.city}
             onChange={handleChange}
-            className='text-black mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+            className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
 
             placeholder="Enter your city"
           />
@@ -99,7 +112,7 @@ const UpdateProfile = () => {
         <Button
           type="submit"
           variant="outline"
-          className='border mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-500 ease-linear duration-200'
+          className='border-2 border-gray-700 mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none  ease-linear duration-200'
           >
           Update Profile
         </Button>

@@ -4,7 +4,7 @@ import axios from "axios";
 const getUserDetails = async () => {
   try {
     const res = await axios.get('/api/users/me');
-    return {
+    const user = {
       name: res.data.data.name,
       email: res.data.data.email,
       college: res.data.data.college,
@@ -12,6 +12,7 @@ const getUserDetails = async () => {
       profileImage: res.data.data.profileImage,
       isProfileComplete: res.data.data.isProfileComplete,
     };
+    return user;
   } catch (error: any) {
     console.log(error.message);
     toast.error(error.message);

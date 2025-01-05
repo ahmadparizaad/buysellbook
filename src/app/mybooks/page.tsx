@@ -66,7 +66,7 @@ const MyBook = () => {
     return <div className="text-xl text-red-600 font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">{error}</div>;
   }
   if(!loading && myBooks.length === 0) {
-    return <div className="text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
+    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
   }
 
   return (
@@ -90,9 +90,9 @@ const MyBook = () => {
 
         {myBooks.map((book) => (
           <div key={book._id} className="container relative text-black">
-            <div className="group box w-full p-4 bg-blue-400 bg-opacity-10 border border-black/[0.9]
+            <div className="group box w-full p-4 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-lg transition-all duration-300 ease-in-out 
-                          flex flex-col justify-between hover:shadow-lg hover:scale-105 hover:border-opacity-55">
+                          flex flex-col justify-between hover:shadow-lg hover:scale-104 hover:border-opacity-55">
 
       <div className="absolute top-2 right-2">
                 <button onClick={() => setMenuVisible(prev => ({ ...prev, [book._id]: !prev[book._id] }))}>

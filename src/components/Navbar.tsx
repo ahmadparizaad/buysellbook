@@ -87,12 +87,12 @@ function Navbar({ className }: { className?: string }) {
         }`, className)}
       >
         <div className="flex flex-col">
-        <div className="bg-gray-800 backdrop-filter backdrop-blur-sm bg-opacity-50 border dark:border-gray-800 flex justify-between dark:bg-blue-950/[0.9] rounded-3xl md:hidden px-3 py-1 top-3 md:top-8 z-50">
-        <h1 className={`text-white top-2 p-2 text-lg md:text-xl font-bold`}>Campus Book</h1>
+        <div className="bg-gray-300 backdrop-filter backdrop-blur-sm bg-opacity-50 border dark:border-gray-800 flex justify-between dark:bg-blue-950/[0.9] rounded-3xl md:hidden px-3 py-1 top-3 md:top-8 z-50">
+        <h1 className={`text-black top-2 p-2 text-lg md:text-xl font-bold`}>Campus Book</h1>
         
         <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="top-2 right-2 p-2 rounded-lg z-50 text-white"
+            className="top-2 right-2 p-2 rounded-lg z-50 text-black"
           >
             {isMenuOpen ? <X size={24} /> : <MenuIcon size={24} />}
         </button>
@@ -132,7 +132,7 @@ function Navbar({ className }: { className?: string }) {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:hidden text-white space-y-5 font-semibold bg-gray-800 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-50 border border-gray-400 fixed rounded-3xl top-14 py-1 w-full transition-opacity duration-300 transform `}>         
+        <div className={`${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:hidden text-black space-y-5 font-semibold bg-gray-300 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-50 border fixed rounded-3xl top-14 py-1 w-full transition-opacity duration-300 transform `}>         
             <div className="flex flex-col px-4">
 
               <Link 

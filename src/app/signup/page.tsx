@@ -132,12 +132,22 @@ export default function SignupPage() {
                 username: user.username,
                 captchaToken: captchaToken
             });
-            toast.success(res.data.message);
             toast.success("Signup successful");
-            router.push("/aftersignup");
+            router.push("/after-signup");
         } catch (error:any) {
             console.log("Signup failed", error.message);
-            toast.error(error.message);
+            if(error.status == 400){
+                toast.error("User already exists");
+            }
+
+            if(error.status == 401){
+                toast.error("Invalid captcha");
+            }
+
+            if(error.status == 500){
+                toast.error("Failed to send verification email");
+            }
+
         } finally {
             setLoading(false);
         }           
