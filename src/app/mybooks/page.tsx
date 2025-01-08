@@ -13,7 +13,8 @@ interface IBook {
   year: string;
   semester: string;
   isSet: string;
-  books: { name: string; price: number }[];
+  books: { name: string; halfPrice: number }[];
+  totalPrice: number;
 }
 
 const MyBook = () => {
@@ -51,9 +52,7 @@ const MyBook = () => {
     const confirmRemove = window.confirm("Are you sure you want to remove this book?");
     if (confirmRemove) {
       try {
-        const response = await axios.delete(`/api/books/deletebooks/`, {
-          data: bookId 
-        }); // Adjust the endpoint as necessary
+        const response = await axios.delete(`/api/books/deletebooks/${bookId}`); // Adjust the endpoint as necessary
         setMyBooks(myBooks.filter(book => book._id !== bookId)); // Update state to remove the book
       } catch (error) {
         console.error('Error removing book:', error);
@@ -66,27 +65,28 @@ const MyBook = () => {
     return <div className="text-xl min-h-[100vh] font-[Gilroy] text-red-600 font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">{error}</div>;
   }
   if(!loading && myBooks.length === 0) {
-    return <div className="min-h-[100vh] font-[Gilroy] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center">You have not listed any books yet.</div>;
+    return <div className="min-h-[100vh] font-[Gilroy] text-xl font-semibold mb-4 mx-3 mt-40 md:mt-56 text-center">You have not listed any books yet.</div>;
   }
 
   return (
     <div className='p-4 sm:p-8 min-h-screen relative z-[9] mt-[60px] sm:mt-[8vw] font-[Gilroy]'>
       <h1 className="text-2xl font-medium mb-8">My Books</h1>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8'>
-        {loading && Array.from({ length: 6 }).map((_, index) => (
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8'>
+        {loading && Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="animate-pulse flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
             <div className="w-full">
-              <div className="w-3/4 h-5 bg-slate-400 rounded-md"></div>
-              <div className="w-1/2 h-4 bg-slate-400 mt-3 rounded-md"></div>
+              <div className="w-3/4 h-5 bg-slate-400 rounded-xl"></div>
+              <div className="w-1/2 h-4 bg-slate-400 mt-3 rounded-xl"></div>
             </div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-1/2 rounded-md"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-1/2 rounded-xl"></div>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-6">
 
         {myBooks.map((book) => (
           <div key={book._id} className="container relative text-black">
@@ -110,7 +110,10 @@ const MyBook = () => {
                 )}
               </div>   
 
+              <div className='flex justify-between items-center'>
               <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
+              {book.isSet && <p className='text-white mb-6 rounded-3xl text-sm bg-green-400 px-2 mx-2'>Complete Set</p>}
+              </div>
 
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 
@@ -123,18 +126,19 @@ const MyBook = () => {
               </div>
 
               {book.std && <p className='text-gray-900 mb-[2px]'>Standard: {book.std}</p>}  
-              <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>
-              <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>
+              {book.year && <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>}
+              {book.semester && <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>}
             
               <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
                 <ul className="space-y-[2px]">
                   {book.books.map((item, index) => (
                     <li key={index} className="text-gray-900">
-                      <p className='font-medium'>{item.name}: ₹{item.price}</p>
+                      <p className='font-medium'>{item.name}: ₹{item.halfPrice}</p>
                     </li>
                   ))}
                 </ul>
+                <p className='font-medium'>Total Price: ₹{book.totalPrice}</p>
               </div>
 
               {/* <Button 

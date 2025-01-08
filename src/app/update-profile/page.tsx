@@ -12,8 +12,9 @@ const UpdateProfile = () => {
   const [formData, setFormData] = useState({
     name: '',
     college: '',
+    university: '',
     city: '',
-    isProfileComplete: true,
+    isProfileComplete: false,
   });
 
   const getUserDetails = async () => {
@@ -47,9 +48,17 @@ const UpdateProfile = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.put('/api/users/update-profile', formData);
+      if(formData.name !== '' && formData.college !== '' && formData.university !== '' && formData.city !== '') {
+      const updatedData = {
+        ...formData,
+        isProfileComplete: true, // Ensure this is set to true
+    };
+      const res = await axios.put('/api/users/update-profile', updatedData);
       toast.success('Profile updated successfully');
       router.push('/profile'); // Redirect to profile page after successful update
+  } else {
+    toast.error('Please fill all the fields');
+  }
     } catch (error: any) {
       console.error(error.message);
       toast.error('Failed to update profile');
@@ -84,6 +93,19 @@ const UpdateProfile = () => {
             className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
 
             placeholder="Enter your college name"
+          />
+          </div>
+        <div className="mb-4">
+          {/* <label className="block text-gray-200 text-sm font-bold mb-2">College:</label> */}
+          <input
+            type="text"
+            name="university"
+            required
+            value={formData.university}
+            onChange={handleChange}
+            className='text-black border-2 border-gray-700 mb-4 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+
+            placeholder="Enter your university name"
           />
         </div>
         <div className="mb-4">

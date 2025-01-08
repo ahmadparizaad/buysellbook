@@ -2,26 +2,38 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { MdCurrencyRupee } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 interface Book {
   name: string;
   price: number;
+  halfPrice: number;
 }
 
 interface BookSelectionProps {
   booklist: (selectedBooks: Book[]) => void;
+  handleTotalPrice: (totalPrice: number) => void;
 }
 
-const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
+const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPrice }) => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0});
+  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0, halfPrice: 0 });
   const [halfAmount, setHalfAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0)
 
   const handleAddBook = () => {
     setBooks([...books, newBook]);
     booklist([...books, newBook]);
-    setNewBook({ name: '', price: 0 });
+    setNewBook({ name: '', price: 0, halfPrice: 0 });
   };
 
   const handleBookNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +41,14 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
   };
 
   const handleBookPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewBook({ ...newBook, price: Number(e.target.value) });
+    const price = Number(e.target.value);
+    setNewBook({ ...newBook, price, halfPrice: price / 2 });
+  };
+
+  const handleDeleteBook = (index: number) => {
+    const updatedBooks = books.filter((_, i) => i !== index);
+    setBooks(updatedBooks);
+    booklist(updatedBooks);
   };
 
   const calculateTotalAmount = () => {
@@ -41,6 +60,8 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
     const totalPrice = books.reduce((acc, book) => acc + book.price, 0);
     const halfTotal = totalPrice / 2;
     setHalfAmount(halfTotal);
+    handleTotalPrice(halfTotal);
+
   };
 
   const calculateAmount = () => {
@@ -77,14 +98,34 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
       
       <div className="w-full flex flex-col items-start mb-4 mt-4 pl-5">
       <div>
+        {books.length > 0 &&
+          <>
         <h2 className='mb-4'>Book Details</h2>
-        <ol>
-          {books.map((book, index) => (
-            <li key={index}  className='flex' >
-              {book.name} - <MdCurrencyRupee className='mt-1 ml-1'/> {book.price}
-            </li>
-          ))}
-        </ol>
+        <Table className='text-base'>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='px-5'>Book Name</TableHead>
+              <TableHead className='px-5'>Price</TableHead>
+              <TableHead className='px-5'>Half Price</TableHead>
+              <TableHead className='px-5'>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {books.map((book, index) => (
+              <TableRow key={index}>
+                <TableCell className='px-5'>{book.name}</TableCell>
+                <TableCell className='px-5'>{book.price}</TableCell>
+                <TableCell className='px-5'>₹{book.halfPrice}</TableCell>
+                <TableCell>
+                  <button onClick={() => handleDeleteBook(index)} className='text-red-500 underline text-sm px-3'>
+                    remove
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        </>}
       </div>
 
       <div>
@@ -93,8 +134,8 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist }) => {
       >Calculate Total</Button>
         {halfAmount > 0 && (
           <>
-          <p className='flex'>Total Amount: <MdCurrencyRupee className='mt-1 ml-1'/> {totalAmount}</p>
-          <p className='flex'>50% Amount: <MdCurrencyRupee className='mt-1 ml-1'/> {halfAmount}</p>
+          <p className='flex px-5'>Total Amount:  <MdCurrencyRupee className='mt-1 ml-1'/>{totalAmount}</p> <hr />
+          <p className='flex px-5'>50% Amount:  <MdCurrencyRupee className='mt-1 ml-1'/>{halfAmount}</p>
           </>
         )}
       </div>

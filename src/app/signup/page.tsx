@@ -37,8 +37,8 @@ export default function SignupPage() {
         }
 
         // Check if username only contains small letters
-        if (!/^[a-z]+$/.test(username)) {
-            setUsernameError("Only contain small letters");
+        if (!/^[a-z_]+$/.test(username)) {
+            setUsernameError("Only contain small letters and underscore");
             return false;
         }
         // Clear error if valid
@@ -202,7 +202,7 @@ export default function SignupPage() {
             type="text"
             value={user.username}
             onChange={handleUsernameChange}
-            placeholder="username"
+            placeholder="Username"
             required
             />
             {usernameError && <div className="text-red-500 ml-5 p-1 text-sm">{usernameError}</div>}
@@ -213,10 +213,10 @@ export default function SignupPage() {
         <input 
         className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="email"
-            type="text"
+            type="email"
             value={user.email}
             onChange={handleEmailChange}
-            placeholder="email"
+            placeholder="Email"
             required
             />
             {emailError && <div className="text-red-500 ml-5 p-1 text-sm">{emailError}</div>}
@@ -230,13 +230,13 @@ export default function SignupPage() {
             type={passwordVisible ? "text" : "password"} // Toggle input type
             value={user.password}
             onChange={handlePasswordChange}
-            placeholder="password"
+            placeholder="Password"
             required
             />
             <button
                 type="button"
                 onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
-                className="absolute right-3 top-6 md:top-5 transform -translate-y-2/4 text-gray-500"
+                className="absolute right-3 top-6 md:top-7 transform -translate-y-2/4 text-gray-500"
             >
                 {passwordVisible ? (
                         <span role="img" aria-label="Hide Password">🙈</span> // Hide Icon

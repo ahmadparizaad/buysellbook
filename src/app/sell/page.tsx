@@ -12,10 +12,12 @@ import getUserDetails from '@/utils/getUserDetails';
 interface Book {
   name: string;
   price: number;
+  halfPrice: number;
 }
 
 function SellPage() {
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [profileComplete, setProfileComplete] = useState(false);
   const [book, setBook] = useState({
@@ -25,19 +27,20 @@ function SellPage() {
     semester: '',
     isSet: '',
     books: [] as Book[],
+    totalPrice: 0,
   });
 
   useEffect(() => {
-    setLoading(true);
+    
     const fetchUserDetails = async () => {
+      setLoading(true);
       const user = await getUserDetails();
       if (user?.isProfileComplete) {
         setProfileComplete(true);
-        
       }
+      setLoading(false);
     };
     fetchUserDetails();
-    setTimeout(() => setLoading(false), 1000);
   }, [])
 
   const handleSemesterChange = (semester: string) => {
@@ -48,34 +51,47 @@ function SellPage() {
     setBook({ ...book, books: selectedBooks });
   };
 
+  const handleTotalPrice = (totalPrice: number) => {
+    setBook({ ...book, totalPrice: totalPrice });
+  };
+
   const onSubmit = async () => {
     try{
-      setLoading(true);
+      setIsLoading(true);
       const response = await axios.post("/api/books/sell", book);
-      router.push("/buy");
+      router.push("/mybooks");
     }
     catch (error:any) {
       console.log("Failed", error.message);
-      
-      toast.error(error.message);
+      if(error.status === 400) {
+        toast.error("Missing required fields");
+      }
+      if(error.status === 404) {
+        toast.error("User not found");
+      }
+      if(error.status === 500) {
+        toast.error("Internal server error");
+      }
   }finally {
-      setLoading(false);
+      setIsLoading(false);
   }
   }
 
-  if(!loading && !profileComplete){
-    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center font-[Gilroy]">Complete your profile first for better experience.
+  if(loading) {
+    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center font-[Gilroy]">Loading...</div>
+  }
+
+  return (
+    <>
+    {!profileComplete ? 
+    <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-40 md:mt-56 text-center font-[Gilroy]">Complete your profile first for better experience.
     <br/>
     <Button
     onClick={() => router.push("/update-profile")}
     variant="outline"
     className=' border-2 border-gray-700 mt-5 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] bg-white hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'>
     Complete Profile</Button> </div>
-  }
-
-  return (
-    <>
-    
+    :
     <div className='min-h-[100vh] pt-20 p-9 mt-[6vw] flex flex-col justify-center items-center relative z-[9] max-sm:mt-[20vw] font-[Gilroy]'>
     
       <div className="flex flex-col items-start">
@@ -150,12 +166,13 @@ function SellPage() {
           value={book.isSet}
           onChange={(e) => setBook({ ...book, isSet: e.target.value })}
         >
+          <option value="">Select</option>
           <option value="1">Yes</option>
           <option value="0">No</option>
           </select>
           </div>
 
-      <BookSelection booklist={handleBookSelection} />
+      <BookSelection booklist={handleBookSelection} handleTotalPrice={handleTotalPrice} />
     
 
     {/* <PhotoUpload bookImage={handleFile} /> */}
@@ -164,9 +181,12 @@ function SellPage() {
       variant="outline"
       className='border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
     >
-      Submit
+      {isLoading ? "Submitting..." : "Submit"}
     </Button>
     </div>
+    }
+    
+    
     
   </> 
   );

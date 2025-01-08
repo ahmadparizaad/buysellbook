@@ -4,31 +4,32 @@ import nodemailer from "nodemailer";
 
 // Create a transporter for sending emails
 var transporter = nodemailer.createTransport({
-    host: "live.smtp.mailtrap.io",
+    host: "smtp.gmail.com",
     port: 587,
+    secure: false,
     auth: {
-      user: process.env.MAILTRAP_USER,
-      pass: process.env.MAILTRAP_PASS
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASSWORD
     }
   });
 
-async function verifyCaptcha(token: string) {
-    try {
-        const response = await axios.post(
-            `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${token}`,
-            {},
-            {
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-                },
-            }
-        );
-        return response.data.success;
-    } catch (error) {
-        console.error("Error verifying captcha:", error);
-        return false;
-    }
-}
+// async function verifyCaptcha(token: string) {
+//     try {
+//         const response = await axios.post(
+//             `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${token}`,
+//             {},
+//             {
+//                 headers: {
+//                     "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+//                 },
+//             }
+//         );
+//         return response.data.success;
+//     } catch (error) {
+//         console.error("Error verifying captcha:", error);
+//         return false;
+//     }
+// }
 
 export async function POST(request: NextRequest) {
     try {
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
         // console.log("request body : ", reqBody);
         
         // Input validation
-        if (!name || !email || !description || !captchaToken) {
+        if (!name || !email || !description) {
             return NextResponse.json(
                 { error: "All fields are required" },
                 { status: 400 }
@@ -49,21 +50,21 @@ export async function POST(request: NextRequest) {
         if (!emailRegex.test(email)) {
             return NextResponse.json(
                 { error: "Invalid email format" },
-                { status: 400 }
+                { status: 401 }
             );
         }
         console.log("Email format verified");
         
 
         // Verify captcha
-        const isCaptchaValid = await verifyCaptcha(captchaToken);
-        if (!isCaptchaValid) {
-            return NextResponse.json(
-                { error: "Invalid captcha" },
-                { status: 400 }
-            );
-        }
-        console.log("Captcha verified");
+        // const isCaptchaValid = await verifyCaptcha(captchaToken);
+        // if (!isCaptchaValid) {
+        //     return NextResponse.json(
+        //         { error: "Invalid captcha" },
+        //         { status: 402 }
+        //     );
+        // }
+        // console.log("Captcha verified");
         
 
         // Email content

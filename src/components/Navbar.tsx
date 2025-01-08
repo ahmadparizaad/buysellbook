@@ -182,7 +182,7 @@ function Navbar({ className }: { className?: string }) {
                 className="text-md px-2 py-1 rounded-3xl border-[1px] border-solid border-gray-400"
                 onClick={() => handleLogin()}
               >
-                {user._id === "" ? 'Login' : 'Logout'}
+                {user?._id === "" ? 'Login' : 'Logout'}
               </Button>
             </div>
           </div>

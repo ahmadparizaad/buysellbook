@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     // Handle search
     let matchingUserIds = [];
-    if (query && (searchType === 'city' || searchType === 'college')) {
+    if (query && (searchType === 'city' || searchType === 'college' || searchType === 'university')) {
       const userFilter = {
         [searchType]: { $regex: query, $options: 'i' }
       };
@@ -65,7 +65,10 @@ export async function GET(request: NextRequest) {
           books: 1,
           userId: 1,
           'seller.city': 1,
-          'seller.college': 1
+          'seller.college': 1,
+          'seller.university': 1,
+          'seller.name': 1,
+          totalPrice: 1
         }
       }
     ]);

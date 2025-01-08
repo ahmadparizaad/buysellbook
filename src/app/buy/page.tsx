@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { isSet } from 'util/types';
 
   interface IBook {
     _id: string;
@@ -24,11 +25,14 @@ import toast from 'react-hot-toast';
     year: string;
     semester: string;
     isSet: string;
-    books: {name : string, price : number}[];
+    books: {name : string, price : number, halfPrice : number}[];
     seller: {
+      name: string;
       city: string;
       college: string;
-    }
+      university: string;
+    };
+    totalPrice: number;
   }
   
 
@@ -110,6 +114,7 @@ useEffect(() => {
       }).toString();
 
       const response = await axios.get(`/api/books/buy?${queryParams}`);
+      console.log(response.data.books);
       if (pageNum === 1) {
         setBooks(response.data.books);
       } else {
@@ -206,6 +211,7 @@ useEffect(() => {
           <option value="books">Search Books</option>
           <option value="city">Search by City</option>
           <option value="college">Search by College</option>
+          <option value="university">Search by University</option>
         </select>
         
         <input 
@@ -218,8 +224,7 @@ useEffect(() => {
         <Button 
           onClick={handleSearch}
           variant="outline" 
-          className='sm:w-auto border-2 dark:border-white/[0.3] rounded-3xl bg-white text-black ease-linear duration-200 border-gray-700'
-        >
+          className='sm:w-auto border-2 dark:border-white/[0.3] rounded-3xl bg-white text-black ease-linear duration-200 border-gray-700 hover:bg-blue-400 hover:text-white hover:border-none'>
           Search
         </Button>
       </div>
@@ -308,17 +313,17 @@ useEffect(() => {
       </Accordion>
 
       
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8'>
-        {loading && Array.from({ length: 6 }).map((_, index) => (
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8'>
+        {loading && Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="animate-pulse flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
             <div className="w-full">
-              <div className="w-3/4 h-5 bg-slate-400 rounded-md"></div>
-              <div className="w-1/2 h-4 bg-slate-400 mt-3 rounded-md"></div>
+              <div className="w-3/4 h-5 bg-slate-400 rounded-xl"></div>
+              <div className="w-1/2 h-4 bg-slate-400 mt-3 rounded-xl"></div>
             </div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-full rounded-md"></div>
-            <div className="h-4 bg-slate-400 w-1/2 rounded-md"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-full rounded-xl"></div>
+            <div className="h-4 bg-slate-400 w-1/2 rounded-xl"></div>
           </div>
         ))}
       </div>
@@ -337,8 +342,10 @@ useEffect(() => {
             <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:scale-103 hover:border-opacity-55">
+              <div className='flex justify-between items-center'>
               <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
-              
+              {book.isSet && <p className='text-white mb-6 rounded-3xl text-sm bg-green-400 px-2'>Complete Set</p>}
+              </div>
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 
                   className='w-full h-full object-cover'
@@ -350,28 +357,30 @@ useEffect(() => {
               </div>
 
               {book.std && <p className='text-gray-900 mb-[2px]'>Standard: {book.std}</p>}  
-              <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>
-              <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>
+              {book.year && <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>}
+              {book.semester && <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>}
             
               <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
                 <ul className="space-y-[1px]">
                   {book.books.map((item, index) => (
                     <li key={index} className="text-black">
-                      <p className='font-medium'>{item.name}: ₹{item.price}</p>
+                      <p className='font-medium'>{item.name}: ₹{item.halfPrice}</p>
                     </li>
                   ))}
                 </ul>
-              </div>
+                <p className='font-medium'>Total Price: ₹{book.totalPrice}</p>
+              </div>  
+              <div>
 
-              <div className="mt-2 text-sm">
-                  <p>Complete Set: {book.isSet ? "Yes" : "No"}</p>
-                </div>
+              </div>
 
               {book.seller && (
                 <div className="text-sm text-gray-900">
-                  <p>Location: {book.seller.city}</p>
+                  <p>Seller: {book.seller.name}</p>
                   <p>College: {book.seller.college}</p>
+                  <p>University: {book.seller.university}</p>
+                  <p>City: {book.seller.city}</p>
                 </div>
               )}
 

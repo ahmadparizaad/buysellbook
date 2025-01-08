@@ -99,10 +99,8 @@ export default function LoginPage() {
                 captchaToken: user.captchaToken // Make sure this is being sent
             });
             
-            toast.success("Login successful");
-            router.push("/");
+            
         } catch (error: any) {
-            toast.error(error.message);
             if (error.response) {
                 // Check for specific error messages from the server
                 if (error.response.status === 400) {
@@ -111,15 +109,15 @@ export default function LoginPage() {
                         setEmailError("Invalid Email: Please Enter Correct Email");
                     } else if (errorMessage.includes("Invalid password")) {
                         setPasswordError("Invalid password: Please Enter Correct Password");
-                    } else {
-                        toast.error(errorMessage); // General error message
+                    } else if (errorMessage.includes("User is not verified")) {
+                        toast.error("User is not verified. Please verify your email.");
                     }
-                } else {
-                    toast.error("An unexpected error occurred. Please try again.");
                 }
             }
         } finally {
             setLoading(false);
+            toast.success("Login successful");
+            router.push("/");
         }
     }
     const handleCaptchaChange = (token: string | null) => {
@@ -138,7 +136,7 @@ export default function LoginPage() {
     return (
     <div className="flex flex-col items-center justify-center h-screen w-screen font-[Gilroy]">
         
-        <h1 className="text-2xl md:mt-20 mb-2">{loading ? "Processing..." : "Login"}</h1>
+        <h1 className="text-2xl md:mt-20 mb-2">Login</h1>
         <hr />
         <form onSubmit={onLogin} className="z-[9] flex flex-col items-center justify-center py-2">
 
@@ -147,7 +145,7 @@ export default function LoginPage() {
         <input 
         className="text-black border-2 border-gray-700 mb-0 mt-2 w-[30vh] md:w-[25vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]"
             id="email"
-            type="text"
+            type="email"
             value={user.email}
             onChange={handleEmailChange}
             placeholder="email"
@@ -181,6 +179,9 @@ export default function LoginPage() {
             {passwordError && <div className="text-red-500 ml-5 p-1 text-sm">{passwordError}</div>}
         </div>
         
+        <div className="mb-5 text-blue-600">
+            <Link href="/forgot-password">Forgot Password?</Link>
+        </div>
         <div className="mb-5">
             <ReCAPTCHA
                 sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
@@ -191,7 +192,7 @@ export default function LoginPage() {
             <Button
             variant="outline"
             className="border-2 border-gray-700 mb-5 px-4 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] ease-linear duration-200 hover:bg-blue-400 hover:border-none hover:text-white">
-                Login
+                {loading ? 'Processing' : 'Login'}
             </Button>
             <p className="text-sm mb-2">Don&apos;t have an account?</p>
             <Link className="text-sm text-blue-500" href="/signup">Sign Up here</Link>

@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     //     required: [true, "Please provide a WhatsApp number"],
     //     unique: true,
     // },
-    isVerfied: {
+    isVerified: {
         type: Boolean,
         default: false,
     },
@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
         // required: [true, "Please provide a name"],
     },
     college: {
+        type: String,
+        // required: [true, "Please provide a college name"],
+    },
+    university: {
         type: String,
         // required: [true, "Please provide a college name"],
     },

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
       // Destructure the request body
-      const { course, std, year, semester, isSet, books } = await request.json();
+      const { course, std, year, semester, isSet, books, totalPrice } = await request.json();
 
       // Check if required fields are present
       if (!course || !isSet || !books) {
@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
         semester: semester,
         isSet: isSet,
         books: books,
+        totalPrice: totalPrice
       });
   
       // Save the new Book document
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       // Return an error response if an error occurs
+      console.log(error.message);
       return NextResponse.json({
         error: error.message,
       }, { status: 500 });

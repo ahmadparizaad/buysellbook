@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image";
 
 export default function ProfilePage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
     const router = useRouter()
     const [user, setUser] = useState({
         name: "",
         email: "",
         college: "",
+        university: "",
         city: "",
         profileImage: "", // Assuming this is the URL for the profile image
       });
@@ -24,11 +26,15 @@ export default function ProfilePage() {
 
     const logout = async () => {
         try {
+            setIsLoading(true);
             await axios.get('/api/users/logout')
-            toast.success('Logout successful')
-            router.push('/login')
+            
         } catch (error:any) {
             toast.error("Error in logout")
+        } finally {
+            setIsLoading(false);
+            toast.success('Logout successful')
+            router.push('/login')
         }
     }
 
@@ -40,6 +46,7 @@ export default function ProfilePage() {
             name: res.data.data.name,
             email: res.data.data.email,
             college: res.data.data.college,
+            university: res.data.data.university,
             city: res.data.data.city,
             profileImage: res.data.data.profileImage,
           });
@@ -51,7 +58,7 @@ export default function ProfilePage() {
       };
 
       if(loading){
-        return <div className="flex items-center justify-center h-screen w-[80%]">
+        return <div className="flex items-center justify-center h-screen w-screen">
         <div className="animate-pulse flex flex-col items-start gap-4 w-full shadow-md rounded-md p-4">
             <div className="w-full">
               <div className="w-3/4 h-5 bg-slate-400 rounded-md"></div>
@@ -67,41 +74,49 @@ export default function ProfilePage() {
 
     return (      
     <>
-    {!loading &&    
+    {!loading &&   
     <div className="text-black flex flex-col items-center justify-center min-h-screen py-2 z-[9] w-full overflow-x-hidden font-[Gilroy]">
           {/* <h1>Profile</h1> */}
+          {/* <Image src="/profilebg.jpg" alt="Profile" layout="fill" objectFit="cover"/>  */}
+
           <hr />
 
           
-          <div className="bg-slate-500/[.07] flex flex-col items-start justify-center shadow-xl rounded-2xl px-[4vw] p-6 mb-8 m-[3vw] z-[9] md:w-[50%]  w-[95%] border-[1px]">
+          <div className="bg-blue-500 backdrop-blur-sm bg-opacity-10 bg-clip-padding backdrop-filter flex flex-col items-start justify-center shadow-lg rounded-2xl px-[4vw] p-6 mb-8 m-[3vw] z-[9] md:w-[50%]  w-[95%] border-[1px]">
             <div className="flex mb-3">
-              <label className="block text-black text-sm font-semibold mb-1 mr-2">
-                Name:
+              <label className="block text-black text-md font-semibold mb-1 mr-2">
+                Name :
               </label>
               <p className='text-md'>{user.name}</p>
             </div>
             <div className="flex mb-3">
-              <label className="fix text-black text-sm font-semibold mb-1 mr-2">
-                Email ID:
+              <label className="fix text-black text-md font-semibold mb-1 mr-2">
+                Email ID :
               </label>
               <p className='text-md'>{user.email}</p>
             </div>
             <div className="flex mb-3">
-              <label className="block text-black text-sm font-semibold mb-1 mr-2">
-                College:
+              <label className="block text-black text-md font-semibold mb-1 mr-2">
+                College :
               </label>
               <p className='text-md'>{user.college}</p>
             </div>
+            <div className="flex mb-3">
+              <label className="block text-black text-md font-semibold mb-1 mr-2">
+              University :
+              </label>
+              <p className='text-md'>{user.university}</p>
+            </div>
             <div className="flex ">
-              <label className="block text-black text-sm font-semibold mb-1 mr-2">
-                City:
+              <label className="block text-black text-md font-semibold mb-1 mr-2">
+                City :
               </label>
               <p className='text-md'>{user.city}</p>
             </div>
             {user.profileImage && (
               <div className="flex mb-3">
-                <label className="block text-black text-sm font-semibold mb-2 mr-2">
-                  Profile Image:
+                <label className="block text-black text-md font-semibold mb-2 mr-2">
+                  Profile Image :
                 </label>
                 <Image
                   src={user.profileImage}
@@ -115,13 +130,13 @@ export default function ProfilePage() {
           <hr />
           <div className="flex gap-4 items-center">
           <Link href="/update-profile">
-              <Button variant="outline" className='border-[1px] shadow-lg px-5 rounded-3xl bg-slate-500/[.07] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'>Update Profile</Button>
+              <Button variant="outline" className='border-[1px] border-gray-700 px-5 rounded-3xl bg-white hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'>Update Profile</Button>
             </Link>
           <Button variant="outline"
             onClick={logout}
-            className='border-[1px] shadow-lg px-5 rounded-3xl hover:bg-blue-400 bg-slate-500/[.07] hover:text-white hover:border-none ease-linear duration-200'
+            className='border-[1px] border-gray-700 px-5 rounded-3xl hover:bg-blue-400 bg-white hover:text-white hover:border-none ease-linear duration-200'
           >
-            Logout
+            {isLoading ? 'Processing...' : 'Logout'}
           </Button>
           </div>
         </div>

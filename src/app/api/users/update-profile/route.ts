@@ -8,7 +8,8 @@ export async function PUT(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
     const reqBody = await request.json()
-    const { name, college, city, profileImage, isProfileComplete } = reqBody;
+    console.log(reqBody);
+    const { name, college, university, city, profileImage, isProfileComplete } = reqBody;
 
     // Find the user by ID
     const user = await User.findById(userId);
@@ -23,9 +24,14 @@ export async function PUT(request: NextRequest) {
       name: name,
       college: college,
       city: city,
+      university: university,
       profileImage: profileImage,
       isProfileComplete: isProfileComplete,
     }, { new: true });
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
 
     return NextResponse.json({
       message: "Profile updated successfully",

@@ -12,7 +12,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    class: {
+    std: {
         type: String,
     },
     year: {
@@ -34,7 +34,16 @@ const bookSchema = new mongoose.Schema({
           type: Number,
           required: true,
         },
+        halfPrice:
+        {
+          type: Number,
+          required: true,  
+        }
       }],
+    totalPrice: {
+        type: Number,
+        required: true,
+    },
     
 });
 

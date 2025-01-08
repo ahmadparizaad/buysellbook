@@ -13,16 +13,16 @@ const   ContactUs = () => {
   const [attachment, setAttachment] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  // const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async(e: React.FormEvent) => {
     try{
     e.preventDefault();
-    if (!captchaToken) {
-      toast.error("Please complete the captcha");
-      return;
-  }
+  //   if (!captchaToken) {
+  //     toast.error("Please complete the captcha");
+  //     return;
+  // }
     setLoading(true);
     setError("");
     setSuccess("");
@@ -39,14 +39,14 @@ const   ContactUs = () => {
     if (attachment) {
       formData.append("attachment", attachment);
     }
-    formData.append("captchaToken", captchaToken);
+    // formData.append("captchaToken", captchaToken);
 
     const response = await axios.post("/api/contactus", {
         name,
         email,
         description,
         attachment,
-        captchaToken
+        // captchaToken
     });
     console.log("Message sent", response.data);
     
@@ -65,9 +65,9 @@ const   ContactUs = () => {
     }
   }
 
-  const handleCaptchaChange = (token: string | null) => {
-    setCaptchaToken(token);
-}
+//   const handleCaptchaChange = (token: string | null) => {
+//     setCaptchaToken(token);
+// }
 
   return (
     <>    
@@ -125,12 +125,12 @@ const   ContactUs = () => {
         />
       </div>
 
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <ReCAPTCHA
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
             onChange={handleCaptchaChange}
         />
-      </div>
+      </div> */}
 
       <Button
         type="submit"

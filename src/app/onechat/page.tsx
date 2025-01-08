@@ -50,11 +50,9 @@ const OneChat = () => {
             return;
         }
         try {
-            setIsLoading(true);
             setError(null);
             await cometchatAuth.init();
             const login = await cometchatAuth.login(senderUID);
-            setIsLoading(false);
         } catch (error) {
             console.error('Error initializing chat:', error);
             setError('Failed to initialize chat');
@@ -79,6 +77,10 @@ const OneChat = () => {
 
                 const previousMessages = await messagesRequest.fetchPrevious();
                 setMessages(previousMessages.map(formatMessage));
+                if(previousMessages.length === 0){
+                    setNewMessage('Hi, I want to buy your books📘');
+                }
+                
                 return previousMessages;
             }
         } catch (error) {
@@ -89,6 +91,35 @@ const OneChat = () => {
         }
     }, [CometChat?.MessagesRequestBuilder]);
 
+    const fetchConversations = async () => {
+        try {
+            setIsLoading(true);
+            await initializeChat();
+            const conversationsRequest = new CometChat.ConversationsRequestBuilder()
+                .setLimit(30)
+                .build();
+
+            const fetchedConversations = await conversationsRequest.fetchNext();
+            const formattedConversations = fetchedConversations.map((conv: any) => {
+                const conversationWith = conv.getConversationWith();
+                const uid = 'uid' in conversationWith ? conversationWith.uid : '';
+                return {
+                    uid,
+                    name: conversationWith.getName(),
+                    lastMessage: conv.getLastMessage()?.getText(),
+                    timestamp: conv.getLastMessage()?.getSentAt()
+                };
+            });
+
+            setConversations(formattedConversations as Conversation[]);
+        } catch (error: any) {
+            console.error('Error fetching conversations:', error.message || error);
+            setError('Failed to fetch conversations');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         const fetchSenderUID = async () => {
             const res = await axios.get('/api/users/me');
@@ -97,31 +128,7 @@ const OneChat = () => {
             if (uid) {
                 await initializeChat();
             }
-            const fetchConversations = async () => {
-                try {
-                    const conversationsRequest = new CometChat.ConversationsRequestBuilder()
-                        .setLimit(30)
-                        .build();
-
-                    const fetchedConversations = await conversationsRequest.fetchNext();
-                    const formattedConversations = fetchedConversations.map((conv: any) => {
-                        const conversationWith = conv.getConversationWith();
-                        const uid = 'uid' in conversationWith ? conversationWith.uid : '';
-                        return {
-                            uid,
-                            name: conversationWith.getName(),
-                            lastMessage: conv.getLastMessage()?.getText(),
-                            timestamp: conv.getLastMessage()?.getSentAt()
-                        };
-                    });
-
-                    setConversations(formattedConversations as Conversation[]);
-                } catch (error) {
-                    console.error('Error fetching conversations:', error);
-                    setError('Failed to fetch conversations');
-                }
-            };
-            fetchConversations();
+            await fetchConversations();
         };
         if (typeof window !== 'undefined') {
             fetchSenderUID();
@@ -185,8 +192,20 @@ const OneChat = () => {
         }
     };
 
+    if(isLoading) {
+        return <div className="min-h-[100vh] animate-pulse mt-5 flex flex-col items-start gap-4 w-full rounded-md p-4">
+
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+        </div>
+    }
+
     if(loading){
-        return <div className="animate-pulse">
+        return <div className="animate-pulse min-h-[100vh]">
         <div className="p-4 mt-20 border-b bg-gray-600 flex justify-between items-center">
           <div className="h-6 bg-gray-500 rounded-xl w-1/2"></div>
           <div className="h-6 bg-gray-500 rounded-xl w-1/6"></div>
@@ -220,16 +239,13 @@ const OneChat = () => {
       </div>
     }
 
-    if (error) {
-        return (
-            <div className="min-h-[100vh] flex justify-center items-center h-64 text-red-500">
-                {error}
-            </div>
-        );
-    }
-    if(conversations.length === 0){
-        <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-56 text-center">No Recent Chat</h2>
-    }
+    // if (!isLoading && error) {
+    //     return (
+    //         <div className="min-h-[100vh] flex justify-center items-center h-64 text-red-500">
+    //             {error}
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className="h-[100vh] flex flex-col border rounded-md font-[Gilroy]">
@@ -238,15 +254,10 @@ const OneChat = () => {
             
             <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
             
-            {isLoading && 
-            <div className="animate-pulse mt-5 flex flex-col items-start gap-4 w-full rounded-md p-4">
+            
 
-            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
-            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
-            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
-            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
-            <div className="h-20 bg-gray-300 w-full rounded-md  shadow-md"></div>
-            </div>
+            {!isLoading && conversations.length === 0 && 
+                <h2 className="text-xl font-medium mb-4 mx-3 mt-40 md:mt-46 text-center">No Recent Chat</h2>
             }
 
             {conversations.map((conversation) => (
