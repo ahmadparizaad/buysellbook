@@ -1,16 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Navbar from "@/components/Navbar";
-import { Spotlight } from "@/components/ui/Spotlight";
 import { cn } from "@/utils/cn";
 import HeroSection from '@/components/HeroSection';
 import HowItWorks from '@/components/HowItWorks';
-import Footer from '@/components/Footer';
 import ContactUs from '@/components/ContactUs';
 import SmoothScroll from '../components/ui/smoothScroll';
-
-// import { useEffect, useState } from "react";
+import { useInitializeCometChat } from '@/utils/cometchatConfig';
 // import LoadingBar from "react-top-loading-bar";
 // import { useRouter } from "next/compat/router";
 
@@ -31,6 +27,14 @@ export default function Home() {
   //       });
     
   //   }, [router?.events]);
+
+  useInitializeCometChat();
+  
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <>

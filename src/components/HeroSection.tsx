@@ -36,22 +36,22 @@ function HeroSection() {
       </Link>
     </div>
   {/* <Spotlight className="absolute -top-40 left-0 md:left-60 md:-top-20" fill="white" /> */}
-  <div className="flex flex-col justify-center items-center p-4 z-10 w-full md:pt-0 text-center -mt-20 md:mt-10">
-    <h1 className="text-4xl text-slate-800 md:text-7xl font-bold bg-clip-text dark:text-white mt-7 md:mt-15 bg-opacity-50">
+  <div className="flex flex-col justify-center items-center p-2 z-10 w-full md:pt-0 text-center -mt-20 md:mt-10">
+    <h1 className="text-4xl p-4 text-black md:text-7xl font-bold bg-clip-text dark:text-white mt-7 md:mt-15 bg-opacity-50">
       Buy & Sell Books @ 50%.
     </h1>
-    <p className="leading-6 mt-10 text-gray-700 p-2 md:px-4 font-normal text-[15px] md:text-2xl dark:text-white max-w-lg mx-auto">
-    Your Gateway to Affordable Learning <br/> Find Second-Hand Books at 50% Price <br/> Directly from Fellow Students😊
+    <p className="leading-6 mt-10 text-black p-2 md:px-4 font-medium text-[16px] md:text-2xl dark:text-white max-w-lg mx-auto">
+    Your Gateway to Affordable Learning <br/> Find Second-Hand Books at 50% Price <br/> Directly from Fellow Students 😊
     </p>
   </div>
-  <div className="flex flex-col md:flex-row items-center justify-center mt-10 gap-4">
+  <div className="flex flex-col md:flex-row items-center justify-center mt-14 md:mt-10 gap-4">
     <Link href="/buy">
-      <Button className="rounded-2xl text-black bg-blue-300/[0.6] border-gray-400 px-2 md:px-3 py-3 text-base md:text-lg border dark:border-slate-800">
+      <Button className="rounded-3xl text-black bg-blue-300/[0.6] border-gray-400 px-2 md:px-3 py-3 text-base md:text-lg border dark:border-slate-800">
         Buy
       </Button>
       </Link>
       <Link href="/sell">
-      <Button className="rounded-2xl text-black bg-blue-300/[0.6] border-gray-400 px-4 md:px-3 py-3 text-base md:text-lg border dark:border-slate-800">
+      <Button className="rounded-3xl text-black bg-blue-300/[0.6] border-gray-400 px-4 md:px-3 py-3 text-base md:text-lg border dark:border-slate-800">
         Sell
       </Button>
     </Link>

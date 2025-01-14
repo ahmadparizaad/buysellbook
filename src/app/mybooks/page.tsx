@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
@@ -22,6 +22,7 @@ const MyBook = () => {
   const [menuVisible, setMenuVisible] = useState<{ [key: string]: boolean }>({}); // Track visibility of menus
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const menuRef = useRef<HTMLDivElement | null>(null); // Create a ref for the menu
 
   useEffect(() => {
     const initializePage = async () => {
@@ -35,11 +36,24 @@ const MyBook = () => {
     initializePage();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setMenuVisible({}); // Close all menus
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
+
   const fetchMyBooks = async () => {
     try {
       setLoading(true);
       const response = await axios.get('/api/books/mybooks'); // Adjust the endpoint as necessary
-      setMyBooks(response.data.data);
+      setMyBooks(response.data.data.reverse());
     } catch (error) {
       console.error('Error fetching my books:', error);
       setError('An error occurred while fetching your books.');
@@ -52,11 +66,14 @@ const MyBook = () => {
     const confirmRemove = window.confirm("Are you sure you want to remove this book?");
     if (confirmRemove) {
       try {
-        const response = await axios.delete(`/api/books/deletebooks/${bookId}`); // Adjust the endpoint as necessary
+        setLoading(true);
+        const response = await axios.delete(`/api/books/deletebooks?id=${bookId}`); // Adjust the endpoint as necessary
         setMyBooks(myBooks.filter(book => book._id !== bookId)); // Update state to remove the book
       } catch (error) {
         console.error('Error removing book:', error);
         setError(`An error occurred while removing the book. ${error}`);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -99,7 +116,7 @@ const MyBook = () => {
                   &#x22EE; {/* Three dots icon */}
                 </button>
                 {menuVisible[book._id] && (
-                  <div className="absolute right-0 bg-white text-black shadow-lg hover:bg-gray-200 rounded">
+                  <div ref={menuRef} className="absolute right-0 bg-white text-black shadow-lg hover:bg-gray-200 rounded">
                     <button 
                       onClick={() => removeBook(book._id)} 
                       className="block px-4 py-2"

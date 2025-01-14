@@ -19,7 +19,7 @@ export default function HowItWorks() {
               <h2 className="bg-black ml-6 text-white rounded-full text-lg w-fit px-4 py-1 mb-4">
                 {item.badge}
               </h2>
-              <p className="ml-6 mb-4 mr-10 text-base">
+              <p className="ml-6 mb-4 mr-10 text-base text-justify text-pretty">
               {item.description}
               </p>
               

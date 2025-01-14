@@ -78,7 +78,7 @@ function SellPage() {
   }
 
   if(loading) {
-    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-20 md:mt-56 text-center font-[Gilroy]">Loading...</div>
+    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-40 md:mt-56 text-center font-[Gilroy]">Loading...</div>
   }
 
   return (

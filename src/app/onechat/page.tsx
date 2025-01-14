@@ -27,7 +27,7 @@ const OneChat = () => {
     const [newMessage, setNewMessage] = useState('');
     const [senderUID, setSenderUID] = useState('');
     const [recieverUID, setRecieverUID] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -121,6 +121,7 @@ const OneChat = () => {
     };
 
     useEffect(() => {
+        setIsLoading(true);
         const fetchSenderUID = async () => {
             const res = await axios.get('/api/users/me');
             const uid = res.data.data.username;
@@ -192,18 +193,6 @@ const OneChat = () => {
         }
     };
 
-    if(isLoading) {
-        return <div className="min-h-[100vh] animate-pulse mt-5 flex flex-col items-start gap-4 w-full rounded-md p-4">
-
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
-        </div>
-    }
-
     if(loading){
         return <div className="animate-pulse min-h-[100vh]">
         <div className="p-4 mt-20 border-b bg-gray-600 flex justify-between items-center">
@@ -254,13 +243,22 @@ const OneChat = () => {
             
             <h2 className="text-xl font-medium mb-4 mx-3 mt-20 md:mt-24">Recent Chats</h2>
             
-            
+            {isLoading && 
+                <div className="animate-pulse mt-5 flex flex-col items-start gap-4 w-full rounded-md p-4">
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                    <div className="h-25 bg-gray-300 w-full rounded-md  shadow-md border-t-0"></div>
+                </div>
+            }
 
-            {!isLoading && conversations.length === 0 && 
+            {!isLoading && conversations?.length === 0 && 
                 <h2 className="text-xl font-medium mb-4 mx-3 mt-40 md:mt-46 text-center">No Recent Chat</h2>
             }
 
-            {conversations.map((conversation) => (
+            {conversations?.map((conversation) => (
                 <div
                     key={conversation.uid}
                     className="border-b rounded-xl p-5 hover:bg-blue-100 cursor-pointer"

@@ -192,7 +192,7 @@ export default function LoginPage() {
             <Button
             variant="outline"
             className="border-2 border-gray-700 mb-5 px-4 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] ease-linear duration-200 hover:bg-blue-400 hover:border-none hover:text-white">
-                {loading ? 'Processing' : 'Login'}
+                {loading ? 'Processing...' : 'Login'}
             </Button>
             <p className="text-sm mb-2">Don&apos;t have an account?</p>
             <Link className="text-sm text-blue-500" href="/signup">Sign Up here</Link>

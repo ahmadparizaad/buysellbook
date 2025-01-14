@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import Book from "@/models/bookModel";
-import { connect } from "@/dbConfig/dbConfig";
-
-connect();
 
 export async function DELETE(request: NextRequest) {
     try {
-        const reqBody = await request.json();
-        const { bookId } = reqBody;
+        const { searchParams } = new URL(request.url);
+        const bookId = searchParams.get('id');
 
         if (!bookId) {
             return NextResponse.json({ error: "Book ID is required" }, { status: 400 });
@@ -19,12 +16,9 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: "Book not found" }, { status: 404 });
         }
 
-        return NextResponse.json({
-            message: "Book deleted successfully",
-            data: deletedBook,
-        }, { status: 200 });
+        return NextResponse.json({ message: "Book deleted successfully" }, { status: 200 });
     } catch (error: any) {
-        console.error("Error deleting book:", error.message);
+        console.error("Error deleting book:", error);
         return NextResponse.json({ error: "Failed to delete book" }, { status: 500 });
     }
 }

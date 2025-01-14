@@ -12,7 +12,7 @@
 @font-face {
   font-family: 'Gilroy';
   src: url('/Gilroy-Light.otf') format('opentype');
-  font-weight: 400; /* Light */
+  font-weight: 600; /* Light */
   font-style: normal;
 }
 
