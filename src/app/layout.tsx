@@ -25,6 +25,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="overflow-x-hidden font-[Gilroy]">
+      {process.env.NODE_ENV === "production" && (
+      <head>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9538009046837010"
+          crossOrigin="anonymous"></script>
+      </head>
+                )}
+
       <body className={inter.className}>
         <Suspense>
         <LoadingProvider>
