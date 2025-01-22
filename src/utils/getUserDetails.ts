@@ -12,6 +12,7 @@ const getUserDetails = async () => {
       profileImage: res.data.data.profileImage,
       isProfileComplete: res.data.data.isProfileComplete,
     };
+    sessionStorage.setItem('user', JSON.stringify(user));
     return user;
   } catch (error: any) {
     console.log(error.message);

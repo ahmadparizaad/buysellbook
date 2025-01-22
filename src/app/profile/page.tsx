@@ -41,14 +41,16 @@ export default function ProfilePage() {
     const getUserDetails = async () => {
         try {
           setLoading(true);
-          const res = await axios.get('/api/users/me');
+          const user = sessionStorage.getItem('user');
+          // const res = await axios.get('/api/users/me');
+          const res = JSON.parse(user!);
           setUser({
-            name: res.data.data.name,
-            email: res.data.data.email,
-            college: res.data.data.college,
-            university: res.data.data.university,
-            city: res.data.data.city,
-            profileImage: res.data.data.profileImage,
+            name: res.name,
+            email: res.email,
+            college: res.college,
+            university: res.university,
+            city: res.city,
+            profileImage: res.profileImage,
           });
         } catch (error: any) {
           toast.error(error.message);

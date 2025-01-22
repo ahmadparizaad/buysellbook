@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
-import LoadingComponent from '@/components/LoadingComponent';
 
 interface IBook {
   _id: string;

@@ -78,7 +78,7 @@ const OneChat = () => {
                 const previousMessages = await messagesRequest.fetchPrevious();
                 setMessages(previousMessages.map(formatMessage));
                 if(previousMessages.length === 0){
-                    setNewMessage('Hi, I want to buy your books📘');
+                    setNewMessage('Hi, I want to buy your books📗');
                 }
                 
                 return previousMessages;

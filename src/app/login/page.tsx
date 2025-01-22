@@ -98,6 +98,11 @@ export default function LoginPage() {
                 password: user.password,
                 captchaToken: user.captchaToken // Make sure this is being sent
             });
+
+            if(response.data.success){
+                toast.success("Login successful");
+                router.push("/");
+            }
             
             
         } catch (error: any) {
@@ -116,8 +121,6 @@ export default function LoginPage() {
             }
         } finally {
             setLoading(false);
-            toast.success("Login successful");
-            router.push("/");
         }
     }
     const handleCaptchaChange = (token: string | null) => {

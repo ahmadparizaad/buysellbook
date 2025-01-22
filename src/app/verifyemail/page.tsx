@@ -48,13 +48,13 @@ export default function VerifyEmailPage() {
             )}
 
             {verified && (
-                <div>
+                <>
                     <h2 className="text-white text-lg m-3 bg-green-400 px-5 py-1 rounded-3xl">Email Verified</h2>
                     <Button onClick={() => router.push('/login')} variant="outline"
                     className="border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200">
                         Login
                     </Button>
-                </div>
+                </>
             )}
             {error && (
                 <div>

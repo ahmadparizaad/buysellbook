@@ -14,11 +14,26 @@ function HeroSection() {
   const getUserDetails = async () => {
     try {
       const res = await axios.get('/api/users/me');
-      setUser({
+      const user = {
+        _id: res.data.data._id,
+        name: res.data.data.name,
         username: res.data.data.username,
-      });
+        email: res.data.data.email,
+        college: res.data.data.college,
+        university: res.data.data.university,
+        city: res.data.data.city,
+        bookIds: res.data.data.bookIds,
+        profileImage: res.data.data.profileImage,
+        isVerified: res.data.data.isVerified,
+        isProfileComplete: res.data.data.isProfileComplete,
+      };
+      setUser(user);
+      sessionStorage.setItem('user', JSON.stringify(user));
+      return user;
+
     } catch (error: any) {
       console.log(error.message);
+      // toast.error(error.message);
     }
   };
   useEffect(() => {
@@ -38,7 +53,7 @@ function HeroSection() {
   {/* <Spotlight className="absolute -top-40 left-0 md:left-60 md:-top-20" fill="white" /> */}
   <div className="flex flex-col justify-center items-center p-2 z-10 w-full md:pt-0 text-center -mt-20 md:mt-10">
     <h1 className="text-4xl p-4 text-black md:text-7xl font-bold bg-clip-text dark:text-white mt-7 md:mt-15 bg-opacity-50">
-      Buy & Sell Books @ 50%.
+      Buy & Sell Books @50%
     </h1>
     <p className="leading-6 mt-10 text-black p-2 md:px-4 font-medium text-[16px] md:text-2xl dark:text-white max-w-lg mx-auto">
     Your Gateway to Affordable Learning <br/> Find Second-Hand Books at 50% Price <br/> Directly from Fellow Students 😊

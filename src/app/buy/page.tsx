@@ -39,6 +39,7 @@ import { title } from 'process';
 function Books() {
   const [books, setBooks] = useState<IBook[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [senderUID, setSenderUID] = useState('');
   const [recieverUID, setRecieverUID] = useState('');      
@@ -84,12 +85,14 @@ useEffect(() => {
   }, [hasMore, loading]);
 
   const handleBuyClick = async (book: any) => {
-    const userId = book.userId
+    try{
+      const userId = book.userId
     if (book.userId === currentUser) {
       alert("You cannot buy your own book.");
       return; // Prevent further execution
     }
 
+    setIsLoading(true);
     const receiverUid = await getRecieverUID(userId);
     setRecieverUID(receiverUid);
     // Encode book details as URL parameters
@@ -98,6 +101,12 @@ useEffect(() => {
     }).toString();
 
     router.push(`/onechat?${queryParams}`);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('An error occurred while fetching data.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchData = async (pageNum = 1) => {
@@ -142,12 +151,14 @@ useEffect(() => {
 // };
 
   const getSenderUID = async () => {
-    const res = await axios.get('/api/users/me');
-    const senderUID = res.data.data.username;
-    const userId = res.data.data._id
-    setCurrentUser(userId)
-    setSenderUID(senderUID);
-    return senderUID;
+    // const res = await axios.get('/api/users/me');
+    const user = sessionStorage.getItem('user');
+    if(user){
+      const res = JSON.parse(user);
+      setCurrentUser(res._id);
+      setSenderUID(res.username);
+      return res.username;
+    }
   }
 
   const getRecieverUID = async (userId: string) => {
@@ -198,7 +209,10 @@ useEffect(() => {
 
   return (
     // Adjust main container padding and margin for mobile
-    <div className='p-2 sm:p-2 min-h-screen relative z-[9] mt-[60px] sm:mt-[8vw] font-[Gilroy]'>
+    <div className='p-2 sm:p-2 min-h-screen h-auto relative z-[9] mt-[60px] sm:mt-[8vw] mb-20 font-[Gilroy]'>
+      {isLoading && <div className="fixed inset-0 bg-black bg-opacity-50 z-[999] flex items-center justify-center">
+          <Image src="/loading.gif" alt="Loading" width={100} height={100} />
+          </div>}
       
       {/* Search section  */}
       <div className="flex flex-col sm:flex-row sm:justify-center gap-3 items-center my-6">
@@ -335,15 +349,15 @@ useEffect(() => {
           No books found.
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 px-6">
         {books?.map((book) => (
-          <div key={book._id} className="container relative text-black">
-            <div className="group box w-[80vw] sm:w-auto p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
+          <div key={book._id} className="relative md:-mb-10 mb-4 md:mx-3 text-black">
+            <div className="group box p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:scale-103 hover:border-opacity-55">
               <div className='flex justify-between items-center'>
-              <h2 className="title text-xl sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
-              {book.isSet && <p className='text-white mb-6 rounded-3xl text-sm bg-green-400 px-2'>Complete Set</p>}
+              <h2 className="title text-lg sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
+              {book.isSet && <p className='text-white mb-6 rounded-3xl text-[12px] bg-green-400 px-2'>Complete Set</p>}
               </div>
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 

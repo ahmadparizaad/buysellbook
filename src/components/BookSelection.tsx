@@ -96,11 +96,10 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
       >Add</Button>
 
       
-      <div className="w-full flex flex-col items-start mb-4 mt-4 pl-5">
-      <div>
+      <div className="w-full flex flex-col items-center justify-center mb-4 mt-8">
         {books.length > 0 &&
           <>
-        <h2 className='mb-4'>Book Details</h2>
+        <h2 className='mb-4 underline'>Book Details</h2>
         <Table className='text-base'>
           <TableHeader>
             <TableRow>
@@ -125,20 +124,20 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
             ))}
           </TableBody>
         </Table>
-        </>}
-      </div>
+        
 
-      <div>
+      <div className='flex flex-col items-center justify-center'>
       <Button variant="outline" onClick={calculateAmount}
-      className='border-2 px-5 border-gray-700 ml-[8vw] mb-8 mt-10 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
+      className='border-2 px-5 border-gray-700 mb-8 mt-10 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
       >Calculate Total</Button>
         {halfAmount > 0 && (
           <>
-          <p className='flex px-5'>Total Amount:  <MdCurrencyRupee className='mt-1 ml-1'/>{totalAmount}</p> <hr />
+          <p className='flex px-5'>Total Amount:  <MdCurrencyRupee className='mt-1 ml-1'/>{totalAmount}</p>
           <p className='flex px-5'>50% Amount:  <MdCurrencyRupee className='mt-1 ml-1'/>{halfAmount}</p>
           </>
         )}
       </div>
+      </>}
       </div>
     </div>
   );

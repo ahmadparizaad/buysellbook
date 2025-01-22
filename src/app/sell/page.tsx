@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import getUserDetails from '@/utils/getUserDetails';
+import Image from 'next/image';
 
 interface Book {
   name: string;
@@ -34,8 +35,10 @@ function SellPage() {
     
     const fetchUserDetails = async () => {
       setLoading(true);
-      const user = await getUserDetails();
-      if (user?.isProfileComplete) {
+      const user = sessionStorage.getItem('user');
+      // const user = await getUserDetails();
+      const userObj = JSON.parse(user!);
+      if (userObj?.isProfileComplete) {
         setProfileComplete(true);
       }
       setLoading(false);
@@ -59,6 +62,7 @@ function SellPage() {
     try{
       setIsLoading(true);
       const response = await axios.post("/api/books/sell", book);
+      toast.success("Book added successfully");
       router.push("/mybooks");
     }
     catch (error:any) {
@@ -78,7 +82,10 @@ function SellPage() {
   }
 
   if(loading) {
-    return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-40 md:mt-56 text-center font-[Gilroy]">Loading...</div>
+    // return <div className="min-h-[100vh] text-xl font-semibold mb-4 mx-3 mt-40 md:mt-56 text-center font-[Gilroy]">Loading...</div>
+    return <div className='flex flex-col items-center justify-center min-h-screen py-2 font-[Gilroy]'>
+      <Image src='/loading.gif' width={100} height={100} alt='Loading' />
+    </div>
   }
 
   return (
@@ -171,9 +178,9 @@ function SellPage() {
           <option value="0">No</option>
           </select>
           </div>
-
+      <div className='flex flex-col items-start'>
       <BookSelection booklist={handleBookSelection} handleTotalPrice={handleTotalPrice} />
-    
+    </div>
 
     {/* <PhotoUpload bookImage={handleFile} /> */}
     <Button 
