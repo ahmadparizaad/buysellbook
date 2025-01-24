@@ -26,12 +26,13 @@ const MyBook = () => {
   useEffect(() => {
     const initializePage = async () => {
       try {
+        if (typeof window !== 'undefined') {
         const user = sessionStorage.getItem('user');
         if(user){
         await fetchMyBooks();
         } else {
           setLoading(false);
-        }
+        }}
       } catch (error) {
         console.error('Error initializing page:', error);
       } 

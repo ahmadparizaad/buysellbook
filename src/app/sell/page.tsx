@@ -35,6 +35,7 @@ function SellPage() {
     
     const fetchUserDetails = async () => {
       setLoading(true);
+      if (typeof window !== 'undefined') {
       const user = sessionStorage.getItem('user');
       // const user = await getUserDetails();
       const userObj = JSON.parse(user!);
@@ -42,6 +43,7 @@ function SellPage() {
         setProfileComplete(true);
       }
       setLoading(false);
+    }
     };
     fetchUserDetails();
   }, [])

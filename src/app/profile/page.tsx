@@ -21,7 +21,7 @@ export default function ProfilePage() {
       });
 
       useEffect(() => {
-        if(sessionStorage.getItem('user')){
+        if (typeof window !== 'undefined' && sessionStorage.getItem('user')) {
           getUserDetails();
         }
       }, []);

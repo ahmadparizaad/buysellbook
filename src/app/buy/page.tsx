@@ -152,6 +152,7 @@ useEffect(() => {
 
   const getSenderUID = async () => {
     // const res = await axios.get('/api/users/me');
+    if (typeof window !== 'undefined') {
     const user = sessionStorage.getItem('user');
     if(user){
       const res = JSON.parse(user);
@@ -159,6 +160,7 @@ useEffect(() => {
       setSenderUID(res.username);
       return res.username;
     }
+  }
   }
 
   const getRecieverUID = async (userId: string) => {

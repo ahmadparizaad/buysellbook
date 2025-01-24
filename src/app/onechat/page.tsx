@@ -123,6 +123,7 @@ const OneChat = () => {
     useEffect(() => {
         setIsLoading(true);
         const fetchSenderUID = async () => {
+            if (typeof window !== 'undefined') {
             const user = sessionStorage.getItem('user');
             if (user) {
                 const res = JSON.parse(user);
@@ -131,7 +132,7 @@ const OneChat = () => {
                     await initializeChat();
                 }
                 await fetchConversations();
-            }
+            }}
         };
         if (typeof window !== 'undefined') {
             fetchSenderUID();
