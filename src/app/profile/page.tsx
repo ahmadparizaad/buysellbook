@@ -21,20 +21,27 @@ export default function ProfilePage() {
       });
 
       useEffect(() => {
-        getUserDetails();
+        if(sessionStorage.getItem('user')){
+          getUserDetails();
+        }
       }, []);
 
     const logout = async () => {
         try {
             setIsLoading(true);
-            await axios.get('/api/users/logout')
+            const logout = await axios.get('/api/users/logout')
+
+            if(logout.data.success){
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('user');
+            }
+            toast.success('Logout successful')
+            router.push('/login')
             
         } catch (error:any) {
             toast.error("Error in logout")
         } finally {
             setIsLoading(false);
-            toast.success('Logout successful')
-            router.push('/login')
         }
     }
 
@@ -74,6 +81,11 @@ export default function ProfilePage() {
           </div>
       }
 
+      if(!sessionStorage.getItem('user')){
+        return (<div className="flex items-center justify-center h-screen w-screen font-[Gilroy]">
+          <p>Sign up today and never miss the books you love!</p>
+          </div>)}
+
     return (      
     <>
     {!loading &&   
@@ -85,31 +97,31 @@ export default function ProfilePage() {
 
           
           <div className="bg-blue-500 backdrop-blur-sm bg-opacity-10 bg-clip-padding backdrop-filter flex flex-col items-start justify-center shadow-lg rounded-2xl px-[4vw] p-6 mb-8 m-[3vw] z-[9] md:w-[50%]  w-[95%] border-[1px]">
-            <div className="flex mb-3">
+            <div className="flex">
               <label className="block text-black text-md font-semibold mb-1 mr-2">
                 Name :
               </label>
               <p className='text-md'>{user.name}</p>
             </div>
-            <div className="flex mb-3">
+            <div className="flex">
               <label className="fix text-black text-md font-semibold mb-1 mr-2">
                 Email ID :
               </label>
               <p className='text-md'>{user.email}</p>
             </div>
-            <div className="flex mb-3">
+            <div className="flex">
               <label className="block text-black text-md font-semibold mb-1 mr-2">
                 College :
               </label>
               <p className='text-md'>{user.college}</p>
             </div>
-            <div className="flex mb-3">
+            <div className="flex">
               <label className="block text-black text-md font-semibold mb-1 mr-2">
               University :
               </label>
               <p className='text-md'>{user.university}</p>
             </div>
-            <div className="flex ">
+            <div className="flex">
               <label className="block text-black text-md font-semibold mb-1 mr-2">
                 City :
               </label>

@@ -351,13 +351,13 @@ useEffect(() => {
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 px-6">
         {books?.map((book) => (
-          <div key={book._id} className="relative md:-mb-10 mb-4 md:mx-3 text-black">
+          <div key={book._id} className="relative mb-4 md:mx-3 text-black">
             <div className="group box p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
-                          flex flex-col justify-between hover:shadow-lg hover:scale-103 hover:border-opacity-55">
+                          flex flex-col justify-between hover:shadow-lg hover:shadow-blue-200 hover:scale-103 hover:border-opacity-55">
               <div className='flex justify-between items-center'>
               <h2 className="title text-lg sm:text-2xl font-medium tracking-wide mb-4">{book.course}</h2>
-              {book.isSet && <p className='text-white mb-6 rounded-3xl text-[12px] bg-green-400 px-2'>Complete Set</p>}
+              {book.isSet && <p className='text-white mb-6 rounded-3xl text-[12px] bg-green-400 px-2 mr-2'>Complete Set</p>}
               </div>
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 
@@ -373,7 +373,7 @@ useEffect(() => {
               {book.year && <p className='text-gray-900 mb-[2px]'>Year: {book.year}</p>}
               {book.semester && <p className='text-gray-900 mb-[2px]'>Semester: {book.semester}</p>}
             
-              <div className="mb-2">
+              {/* <div className="mb-2">
                 <h3 className="font-medium mb-[2px]">Books:</h3>
                 <ul className="space-y-[1px]">
                   {book.books.map((item, index) => (
@@ -383,7 +383,7 @@ useEffect(() => {
                   ))}
                 </ul>
                 <p className='font-medium'>Total Price: ₹{book.totalPrice}</p>
-              </div>  
+              </div>   */}
               <div>
 
               </div>
@@ -391,8 +391,8 @@ useEffect(() => {
               {book.seller && (
                 <div className="text-sm text-gray-900">
                   <p>Seller: {book.seller.name}</p>
-                  <p>College: {book.seller.college}</p>
-                  <p>University: {book.seller.university}</p>
+                  <p>College: {book.seller.college.length > 25 ? `${book.seller.college.split('').slice(0, 25).join('')}...` : book.seller.college}</p>
+                  {/* <p>University: {book.seller.university}</p> */}
                   <p>City: {book.seller.city}</p>
                 </div>
               )}

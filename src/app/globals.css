@@ -104,6 +104,14 @@ body{
     --ring: 212.7 26.8% 83.9%;
   }
 }
+
+.card {
+  margin-bottom: 16px; /* Adjust this value as needed */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
  
 @layer base {
   * {

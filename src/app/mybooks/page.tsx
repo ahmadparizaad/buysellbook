@@ -19,14 +19,19 @@ interface IBook {
 const MyBook = () => {
   const [myBooks, setMyBooks] = useState<IBook[]>([]);
   const [menuVisible, setMenuVisible] = useState<{ [key: string]: boolean }>({}); // Track visibility of menus
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const menuRef = useRef<HTMLDivElement | null>(null); // Create a ref for the menu
 
   useEffect(() => {
     const initializePage = async () => {
       try {
+        const user = sessionStorage.getItem('user');
+        if(user){
         await fetchMyBooks();
+        } else {
+          setLoading(false);
+        }
       } catch (error) {
         console.error('Error initializing page:', error);
       } 
@@ -102,13 +107,13 @@ const MyBook = () => {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 px-6">
 
         {myBooks.map((book) => (
-          <div key={book._id} className="container relative text-black">
-            <div className="group box w-full p-4 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
-                          filter backdrop-blur-xl rounded-lg transition-all duration-300 ease-in-out 
-                          flex flex-col justify-between hover:shadow-lg hover:scale-104 hover:border-opacity-55">
+          <div key={book._id} className="relative mb-4 md:mx-3 text-black">
+            <div className="group box p-4 pb-2 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
+                          filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
+                          flex flex-col justify-between hover:shadow-lg hover:shadow-blue-200 hover:scale-103 hover:border-opacity-55">
 
       <div className="absolute top-2 right-2">
                 <button onClick={() => setMenuVisible(prev => ({ ...prev, [book._id]: !prev[book._id] }))}>

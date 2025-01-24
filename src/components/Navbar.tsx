@@ -35,8 +35,18 @@ function Navbar({ className }: { className?: string }) {
     };
     const getUserDetails = async () => {
       try {
-        const res = await axios.get('/api/users/me');
-        setUser(res.data.data);
+        const user = sessionStorage.getItem('user');
+        if(user){
+          const res = JSON.parse(user!);
+          setUser({
+            _id: res._id,
+            name: res.name,
+            email: res.email,
+            college: res.college,
+            city: res.city,
+            profileImage: res.profileImage,
+          });
+        }
       } catch (error: any) {
       }
     };

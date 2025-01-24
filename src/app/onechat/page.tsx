@@ -123,13 +123,15 @@ const OneChat = () => {
     useEffect(() => {
         setIsLoading(true);
         const fetchSenderUID = async () => {
-            const res = await axios.get('/api/users/me');
-            const uid = res.data.data.username;
-            setSenderUID(uid);
-            if (uid) {
-                await initializeChat();
+            const user = sessionStorage.getItem('user');
+            if (user) {
+                const res = JSON.parse(user);
+                setSenderUID(res.username);
+                if (res.username) {
+                    await initializeChat();
+                }
+                await fetchConversations();
             }
-            await fetchConversations();
         };
         if (typeof window !== 'undefined') {
             fetchSenderUID();
@@ -254,8 +256,8 @@ const OneChat = () => {
                 </div>
             }
 
-            {!isLoading && conversations?.length === 0 && 
-                <h2 className="text-xl font-medium mb-4 mx-3 mt-40 md:mt-46 text-center">No Recent Chat</h2>
+            {conversations?.length === 0 && 
+                <h2 className="text-xl font-medium mb-4 mx-3 mt-0 md:mt-0 text-center">No Recent Chat</h2>
             }
 
             {conversations?.map((conversation) => (
