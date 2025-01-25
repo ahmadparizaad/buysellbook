@@ -27,7 +27,7 @@ const MyBook = () => {
     const initializePage = async () => {
       try {
         if (typeof window !== 'undefined') {
-        const user = sessionStorage.getItem('user');
+        const user = window.sessionStorage.getItem('user');
         if(user){
         await fetchMyBooks();
         } else {

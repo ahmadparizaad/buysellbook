@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Book from "@/models/bookModel";
 import User from "@/models/userModel";
 import { connect } from "@/dbConfig/dbConfig";
-
 connect()
 
 export async function GET(request: NextRequest) {
-  try {
+  // try {
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '12');
@@ -77,8 +76,11 @@ export async function GET(request: NextRequest) {
       message: "Books retrieved successfully",
       books: books
     });
-  } catch (error: any) {
-    console.error("Error fetching books:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
+  // } catch (error: any) {
+  //   if(isDynamicServerError(error)) {
+  //     return NextResponse.json({ error: "Next JS dynamic server error" }, { status: 500 });
+  //   }
+  //   console.error("Error fetching books:", error);
+  //   return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  // }
 }

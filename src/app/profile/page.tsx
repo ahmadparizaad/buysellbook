@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import {useRouter} from "next/navigation";
 import { Button } from "@/components/ui/button"
 import Image from "next/image";
+// import window.sessionStorage from "service-worker/window.sessionStorage";
 
 export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,10 +22,11 @@ export default function ProfilePage() {
       });
 
       useEffect(() => {
-        if (typeof window !== 'undefined' && sessionStorage.getItem('user')) {
+        if (typeof window !== 'undefined') {
+          if (window.sessionStorage.getItem('user')) {
           getUserDetails();
         }
-      }, []);
+      }}, []);
 
     const logout = async () => {
         try {
@@ -32,8 +34,8 @@ export default function ProfilePage() {
             const logout = await axios.get('/api/users/logout')
 
             if(logout.data.success){
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('user');
+                window.sessionStorage.removeItem('token');
+                window.sessionStorage.removeItem('user');
             }
             toast.success('Logout successful')
             router.push('/login')
@@ -48,7 +50,7 @@ export default function ProfilePage() {
     const getUserDetails = async () => {
         try {
           setLoading(true);
-          const user = sessionStorage.getItem('user');
+          const user = window.sessionStorage.getItem('user');
           // const res = await axios.get('/api/users/me');
           const res = JSON.parse(user!);
           setUser({
@@ -81,7 +83,7 @@ export default function ProfilePage() {
           </div>
       }
 
-      if(!sessionStorage.getItem('user')){
+      if(!window.sessionStorage.getItem('user')){
         return (<div className="flex items-center justify-center h-screen w-screen font-[Gilroy]">
           <p>Sign up today and never miss the books you love!</p>
           </div>)}

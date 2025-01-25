@@ -124,7 +124,7 @@ const OneChat = () => {
         setIsLoading(true);
         const fetchSenderUID = async () => {
             if (typeof window !== 'undefined') {
-            const user = sessionStorage.getItem('user');
+            const user = window.sessionStorage.getItem('user');
             if (user) {
                 const res = JSON.parse(user);
                 setSenderUID(res.username);
