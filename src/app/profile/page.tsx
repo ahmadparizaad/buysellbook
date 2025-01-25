@@ -34,9 +34,10 @@ export default function ProfilePage() {
             const logout = await axios.get('/api/users/logout')
 
             if(logout.data.success){
+              if(typeof window !== 'undefined'){
                 window.sessionStorage.removeItem('token');
                 window.sessionStorage.removeItem('user');
-            }
+            }}
             toast.success('Logout successful')
             router.push('/login')
             
@@ -50,6 +51,7 @@ export default function ProfilePage() {
     const getUserDetails = async () => {
         try {
           setLoading(true);
+          if (typeof window !== 'undefined') {
           const user = window.sessionStorage.getItem('user');
           // const res = await axios.get('/api/users/me');
           const res = JSON.parse(user!);
@@ -61,6 +63,7 @@ export default function ProfilePage() {
             city: res.city,
             profileImage: res.profileImage,
           });
+        }
         } catch (error: any) {
           toast.error(error.message);
         } finally {
@@ -83,10 +86,11 @@ export default function ProfilePage() {
           </div>
       }
 
+      if(typeof window !== 'undefined'){
       if(!window.sessionStorage.getItem('user')){
         return (<div className="flex items-center justify-center h-screen w-screen font-[Gilroy]">
           <p>Sign up today and never miss the books you love!</p>
-          </div>)}
+          </div>)}}
 
     return (      
     <>
