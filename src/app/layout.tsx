@@ -44,7 +44,7 @@ export default function RootLayout({
         <Footer/>
         </LoadingProvider>
         </Suspense>
-        {process.env.NODE_ENV === "production" && (
+        {/* {process.env.NODE_ENV === "production" && (
           <>
         <script async type='text/javascript' src='//pl25672536.profitablecpmrate.com/92/b6/49/92b6496befa6e7512faa3efd72b8ac84.js'></script>
         <script type="text/javascript">
@@ -68,7 +68,7 @@ export default function RootLayout({
     </script>
     <script async type="text/javascript" src="//www.highperformanceformat.com/0589a46fadc2635261f5d7864e25bf69/invoke.js"></script>
         </>
-        )}
+        )} */}
         </body>
     </html>
   );
