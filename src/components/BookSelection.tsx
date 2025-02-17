@@ -12,11 +12,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import UploadImage from '@/components/ui/UploadImage';
+import Image from 'next/image';
+import { toast } from 'react-hot-toast';
 
 interface Book {
   name: string;
   price: number;
   halfPrice: number;
+  image: string;
 }
 
 interface BookSelectionProps {
@@ -26,14 +30,15 @@ interface BookSelectionProps {
 
 const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPrice }) => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0, halfPrice: 0 });
+  const [newBook, setNewBook] = useState<Book>({ name: '', price: 0, halfPrice: 0, image: '' });
   const [halfAmount, setHalfAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0)
 
   const handleAddBook = () => {
+    if (!newBook.name || !newBook.price || !newBook.image) return toast.error('Please fill all the fields');
     setBooks([...books, newBook]);
     booklist([...books, newBook]);
-    setNewBook({ name: '', price: 0, halfPrice: 0 });
+    setNewBook({ name: '', price: 0, halfPrice: 0, image: '' });
   };
 
   const handleBookNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +55,15 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
     setBooks(updatedBooks);
     booklist(updatedBooks);
   };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // Get the first uploaded file
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // Create a blob URL for the file
+      setNewBook({ ...newBook, image: imageUrl }); // Set the image URL in the state
+    }
+  };
+  
 
   const calculateTotalAmount = () => {
     const totalPrice = books.reduce((acc, book) => acc + book.price, 0);
@@ -79,18 +93,38 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
           id="bookName"
           value={newBook.name}
           onChange={handleBookNameChange}
+          required
         />
       </div>
       <div className='flex flex-col items-start'>
         <label className='pl-5' htmlFor="bookPrice">Book Price</label>
         <input
           type="number"
-          className='text-black  border-2 border-gray-700 mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+          className='text-black border-2 border-gray-700 mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
           id="bookPrice"
           value={newBook.price}
           onChange={handleBookPriceChange}
+          required
         />
       </div>
+
+      <div className='flex flex-col items-start'>
+      <label className='pl-5' htmlFor="bookImage">Book Image</label>
+      <input
+        type='file'
+        onChange={handleImageUpload}
+        className='text-black border-2 border-gray-700 mb-6 mt-2 w-[30vh] md:w-[30vw] px-4 py-2 rounded-[2vw] max-sm:rounded-[6vw]'
+        required
+      />
+
+      </div>
+
+      <div className='flex flex-col items-start'>
+        {/* <label className='pl-5' htmlFor="bookImage">Book Image Preview</label> */}
+        {newBook.image && <Image src={newBook.image} width={500} height={350} alt="Book Image" className='mb-6 mt-2 w-[30vh] md:w-[30vw] rounded-[2vw] max-sm:rounded-[6vw]' />}
+      </div>
+          
+
       <Button variant="outline" onClick={handleAddBook}
       className='mt-2 border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
       >Add</Button>
@@ -106,6 +140,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
               <TableHead className='px-5'>Book Name</TableHead>
               <TableHead className='px-5'>Price</TableHead>
               <TableHead className='px-5'>Half Price</TableHead>
+              <TableHead className='px-5'>Preview</TableHead>
               <TableHead className='px-5'>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -115,6 +150,9 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
                 <TableCell className='px-5'>{book.name}</TableCell>
                 <TableCell className='px-5'>{book.price}</TableCell>
                 <TableCell className='px-5'>₹{book.halfPrice}</TableCell>
+                <TableCell className='px-5'>
+                  <Image src={book.image} width={50} height={50} alt='Book Image' className='rounded-md' />
+                </TableCell>
                 <TableCell>
                   <button onClick={() => handleDeleteBook(index)} className='text-red-500 underline text-sm px-3'>
                     remove
@@ -128,7 +166,7 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
 
       <div className='flex flex-col items-center justify-center'>
       <Button variant="outline" onClick={calculateAmount}
-      className='border-2 px-5 border-gray-700 mb-8 mt-10 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
+      className='border-2 px-5 border-gray-700 mb-8 mt-10 rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
       >Calculate Total</Button>
         {halfAmount > 0 && (
           <>

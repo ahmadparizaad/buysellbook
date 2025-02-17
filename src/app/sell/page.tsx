@@ -14,6 +14,7 @@ interface Book {
   name: string;
   price: number;
   halfPrice: number;
+  image: string;
 }
 
 function SellPage() {
@@ -64,6 +65,7 @@ function SellPage() {
     try{
       setIsLoading(true);
       const response = await axios.post("/api/books/sell", book);
+      console.log(response);
       toast.success("Book added successfully");
       router.push("/mybooks");
     }
@@ -76,7 +78,8 @@ function SellPage() {
         toast.error("User not found");
       }
       if(error.status === 500) {
-        toast.error("Internal server error");
+        toast.error("Internal server error", error.message);
+        console.log(error.message);
       }
   }finally {
       setIsLoading(false);

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import User from "@/models/userModel";
 import Book from "@/models/bookModel";
+import { uploadToCloudinary } from "@/helpers/uploadToCloudinary";
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +40,11 @@ export async function POST(request: NextRequest) {
   
       // Save the new Book document
       const savedBook = await newBook.save();
+
+      for(const book in books) {
+      const res = await uploadToCloudinary(books[book].image, books[book].name);
+      console.log(res);
+      }
   
       // Log the saved book to the console
       console.log(savedBook);

@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-
+import Link from 'next/link';
 
   interface IBook {
     _id: string;
@@ -56,6 +56,7 @@ function Books() {
 
 
   useEffect(() => {
+    sessionStorage.setItem('books', JSON.stringify(books));
     fetchData();
     getSenderUID();
   }, [searchQuery, filters]);
@@ -85,7 +86,7 @@ useEffect(() => {
     try{
       const userId = book.userId
     if (book.userId === currentUser) {
-      alert("You cannot buy your own book.");
+      toast.error("You cannot buy your own book.");
       return; // Prevent further execution
     }
 
@@ -120,10 +121,12 @@ useEffect(() => {
 
       const response = await axios.get(`/api/books/buy?${queryParams}`);
       console.log(response.data.books);
+      const fetchedBooks = response.data.books.reverse();
       if (pageNum === 1) {
-        setBooks(response.data.books.reverse());
+        setBooks(fetchedBooks);
+        // sessionStorage.setItem('books', JSON.stringify(fetchedBooks));        
       } else {
-        setBooks(prev => [...prev, ...response.data.books]);
+        setBooks(prev => [...prev, fetchedBooks]);
       }
       setHasMore(response.data.books.length === 12);
     } catch (error) {
@@ -351,7 +354,8 @@ useEffect(() => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 px-6">
         {books?.map((book) => (
           <div key={book._id} className="relative mb-4 md:mx-3 text-black">
-            <div className="group box p-4 pb-16 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
+            <Link href={`/buy/${book._id}`}>
+            <div className="group box p-4 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
                           filter backdrop-blur-xl rounded-xl transition-all duration-300 ease-in-out 
                           flex flex-col justify-between hover:shadow-lg hover:shadow-blue-200 hover:scale-103 hover:border-opacity-55">
               <div className='flex justify-between items-center'>
@@ -396,17 +400,19 @@ useEffect(() => {
                 </div>
               )}
 
-              <Button 
+              {/* <Button 
                 onClick={() => handleBuyClick(book)} 
                 variant="outline" 
                 className="absolute font-medium left-1/2 bottom-4 transform -translate-x-1/2 w-4/5 rounded-full bg-white text-black hover:text-white hover:bg-blue-400 transition-all duration-300 ease-out"
               >
                 Buy
-              </Button>
+              </Button> */}
 
               <div className="absolute blur-lg bg-[#fab5704c] rounded-full w-16 h-16 sm:w-24 sm:h-24 top-[8%] right-[9%] -z-10"></div>
               <div className="absolute border border-white h-8 sm:h-12 top-[8%] right-[5%]"></div>
             </div>
+            </Link>
+
           </div> 
         ))}
         <div id="sentinel" className="h-10" />

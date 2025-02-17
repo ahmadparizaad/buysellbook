@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { cometchatAuth } from '@/utils/cometchatAuth';
+import toast from 'react-hot-toast';
 
 export interface Message {
     id: string;
@@ -37,6 +37,7 @@ const OneChat = () => {
     const router = useRouter();
     const messageContainerRef = useRef<HTMLDivElement>(null);
 
+    // Move CometChat declaration outside and make it properly typed
 
     let CometChat: any;
     if (typeof window !== "undefined") {
@@ -44,9 +45,9 @@ const OneChat = () => {
         window.CometChat = CometChat;
     }
 
-    // Initialize chat and fetch previous messages  
+    // Update initializeChat to check for CometChat
     const initializeChat = useCallback(async () => {
-        if (!senderUID) {
+        if (!senderUID || !CometChat) {
             return;
         }
         try {
@@ -57,7 +58,7 @@ const OneChat = () => {
             console.error('Error initializing chat:', error);
             setError('Failed to initialize chat');
         }
-    }, [senderUID]);
+    }, [senderUID, CometChat]);
 
     const scrollToBottom = () => {
         messageContainerRef.current?.scrollTo({
@@ -66,84 +67,106 @@ const OneChat = () => {
         });
     };
 
+    // Update loadChatHistory to check for CometChat
     const loadChatHistory = useCallback(async (receiverUid: string) => {
+        if (!CometChat?.MessagesRequestBuilder) {
+            console.log("Cometchat not found")
+            return [];
+        }
         try {
-            setLoading(true)
-            if (CometChat.MessagesRequestBuilder) {
-                const messagesRequest = new CometChat.MessagesRequestBuilder()
-                    .setUID(receiverUid)
-                    .setLimit(50)
-                    .build();
-
-                const previousMessages = await messagesRequest.fetchPrevious();
-                setMessages(previousMessages.map(formatMessage));
-                if(previousMessages.length === 0){
-                    setNewMessage('Hi, I want to buy your books📗');
-                }
-                
-                return previousMessages;
-            }
+            setLoading(true);
+            const messagesRequest = new CometChat.MessagesRequestBuilder()
+                .setUID(receiverUid)
+                .setLimit(50)
+                .build();
+            // console.log("message request", messagesRequest)
+            const previousMessages = await messagesRequest.fetchPrevious();
+            const formattedMessages = previousMessages.map(formatMessage);
+            setMessages(formattedMessages);
+            
+            return formattedMessages;
         } catch (error) {
             console.error('Error loading chat history:', error);
             setError('Failed to load chat history');
+            return [];
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }, [CometChat?.MessagesRequestBuilder]);
+    }, [CometChat]);
 
-    const fetchConversations = async () => {
-        try {
-            setIsLoading(true);
-            await initializeChat();
-            const conversationsRequest = new CometChat.ConversationsRequestBuilder()
-                .setLimit(30)
-                .build();
-
-            const fetchedConversations = await conversationsRequest.fetchNext();
-            const formattedConversations = fetchedConversations.map((conv: any) => {
-                const conversationWith = conv.getConversationWith();
-                const uid = 'uid' in conversationWith ? conversationWith.uid : '';
-                return {
-                    uid,
-                    name: conversationWith.getName(),
-                    lastMessage: conv.getLastMessage()?.getText(),
-                    timestamp: conv.getLastMessage()?.getSentAt()
-                };
-            });
-
-            setConversations(formattedConversations as Conversation[]);
-        } catch (error: any) {
-            console.error('Error fetching conversations:', error.message || error);
-            setError('Failed to fetch conversations');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    
 
     useEffect(() => {
-        setIsLoading(true);
+        const fetchConversations = async () => {
+            if (!CometChat?.ConversationsRequestBuilder) {
+                console.log('CometChat not initialized yet');
+                return;
+            }
+            
+            try {
+                setIsLoading(true);
+                await initializeChat();
+                
+                // Add a small delay to ensure CometChat is fully initialized
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const conversationsRequest = new CometChat.ConversationsRequestBuilder()
+                    .setLimit(30)
+                    .build();
+    
+                const fetchedConversations = await conversationsRequest.fetchNext();
+                const formattedConversations = fetchedConversations.map((conv: any) => {
+                    const conversationWith = conv.getConversationWith();
+                    const uid = 'uid' in conversationWith ? conversationWith.uid : '';
+                    return {
+                        uid,
+                        name: conversationWith.getName(),
+                        lastMessage: conv.getLastMessage()?.getText(),
+                        timestamp: conv.getLastMessage()?.getSentAt()
+                    };
+                });
+    
+                setConversations(formattedConversations as Conversation[]);
+            } catch (error: any) {
+                console.error('Error fetching conversations:', error.message || error);
+                setError('Failed to fetch conversations');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
         const fetchSenderUID = async () => {
             if (typeof window !== 'undefined') {
-            const user = window.sessionStorage.getItem('user');
-            if (user) {
-                const res = JSON.parse(user);
-                setSenderUID(res.username);
-                if (res.username) {
-                    await initializeChat();
+                const user = window.sessionStorage.getItem('user');
+                if (user) {
+                    const res = JSON.parse(user);
+                    setSenderUID(res.username);
+    
+                    if (CometChat && res.username) {
+                        await initializeChat();
+                        await fetchConversations();
+                    }
                 }
-                await fetchConversations();
-            }}
+            }
         };
-        if (typeof window !== 'undefined') {
-            fetchSenderUID();
-        }
-    }, [CometChat.ConversationsRequestBuilder, initializeChat]);
+    
+        if(typeof window !== 'undefined')
+        fetchSenderUID();
+        
+    }, [CometChat, setConversations, initializeChat]);
+    
 
     useEffect(() => {
         if (reciever) {
             setRecieverUID(reciever);
             setSelectedChat(reciever);
-            loadChatHistory(reciever);
+            const initializeNewChat = async () => {
+                const messages = await loadChatHistory(reciever);
+                if (!messages || messages.length === 0) {
+                    setNewMessage('Hi, I want to buy your books📗');
+                }
+            };
+            initializeNewChat();
         }
     }, [reciever, loadChatHistory]);
 
@@ -152,8 +175,13 @@ const OneChat = () => {
             router.push(`/onechat?reciever=${receiverUid}`);
             setSelectedChat(receiverUid);
             setRecieverUID(receiverUid);
-            await loadChatHistory(receiverUid);
-            scrollToBottom()
+            
+            // Load chat history and check if it's a new conversation
+            const previousMessages = await loadChatHistory(receiverUid);
+            if (!previousMessages || previousMessages.length === 0) {
+                setNewMessage('Hi, I want to buy your books📗');
+            }
+            scrollToBottom();
         } catch (error) {
             console.error('Error starting chat:', error);
             setError('Failed to start chat');
@@ -176,8 +204,18 @@ const OneChat = () => {
     // Send message
     const sendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!newMessage.trim() || !senderUID) return;
+        if (!newMessage.trim()) {
+            console.error("Message is empty.");
+            toast.error("Message is empty")
+            return;
+        }
+    
+        if (!senderUID) {
+            console.error("SenderUID is not initialized yet.");
+            toast.error("SenderUID is not initialized yet.");
+            setError("Failed to send message: User not authenticated.");
+            return;
+        }
 
         try {
             const textMessage = new CometChat.TextMessage(
@@ -264,7 +302,7 @@ const OneChat = () => {
             {conversations?.map((conversation) => (
                 <div
                     key={conversation.uid}
-                    className="border-b rounded-xl p-5 hover:bg-blue-100 cursor-pointer"
+                    className="border-b shadow-sm rounded-xl p-5 hover:bg-blue-100 cursor-pointer"
                     onClick={() => startChat(conversation.uid)}
                 >
                     <div className="font-medium text-gray-600">{conversation.name || conversation.uid}</div>
@@ -303,7 +341,7 @@ const OneChat = () => {
                 {messages.map((message) => (
                     <div
                         key={message.id}
-                        className={`flex ${message.sender.uid === senderUID ? 'justify-end' : 'justify-start'}`}
+                        className={`flex ${message.sender.uid === senderUID ? 'justify-start' : 'justify-end'}`}
                     >
                         <div
                             className={`flex justify-between max-w-[80%] rounded-2xl pl-4 pr-3 py-1 ${

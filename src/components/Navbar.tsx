@@ -8,6 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import {useRouter} from "next/navigation";
+import { useCallback } from "react";
 
 function Navbar({ className }: { className?: string }) {
     const [active, setActive] = useState<string | null>(null);
@@ -26,30 +27,11 @@ function Navbar({ className }: { className?: string }) {
     const router = useRouter();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const handleScroll = () => {
-    const currentScrollPos = window.scrollY;
-  
+    const handleScroll = useCallback(() => {
+      const currentScrollPos = window.scrollY;
       setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-  
       setPrevScrollPos(currentScrollPos);
-    };
-    const getUserDetails = async () => {
-      try {
-        const user = sessionStorage.getItem('user');
-        if(user){
-          const res = JSON.parse(user!);
-          setUser({
-            _id: res._id,
-            name: res.name,
-            email: res.email,
-            college: res.college,
-            city: res.city,
-            profileImage: res.profileImage,
-          });
-        }
-      } catch (error: any) {
-      }
-    };
+    }, [prevScrollPos]);
 
     const handleLogin = async () => {
       try {
@@ -78,6 +60,24 @@ function Navbar({ className }: { className?: string }) {
     };
 
     useEffect(() => {
+      const getUserDetails = async () => {
+        try {
+          const user = sessionStorage.getItem('user');
+          if(user){
+            const res = JSON.parse(user!);
+            setUser({
+              _id: res._id,
+              name: res.name,
+              email: res.email,
+              college: res.college,
+              city: res.city,
+              profileImage: res.profileImage,
+            });
+          }
+        } catch (error: any) {
+        }
+      };
+
       window.addEventListener('scroll', handleScroll);
       const currentPath = window.location.pathname;
       if (!['/signup', '/login', '/verifyEmail', '/'].includes(currentPath)) {
@@ -86,7 +86,7 @@ function Navbar({ className }: { className?: string }) {
       return () => {
         window.removeEventListener('scroll', handleScroll);
       };
-    }, [handleScroll, prevScrollPos]);
+    }, [handleScroll]);
 
     return (
       <div>
