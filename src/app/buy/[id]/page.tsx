@@ -7,6 +7,8 @@ import { IBook } from '@/components/interfaces/book';
 import { User } from '@/components/interfaces/user';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 // import Carousel from "@/components/ui/carousel";
 
@@ -79,7 +81,7 @@ export default function BookDetails({params}: any) {
           <div className="space-y-2 md:px-8">
           {book?.books.map((book, index) => (
             <div key={index} className="flex justify-between items-center">
-                <p className="text-base md:text-lg px-2 font-medium text-gray-600">{book.name}</p>
+                <p className="text-base md:text-lg px-2 font-medium text-gray-600">{book.name || <Skeleton/>}</p>
                 <p className="text-base md:text-lg px-2 font-semibold text-gray-800">₹{book.halfPrice}</p>
             </div>
 
@@ -97,7 +99,7 @@ export default function BookDetails({params}: any) {
           <p className="text-3xl font-extrabold text-blue-500 mb-6">₹{book?.totalPrice}</p>
           <button 
             onClick={() => handleBuyClick(book)}          
-            className="bg-blue-500 bg-opacity-90 text-white px-6 py-3 rounded-full hover:bg-indigo-700 transition font-medium">
+            className="bg-blue-500 bg-opacity-90 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-medium">
             Contact Seller
           </button>
         </div>
