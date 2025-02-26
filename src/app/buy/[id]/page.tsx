@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Carousel from '@/components/ui/carousel'
+
 
 // import Carousel from "@/components/ui/carousel";
 
@@ -16,6 +18,7 @@ export default function BookDetails({params}: any) {
     const [book, setBook] = useState<IBook | undefined>();
     const [seller, setSeller] = useState<User>();
     const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
 
     const router = useRouter();
 
@@ -26,6 +29,7 @@ export default function BookDetails({params}: any) {
             const res = await axios.post(`/api/books/bookdetails`, {id: params.id});
             setBook(res.data.data);
             setSeller(res.data.seller);
+            setData(res.data.data.books);
         }
         catch (error) {
             console.log(error);
@@ -70,6 +74,8 @@ export default function BookDetails({params}: any) {
   return (
     <div className="flex flex-col gap-5 p-5 md:px-16 mt-24">
       {/* <Carousel slides={book?.images} /> */}
+      <Carousel data={data} />
+
 
       {/* Book Details and Total Price */}
       <div className="flex flex-col md:flex-row gap-5">

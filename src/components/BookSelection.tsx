@@ -59,10 +59,25 @@ const BookSelection: React.FC<BookSelectionProps> = ({ booklist, handleTotalPric
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // Get the first uploaded file
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a blob URL for the file
-      setNewBook({ ...newBook, image: imageUrl }); // Set the image URL in the state
+      console.log("Uploading Image:", file);
+  
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // Convert to Base64
+  
+      reader.onloadend = () => {
+        const base64Image = reader.result as string;
+        console.log("Base64 Image:", base64Image);
+  
+        // Set the Base64 string to state
+        setNewBook({ ...newBook, image: base64Image });
+      };
+  
+      reader.onerror = (error) => {
+        console.error("Error converting file to Base64:", error);
+      };
     }
   };
+  
   
 
   const calculateTotalAmount = () => {

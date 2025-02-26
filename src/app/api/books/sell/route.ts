@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import User from "@/models/userModel";
 import Book from "@/models/bookModel";
-import { uploadToCloudinary } from "@/helpers/uploadToCloudinary";
+import cloudinary from "@/lib/cloudinary";
+import { connect } from "@/dbConfig/dbConfig";
+
+connect();
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +28,21 @@ export async function POST(request: NextRequest) {
       }, { status: 404 });
     }
 
-    // Update user data with the request body
+    // Upload book images to Cloudinary
+    const uploadedBooks = await Promise.all(
+      books.map(async (book: any) => {
+        if (book.image) {
+          const uploadedResponse = await cloudinary.uploader.upload(book.image, {
+            folder: "campusbook",
+          });
+
+          return { ...book, image: uploadedResponse.secure_url };
+        }
+        return book;
+      })
+    );
+
+      console.log(uploadedBooks);
        // Create a new Book instance
        const newBook = new Book({
         userId: userId,
@@ -34,17 +51,12 @@ export async function POST(request: NextRequest) {
         year: year,
         semester: semester,
         isSet: isSet,
-        books: books,
+        books: uploadedBooks,
         totalPrice: totalPrice
       });
   
       // Save the new Book document
       const savedBook = await newBook.save();
-
-      for(const book in books) {
-      const res = await uploadToCloudinary(books[book].image, books[book].name);
-      console.log(res);
-      }
   
       // Log the saved book to the console
       console.log(savedBook);
@@ -57,7 +69,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       // Return an error response if an error occurs
-      console.log(error.message);
+      console.error("Server Error:", error);
       return NextResponse.json({
         error: error.message,
       }, { status: 500 });

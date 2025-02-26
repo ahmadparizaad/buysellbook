@@ -12,7 +12,13 @@ interface IBook {
   year: string;
   semester: string;
   isSet: string;
-  books: { name: string; halfPrice: number }[];
+  books: {name : string, price : number, halfPrice : number, image: string}[];
+  seller: {
+    name: string;
+    city: string;
+    college: string;
+    university: string;
+  };
   totalPrice: number;
 }
 
@@ -140,7 +146,7 @@ const MyBook = () => {
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 
                   className='w-full h-full object-cover'
-                  src="https://imgs.search.brave.com/-jECYjiPs2ms18A1J5ZBPuf_NCglf6PouYjY2fQHCvA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudGhyaWZ0Ym9v/a3MuY29tL2dlbmVy/YWwvZHQtc18xMGVk/MWFkMi5qcGc" // Replace with actual image URL if available
+                  src={book.books[0].image || "https://imgs.search.brave.com/-jECYjiPs2ms18A1J5ZBPuf_NCglf6PouYjY2fQHCvA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudGhyaWZ0Ym9v/a3MuY29tL2dlbmVy/YWwvZHQtc18xMGVk/MWFkMi5qcGc"} // Replace with actual image URL if available
                   alt={book.course}
                   width={500} 
                   height={500}
