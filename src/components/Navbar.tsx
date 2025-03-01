@@ -41,7 +41,8 @@ function Navbar({ className }: { className?: string }) {
             window.location.href = '/login';
           }  else {
             setIsMenuOpen(false);
-            await axios.get('/api/users/logout');
+            const res = await axios.get('/api/users/logout');
+            if(res.data.success){
             setUser({
               _id: "",
               name: "",
@@ -50,8 +51,11 @@ function Navbar({ className }: { className?: string }) {
               city: "",
               profileImage: "",
             });
+            sessionStorage.removeItem('user');
             toast.success('Logged out successfully');
             router.push("/login");
+          }
+            
           }
       } catch (error: any) {
       } finally {

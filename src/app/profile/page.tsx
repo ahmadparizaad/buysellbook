@@ -86,11 +86,11 @@ export default function ProfilePage() {
           </div>
       }
 
-      if(typeof window !== 'undefined'){
-      if(!window.sessionStorage.getItem('user')){
-        return (<div className="flex items-center justify-center h-screen w-screen font-[Gilroy]">
-          <p>Sign up today and never miss the books you love!</p>
-          </div>)}}
+      // if(typeof window !== 'undefined'){
+      // if(!window.sessionStorage.getItem('user')){
+      //   return (<div className="flex items-center justify-center h-screen w-screen font-[Gilroy]">
+      //     <p>Sign up today and never miss the books you love!</p>
+      //     </div>)}}
 
     return (      
     <>
