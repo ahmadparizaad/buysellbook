@@ -67,7 +67,7 @@ export default function BookDetails({params}: any) {
         console.error('Error fetching data:', error);
         toast.error('An error occurred while fetching data.');
       } finally {
-        setIsLoading(true);
+        setIsLoading(false); // Change this from true to false
       }
     };
     

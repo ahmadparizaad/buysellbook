@@ -22,6 +22,7 @@ function SellPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [profileComplete, setProfileComplete] = useState(false);
+  const [totalCalculated, setTotalCalculated] = useState(false);
   const [book, setBook] = useState({
     course: '',
     std: '',
@@ -59,6 +60,7 @@ function SellPage() {
 
   const handleTotalPrice = (totalPrice: number) => {
     setBook({ ...book, totalPrice: totalPrice });
+    setTotalCalculated(true);
   };
 
   const onSubmit = async () => {
@@ -188,13 +190,15 @@ function SellPage() {
     </div>
 
     {/* <PhotoUpload bookImage={handleFile} /> */}
-    <Button 
-    onClick={onSubmit}
-      variant="outline"
-      className='border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
-    >
-      {isLoading ? "Submitting..." : "Submit"}
-    </Button>
+    {book.books.length > 0 && totalCalculated && (
+        <Button 
+          onClick={onSubmit}
+          variant="outline"
+          className='border-2 px-5 border-gray-700 dark:border-white/[0.3] rounded-[2vw] max-sm:rounded-[6vw] hover:bg-blue-400 hover:text-white hover:border-none ease-linear duration-200'
+        >
+          {isLoading ? "Submitting..." : "Submit"}
+        </Button>
+      )}
     </div>
     }
     

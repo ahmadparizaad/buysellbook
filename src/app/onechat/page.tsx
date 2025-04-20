@@ -79,7 +79,7 @@ const OneChat = () => {
                 .setUID(receiverUid)
                 .setLimit(50)
                 .build();
-            // console.log("message request", messagesRequest)
+            
             const previousMessages = await messagesRequest.fetchPrevious();
             const formattedMessages = previousMessages.map(formatMessage);
             setMessages(formattedMessages);
@@ -90,7 +90,7 @@ const OneChat = () => {
             setError('Failed to load chat history');
             return [];
         } finally {
-            setLoading(false);
+            setLoading(false); // Make sure loading is set to false in all cases
         }
     }, [CometChat]);
 
@@ -143,17 +143,29 @@ const OneChat = () => {
                     setSenderUID(res.username);
     
                     if (CometChat && res.username) {
-                        await initializeChat();
-                        await fetchConversations();
+                        try {
+                            await initializeChat();
+                            await fetchConversations();
+                        } catch (error) {
+                            console.error('Error in chat initialization:', error);
+                            setLoading(false); // Ensure loading is set to false if there's an error
+                        }
                     }
+                } else {
+                    setLoading(false); // Set loading to false if no user found
                 }
+            } else {
+                setLoading(false); // Set loading to false if not in browser
             }
         };
     
-        if(typeof window !== 'undefined')
         fetchSenderUID();
         
-    }, [CometChat, setConversations, initializeChat]);
+        // Cleanup function
+        return () => {
+            setLoading(false); // Ensure loading is set to false on unmount
+        };
+    }, [CometChat, initializeChat]);
     
 
     useEffect(() => {

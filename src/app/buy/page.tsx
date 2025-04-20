@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Accordion,
@@ -53,6 +53,7 @@ function Books() {
   });
 
   const router = useRouter();
+  const cache = useRef<Record<string, any>>({});
 
 
   useEffect(() => {
@@ -109,28 +110,56 @@ useEffect(() => {
 
   const fetchData = async (pageNum = 1) => {
     try {
-      // Add filters to query params
+      setLoading(true);
+      
+      // Create cache key from filters
+      const cacheKey = JSON.stringify({
+        page: pageNum,
+        filters,
+        searchQuery,
+        searchType
+      });
+      
+      // Check if we have cached data
+      if (cache.current[cacheKey]) {
+        const cachedData = cache.current[cacheKey];
+        if (pageNum === 1) {
+          setBooks(cachedData);
+        } else {
+          setBooks(prev => [...prev, ...cachedData]);
+        }
+        setHasMore(cachedData.length === 12);
+        setLoading(false);
+        return;
+      }
+      
+      // No cache, proceed with API call
       const queryParams = new URLSearchParams({
         page: pageNum.toString(),
         limit: '12',
         ...(filters.course && { course: filters.course }),
         ...(filters.std && { std: filters.std }),
         ...(filters.year && { year: filters.year }),
-        ...(filters.semester && { semester: filters.semester })
+        ...(filters.semester && { semester: filters.semester }),
+        ...(searchQuery && { query: searchQuery }),
+        ...(searchType && { searchType: searchType })
       }).toString();
-
+  
       const response = await axios.get(`/api/books/buy?${queryParams}`);
-      console.log(response.data.books);
       const fetchedBooks = response.data.books.reverse();
+      
+      // Save to cache
+      cache.current[cacheKey] = fetchedBooks;
+      
       if (pageNum === 1) {
         setBooks(fetchedBooks);
-        console.log(fetchedBooks);
-        // sessionStorage.setItem('books', JSON.stringify(fetchedBooks));        
       } else {
-        setBooks(prev => [...prev, fetchedBooks]);
+        setBooks(prev => [...prev, ...fetchedBooks]); // Using spread operator for better array merging
       }
-      setHasMore(response.data.books.length === 12);
+      
+      setHasMore(fetchedBooks.length === 12);
     } catch (error) {
+      console.error('Error fetching data:', error);
       setError('An error occurred while fetching data.');
     } finally {
       setLoading(false);
@@ -353,7 +382,7 @@ useEffect(() => {
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 px-6">
-        {books?.map((book) => (
+        {books?.map((book, index) => (
           <div key={book._id} className="relative mb-4 md:mx-3 text-black">
             <Link href={`/buy/${book._id}`}>
             <div className="group box p-4 bg-blue-500 bg-opacity-10 border border-gray-400/[0.8]
@@ -366,10 +395,13 @@ useEffect(() => {
               <div className='aspect-video w-full rounded-md border-2 overflow-hidden mb-4'>
                 <Image 
                   className='w-full h-full object-cover'
-                  src={book.books[0].image || 'https://imgs.search.brave.com/-jECYjiPs2ms18A1J5ZBPuf_NCglf6PouYjY2fQHCvA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudGhyaWZ0Ym9v/a3MuY29tL2dlbmVy/YWwvZHQtc18xMGVk/MWFkMi5qcGc'}
-                  alt={book.course}
+                  src={(book?.books && Array.isArray(book.books) && book.books[0]?.image) || 'https://imgs.search.brave.com/-jECYjiPs2ms18A1J5ZBPuf_NCglf6PouYjY2fQHCvA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudGhyaWZ0Ym9v/a3MuY29tL2dlbmVy/YWwvZHQtc18xMGVk/MWFkMi5qcGc'}
+                  alt={book?.course || "Book"}
                   width={500} 
                   height={500}
+                  loading="lazy" // Add lazy loading
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" // Responsive sizes
+                  // priority={index < 4} // Priority loading for first 4 images
                 />
               </div>
 
