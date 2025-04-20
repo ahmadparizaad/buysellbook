@@ -157,10 +157,10 @@ function SellPage() {
           <option value="First Year">First Year</option>
           <option value="Second Year">Second Year</option>
           <option value="Third Year">Third Year</option>
-          {book.course !== "BSc" && book.course === "Medical" &&
+          {book.course !== "BSc" && book.course !== "BCom" && book.course === "Medical" &&
             <option value="Fourth Year">Fourth Year</option>
           }
-          {book.course !== "BSc" &&
+          {book.course !== "BSc" && book.course !== "BCom" && 
             <option value="Final Year">Final Year</option>
           }
         </select>
